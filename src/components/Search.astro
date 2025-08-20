@@ -51,15 +51,15 @@
 
   let isSearchInitialized = false;
 
-  if (document.readyState === 'loading') {
+  if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initSearch);
   } else {
     initSearch();
   }
 
-  document.addEventListener('astro:page-load', initSearch);
-  
-  document.addEventListener('astro:before-preparation', () => {
+  document.addEventListener("astro:page-load", initSearch);
+
+  document.addEventListener("astro:before-preparation", () => {
     isSearchInitialized = false;
   });
 
@@ -97,9 +97,15 @@
       return;
     }
 
-    const freshSearchInput = document.getElementById("search-input") as HTMLInputElement;
-    const freshSearchResults = document.getElementById("search-results") as HTMLDivElement;
-    const freshSearchForm = document.getElementById("search-form") as HTMLElement;
+    const freshSearchInput = document.getElementById(
+      "search-input"
+    ) as HTMLInputElement;
+    const freshSearchResults = document.getElementById(
+      "search-results"
+    ) as HTMLDivElement;
+    const freshSearchForm = document.getElementById(
+      "search-form"
+    ) as HTMLElement;
 
     if (!freshSearchInput || !freshSearchResults || !freshSearchForm) return;
 
@@ -137,7 +143,11 @@
       e.preventDefault();
     });
 
-    function displayResults(results: Post[], resultsElement: HTMLDivElement, inputElement: HTMLInputElement) {
+    function displayResults(
+      results: Post[],
+      resultsElement: HTMLDivElement,
+      inputElement: HTMLInputElement
+    ) {
       resultsElement.innerHTML = "";
       resultsElement.classList.remove("hidden");
 
@@ -164,10 +174,10 @@
 
         const title = document.createElement("div");
         title.className = "font-medium text-neutral-900 dark:text-white";
-        
+
         // Highlight search term in title
         const highlightedTitle = post.title.replace(
-          new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+          new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
           '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>'
         );
         title.innerHTML = highlightedTitle;
@@ -198,7 +208,10 @@
 
           // Highlight the search term in the snippet
           const highlightedSnippet = snippet.replace(
-            new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+            new RegExp(
+              `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
+              "gi"
+            ),
             '<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">$1</mark>'
           );
 

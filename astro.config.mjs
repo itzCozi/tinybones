@@ -47,13 +47,13 @@ export default defineConfig({
             vendor: ["astro"],
           },
           // Ensure proper script loading
-          format: 'es',
-          entryFileNames: 'assets/[name].[hash].js',
-          chunkFileNames: 'assets/[name].[hash].js',
+          format: "es",
+          entryFileNames: "assets/[name].[hash].js",
+          chunkFileNames: "assets/[name].[hash].js",
         },
       },
       // Preserve function names for better debugging
-      minify: 'terser',
+      minify: "terser",
       terserOptions: {
         keep_fnames: true,
         keep_classnames: true,
