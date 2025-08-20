@@ -1,19 +1,15 @@
-# Cats with power tools 🐱⚡
+# TinyBones 🦴
 
-[Visit our blog](https://blog.exploit.cat/)
-
-Welcome to Cats with power tools, a collaborative programmer blog built with [Astro](https://astro.build/). We share insights, tutorials, and experiences from our programming adventures.
-
-Visit us at [blog.exploit.cat](https://blog.exploit.cat/) to explore our latest articles and collaborative projects.
+A minimal blog template built with [Astro](https://astro.build/). Perfect for developers who want a clean, fast, and customizable blog without the bloat.
 
 ## Key features
 
-- **Collaborative content:** A platform where programmers share knowledge and experiences
-- **Technical deep dives:** In-depth articles on programming concepts and technologies
-- **SEO-friendly:** Sitemap, an [RSS feed](https://blog.exploit.cat/rss.xml), and Open Graph protocol support
-- **Accessible to all:** System, dark, and light mode support for optimal reading experience
-- **Community-driven:** Join our community of programmers and contribute your expertise
-- **Comments system:** Built-in support for Giscus comments (see [GISCUS_SETUP.md](./GISCUS_SETUP.md) for setup instructions)
+- **Minimal and fast:** Built with Astro for optimal performance and minimal JavaScript
+- **Easy to customize:** Clean codebase that's simple to modify and extend
+- **SEO-friendly:** Sitemap, RSS feed, and Open Graph protocol support out of the box
+- **Accessible:** System, dark, and light mode support with keyboard navigation
+- **Developer-friendly:** TypeScript, Tailwind CSS, and modern tooling
+- **Comments system:** Built-in support for Giscus comments (optional setup)
 
 ## Core Web Vitals
 
@@ -38,6 +34,17 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## Connect with us
+## Getting Started
 
-Visit our blog at [blog.exploit.cat](https://blog.exploit.cat/) to read our latest articles and engage with our community of programmers.
+1. Clone this repository
+2. Install dependencies: `npm install` or `pnpm install`
+3. Update `src/siteConfig.ts` with your site details
+4. Start developing: `npm run dev`
+5. Build for production: `npm run build`
+
+## Customization
+
+- Update site configuration in `src/siteConfig.ts`
+- Modify colors and styling in `src/styles/`
+- Add your content in `src/content/blog/`
+- Customize components in `src/components/`

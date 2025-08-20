@@ -7,7 +7,6 @@ const post = entry as CollectionEntry<"blog">;
 
 const postTitle = post.data.title || SITE.title;
 const postDescription = post.data.description || SITE.description;
-const ogImage = new URL("./og.jpg", Astro.site);
 ---
 
 <title>{`${postTitle} | ${SITE.title}`}</title>
@@ -17,20 +16,25 @@ const ogImage = new URL("./og.jpg", Astro.site);
 
 <meta property="og:title" content={postTitle} />
 <meta property="og:description" content={postDescription} />
-<meta
-  property="og:image"
-  content={`${SITE.href}${post?.data?.image?.src}` || ogImage}
-/>
+{
+  post?.data?.image?.src && (
+    <meta property="og:image" content={`${SITE.href}${post.data.image.src}`} />
+  )
+}
 <meta property="og:image:alt" content={postTitle} />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content={SITE.locale} />
 
 <meta name="twitter:title" content={postTitle} />
 <meta name="twitter:description" content={postDescription} />
-<meta
-  property="twitter:image"
-  content={`${SITE.href}${post?.data?.image?.src}` || ogImage}
-/>
+{
+  post?.data?.image?.src && (
+    <meta
+      property="twitter:image"
+      content={`${SITE.href}${post.data.image.src}`}
+    />
+  )
+}
 <meta name="twitter:image:alt" content={postTitle} />
 <meta name="twitter:card" content="summary_large_image" />
 

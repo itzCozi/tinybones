@@ -6,25 +6,25 @@ import type {
 } from "@/types.ts";
 
 export const SITE: SiteConfiguration = {
-  title: "Cats with power tools",
-  description: "Collaborative programmer blog",
-  href: "https://blog.exploit.cat/",
-  author: "Cooper Ransom",
+  title: "TinyBones",
+  description: "A minimal blog template for your thoughts",
+  href: "https://yourdomain.com/",
+  author: "Your Name",
   locale: "en-US",
 };
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
     label: "GitHub",
-    href: "https://github.com/cooperransom",
+    href: "https://github.com/yourusername",
   },
   {
     label: "Twitter",
-    href: "https://twitter.com/cooperransom",
+    href: "https://twitter.com/yourusername",
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/cooperransom",
+    href: "https://linkedin.com/in/yourusername",
   },
 ];
 

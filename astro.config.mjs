@@ -31,7 +31,7 @@ export default defineConfig({
       defaultColor: false,
     },
   },
-  site: "https://blog.exploit.cat",
+  site: "https://yourdomain.com",
   output: "static",
   prefetch: {
     prefetchAll: true,
