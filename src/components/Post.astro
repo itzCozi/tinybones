@@ -1,5 +1,5 @@
 ---
-import { formatDate, calculateReadingTime } from "@/lib/util";
+import { formatDate, calculateReadingTime } from '@/lib/util';
 
 const { post } = Astro.props;
 const readingTime = calculateReadingTime(post.body || '');
@@ -12,7 +12,7 @@ const readingTime = calculateReadingTime(post.body || '');
   >
     <span class="link">{post.data.title}</span>
     <div
-      class="text-muted-text dark:text-dark-muted-text text-sm font-normal flex flex-col sm:flex-row sm:gap-3 sm:items-center"
+      class="text-muted-text dark:text-dark-muted-text flex flex-col text-sm font-normal sm:flex-row sm:items-center sm:gap-3"
     >
       <span>{formatDate(post.data.publicationDate)}</span>
       <span>{readingTime}</span>

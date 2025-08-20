@@ -1,6 +1,6 @@
 ---
-import { SITE, SOCIAL_LINKS } from "@/siteConfig";
-import ThemeToggle from "@/components/ThemeToggle.astro";
+import { SITE, SOCIAL_LINKS } from '@/siteConfig';
+import ThemeToggle from '@/components/ThemeToggle.astro';
 
 const year = new Date().getFullYear();
 ---
@@ -8,20 +8,22 @@ const year = new Date().getFullYear();
 <footer
   class="mx-auto flex w-full flex-col items-center gap-6 pt-16 pb-20 text-center sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:text-left"
 >
-    <ThemeToggle />
-    <div class="flex flex-row gap-4 items-center">
-      {SOCIAL_LINKS.map((link) => (
-        <a 
-          href={link.href} 
-          target="_blank" 
+  <ThemeToggle />
+  <div class="flex flex-row items-center gap-4">
+    {
+      SOCIAL_LINKS.map((link) => (
+        <a
+          href={link.href}
+          target="_blank"
           rel="noopener noreferrer"
           class="social-link"
           aria-label={link.label}
         >
           {link.label}
         </a>
-      ))}
-    </div>
+      ))
+    }
+  </div>
 
   <span class="prose">{year}, {SITE.author}</span>
 </footer>

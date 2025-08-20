@@ -1,7 +1,7 @@
 ---
-import { getCollection } from "astro:content";
-import Post from "@/components/Post.astro";
-import Pagination from "@/components/Pagination.astro";
+import { getCollection } from 'astro:content';
+import Post from '@/components/Post.astro';
+import Pagination from '@/components/Pagination.astro';
 
 export interface Props {
   currentPage?: number;
@@ -10,15 +10,15 @@ export interface Props {
   baseUrl?: string;
 }
 
-const { 
-  currentPage = 1, 
-  pageSize = 5, 
+const {
+  currentPage = 1,
+  pageSize = 5,
   showPagination = true,
-  baseUrl = "/blog"
+  baseUrl = '/blog',
 } = Astro.props;
 
-const allPosts = (await getCollection("blog")).sort(
-  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf()
 );
 
 const totalPages = Math.ceil(allPosts.length / pageSize);
@@ -28,17 +28,17 @@ const posts = allPosts.slice(startIndex, endIndex);
 ---
 
 <section class="py-3">
-  <h2 class="text-black dark:text-white mb-3 text-lg font-bold">
-    Blog posts
-  </h2>
+  <h2 class="mb-3 text-lg font-bold text-black dark:text-white">Blog posts</h2>
   <div class="grid list-none gap-4 p-0">
     {posts.map((post) => <Post post={post} />)}
   </div>
-  {showPagination && (
-    <Pagination 
-      currentPage={currentPage}
-      totalPages={totalPages}
-      baseUrl={baseUrl}
-    />
-  )}
+  {
+    showPagination && (
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl={baseUrl}
+      />
+    )
+  }
 </section>

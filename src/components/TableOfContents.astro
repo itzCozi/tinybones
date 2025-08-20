@@ -19,13 +19,13 @@ function extractHeadings(content: string): Heading[] {
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
     const text = match[2].trim();
-    
+
     const id = text
       .toLowerCase()
       .replace(/[^\w\s-]/g, '')
       .replace(/\s+/g, '-')
       .trim();
-    
+
     headings.push({ id, text, level });
   }
 
@@ -35,28 +35,30 @@ function extractHeadings(content: string): Heading[] {
 const headings = extractHeadings(content);
 ---
 
-{headings.length > 0 && (
-  <div class="toc-container">
-    <h3 class="toc-title text-lg font-semibold mb-4 text-black dark:text-white">
-      Table of Contents
-    </h3>
-    <nav class="toc-nav">
-      <ul class="toc-list space-y-2">
-        {headings.map(heading => (
-          <li class={`toc-item toc-level-${heading.level}`}>
-            <a 
-              href={`#${heading.id}`}
-              class="toc-link block text-sm text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link transition-colors duration-200"
-              style={`padding-left: ${(heading.level - 1) * 0.75}rem`}
-            >
-              {heading.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </div>
-)}
+{
+  headings.length > 0 && (
+    <div class="toc-container">
+      <h3 class="toc-title mb-4 text-lg font-semibold text-black dark:text-white">
+        Table of Contents
+      </h3>
+      <nav class="toc-nav">
+        <ul class="toc-list space-y-2">
+          {headings.map((heading) => (
+            <li class={`toc-item toc-level-${heading.level}`}>
+              <a
+                href={`#${heading.id}`}
+                class="toc-link text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link block text-sm transition-colors duration-200"
+                style={`padding-left: ${(heading.level - 1) * 0.75}rem`}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  )
+}
 
 <style>
   .toc-container {
@@ -87,8 +89,8 @@ const headings = extractHeadings(content);
     if (!prose) return;
 
     const headings = prose.querySelectorAll('h1, h2, h3, h4, h5, h6');
-    
-    headings.forEach(heading => {
+
+    headings.forEach((heading) => {
       if (!heading.id) {
         const text = heading.textContent || '';
         const id = text
@@ -103,22 +105,22 @@ const headings = extractHeadings(content);
     const tocLinks = document.querySelectorAll('.toc-link');
     const observerOptions = {
       rootMargin: '-20% 0% -80% 0%',
-      threshold: 0
+      threshold: 0,
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         const id = entry.target.id;
         const tocLink = document.querySelector(`.toc-link[href="#${id}"]`);
-        
+
         if (entry.isIntersecting) {
-          tocLinks.forEach(link => link.classList.remove('toc-active'));
+          tocLinks.forEach((link) => link.classList.remove('toc-active'));
           tocLink?.classList.add('toc-active');
         }
       });
     }, observerOptions);
 
-    headings.forEach(heading => {
+    headings.forEach((heading) => {
       if (heading.id) {
         observer.observe(heading);
       }

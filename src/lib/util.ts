@@ -1,21 +1,21 @@
-import { SITE } from "@/siteConfig.ts";
+import { SITE } from '@/siteConfig.ts';
 
 export function formatDate(
   date: Date,
   options: {
-    year?: "numeric" | "2-digit";
-    month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
-    day?: "numeric" | "2-digit";
+    year?: 'numeric' | '2-digit';
+    month?: 'numeric' | '2-digit' | 'long' | 'short' | 'narrow';
+    day?: 'numeric' | '2-digit';
   } = {},
-  locale: string = SITE.locale,
+  locale: string = SITE.locale
 ): string {
   const currentYear = new Date().getFullYear();
   const dateYear = date.getFullYear();
-  
+
   const defaultOptions: Intl.DateTimeFormatOptions = {
-    year: dateYear === currentYear ? undefined : "numeric",
-    month: "short",
-    day: "numeric",
+    year: dateYear === currentYear ? undefined : 'numeric',
+    month: 'short',
+    day: 'numeric',
   };
 
   const formatOptions = { ...defaultOptions, ...options };
@@ -34,10 +34,12 @@ export function calculateReadingTime(content: string): string {
     .replace(/\s+/g, ' ')
     .trim();
 
-  const words = cleanContent.split(' ').filter(word => word.length > 0);
+  const words = cleanContent.split(' ').filter((word) => word.length > 0);
   const wordCount = words.length;
   const readingTimeMinutes = Math.ceil(wordCount / 200);
-  return readingTimeMinutes === 1 ? '1 min read' : `${readingTimeMinutes} min read`;
+  return readingTimeMinutes === 1
+    ? '1 min read'
+    : `${readingTimeMinutes} min read`;
 }
 
 export function paginateArray<T>(array: T[], pageSize: number): T[][] {

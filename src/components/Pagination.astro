@@ -15,55 +15,59 @@ function getPageUrl(page: number): string {
 }
 ---
 
-{totalPages > 1 && (
-  <nav class="flex items-center justify-center gap-4 mt-8" aria-label="Pagination">
-    {currentPage > 1 ? (
-      <a 
-        href={getPageUrl(currentPage - 1)}
-        class="flex items-center px-3 text-sm font-medium pager-link-1"
-        aria-label="Previous page"
-      >
-        Previous
-      </a>
-    ) : (
-      <span class="flex items-center px-3 text-sm font-medium pager-link-2 cursor-not-allowed">
-        Previous
-      </span>
-    )}
+{
+  totalPages > 1 && (
+    <nav
+      class="mt-8 flex items-center justify-center gap-4"
+      aria-label="Pagination"
+    >
+      {currentPage > 1 ? (
+        <a
+          href={getPageUrl(currentPage - 1)}
+          class="pager-link-1 flex items-center px-3 text-sm font-medium"
+          aria-label="Previous page"
+        >
+          Previous
+        </a>
+      ) : (
+        <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
+          Previous
+        </span>
+      )}
 
-    <div class="flex">
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        page === currentPage ? (
-          <span 
-            class="px-2 text-sm font-medium pager-link-2 cursor-not-allowed"
-            aria-current="page"
-          >
-            {page}
-          </span>
-        ) : (
-          <a 
-            href={getPageUrl(page)}
-            class="px-2 text-sm font-medium pager-link-1"
-          >
-            {page}
-          </a>
-        )
-      ))}
-    </div>
+      <div class="flex">
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
+          page === currentPage ? (
+            <span
+              class="pager-link-2 cursor-not-allowed px-2 text-sm font-medium"
+              aria-current="page"
+            >
+              {page}
+            </span>
+          ) : (
+            <a
+              href={getPageUrl(page)}
+              class="pager-link-1 px-2 text-sm font-medium"
+            >
+              {page}
+            </a>
+          )
+        )}
+      </div>
 
-    {currentPage < totalPages ? (
-      <a 
-        href={getPageUrl(currentPage + 1)}
-        class="flex items-center px-3 text-sm font-medium pager-link-1"
-        aria-label="Next page"
-      >
-        Next
-      </a>
-    ) : (
-      <span class="flex items-center px-3 text-sm font-medium pager-link-2 cursor-not-allowed">
-        Next
-      </span>
-    )}
-  </nav>
-)}
-
+      {currentPage < totalPages ? (
+        <a
+          href={getPageUrl(currentPage + 1)}
+          class="pager-link-1 flex items-center px-3 text-sm font-medium"
+          aria-label="Next page"
+        >
+          Next
+        </a>
+      ) : (
+        <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
+          Next
+        </span>
+      )}
+    </nav>
+  )
+}

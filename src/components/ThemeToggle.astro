@@ -1,11 +1,11 @@
 <div
   id="theme-toggle"
-  class="relative z-0 inline-grid grid-cols-2 gap-0.5 bg-neutral-950/5 p-0.75 text-neutral-950 dark:bg-white/10 dark:text-white rounded-full"
+  class="relative z-0 inline-grid grid-cols-2 gap-0.5 rounded-full bg-neutral-950/5 p-0.75 text-neutral-950 dark:bg-white/10 dark:text-white"
 >
   <button
     aria-label="Light theme"
     data-theme="light"
-    class="theme-button p-1.5 sm:p-0 rounded-l-full"
+    class="theme-button rounded-l-full p-1.5 sm:p-0"
   >
     <svg viewBox="0 0 28 28" fill="none" class="size-7">
       <circle cx="14" cy="14" r="3.5" stroke="currentColor"></circle>
@@ -38,7 +38,7 @@
   <button
     aria-label="Dark theme"
     data-theme="dark"
-    class="theme-button p-1.5 sm:p-0 rounded-r-full"
+    class="theme-button rounded-r-full p-1.5 sm:p-0"
   >
     <svg viewBox="0 0 28 28" fill="none" class="size-7">
       <path
@@ -51,9 +51,11 @@
 
 <style>
   .theme-button {
-    transition: background-color 0.3s ease, outline 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      outline 0.3s ease;
   }
-  
+
   .theme-button.active {
     background-color: white;
   }
@@ -65,35 +67,35 @@
 
 <script data-astro-rerun is:inline>
   (function () {
-    const theme = localStorage.getItem("currentTheme") || "system";
+    const theme = localStorage.getItem('currentTheme') || 'system';
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
+      '(prefers-color-scheme: dark)'
     ).matches;
 
-    const isDark = theme === "dark" || (theme === "system" && prefersDark);
+    const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
 
     if (isDark) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
     }
   })();
 </script>
 
 <script>
-  type Theme = "light" | "dark" | "system" | null;
+  type Theme = 'light' | 'dark' | 'system' | null;
 
   function getCurrentTheme(): Theme {
-    return (localStorage.getItem("currentTheme") ?? "system") as Theme;
+    return (localStorage.getItem('currentTheme') ?? 'system') as Theme;
   }
 
   function updateTheme(theme: Theme): void {
     if (theme !== null) {
-      localStorage.setItem("currentTheme", theme);
+      localStorage.setItem('currentTheme', theme);
     } else {
-      localStorage.removeItem("currentTheme");
+      localStorage.removeItem('currentTheme');
     }
 
     applyTheme(theme);
@@ -101,37 +103,37 @@
 
   function applyTheme(theme: Theme): void {
     const isDark =
-      theme === "dark" ||
-      (theme === "system" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
+      theme === 'dark' ||
+      (theme === 'system' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
 
     if (isDark) {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
     }
 
     (window as any)._updateTheme?.(theme);
   }
 
   function initThemeToggle(): void {
-    const buttons = document.querySelectorAll(".theme-button");
+    const buttons = document.querySelectorAll('.theme-button');
     const currentTheme = getCurrentTheme();
 
     buttons.forEach((button) => {
-      const buttonTheme = button.getAttribute("data-theme");
+      const buttonTheme = button.getAttribute('data-theme');
       if (buttonTheme === currentTheme) {
-        button.classList.add("active");
+        button.classList.add('active');
       }
 
-      button.addEventListener("click", () => {
-        const selectedTheme = button.getAttribute("data-theme") as Theme;
+      button.addEventListener('click', () => {
+        const selectedTheme = button.getAttribute('data-theme') as Theme;
 
-        buttons.forEach((b) => b.classList.remove("active"));
+        buttons.forEach((b) => b.classList.remove('active'));
 
-        button.classList.add("active");
+        button.classList.add('active');
 
         updateTheme(selectedTheme);
       });
@@ -140,21 +142,21 @@
     applyTheme(currentTheme);
 
     window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", () => {
-        if (getCurrentTheme() === "system") {
-          applyTheme("system");
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', () => {
+        if (getCurrentTheme() === 'system') {
+          applyTheme('system');
         }
       });
   }
 
-  document.addEventListener("DOMContentLoaded", initThemeToggle);
+  document.addEventListener('DOMContentLoaded', initThemeToggle);
 
-  document.addEventListener("astro:page-load", initThemeToggle);
+  document.addEventListener('astro:page-load', initThemeToggle);
 
   if (
-    document.readyState === "interactive" ||
-    document.readyState === "complete"
+    document.readyState === 'interactive' ||
+    document.readyState === 'complete'
   ) {
     initThemeToggle();
   }
