@@ -2,6 +2,8 @@
 
 A minimal blog template built with [Astro](https://astro.build/). Perfect for developers who want a clean, fast, and customizable blog without the bloat.
 
+> **Note:** This project is a fork of [barebones blog](https://github.com/trevortylerlee/barebones) with enhanced features and improved UI.
+
 ## Key features
 
 - **Minimal and fast:** Built with Astro for optimal performance and minimal JavaScript
