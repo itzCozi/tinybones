@@ -1,21 +1,21 @@
-import { getCollection } from 'astro:content';
-import { SITE } from '@/siteConfig';
+import { getCollection } from "astro:content";
+import { SITE } from "@/siteConfig";
 
-export async function GET(context) {
-  const posts = await getCollection('blog');
+export async function GET() {
+  const posts = await getCollection("blog");
 
   const searchData = posts.map((post) => {
-    let contentText = '';
+    let contentText = "";
 
     try {
-      contentText = post.body.replace(/\s+/g, ' ').trim().substring(0, 5000);
+      contentText = post.body.replace(/\s+/g, " ").trim().substring(0, 5000);
     } catch (err) {
       console.error(`Error processing content for ${post.slug}:`, err);
     }
 
     return {
       title: post.data.title,
-      description: post.data.description || '',
+      description: post.data.description || "",
       content: contentText,
       url: `/blog/${post.id}`,
       pubDate: post.data.publicationDate,
@@ -27,7 +27,7 @@ export async function GET(context) {
   return new Response(JSON.stringify(searchData), {
     status: 200,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 }

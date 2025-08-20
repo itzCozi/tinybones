@@ -67,35 +67,35 @@
 
 <script data-astro-rerun is:inline>
   (function () {
-    const theme = localStorage.getItem('currentTheme') || 'system';
+    const theme = localStorage.getItem("currentTheme") || "system";
     const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
+      "(prefers-color-scheme: dark)"
     ).matches;
 
-    const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+    const isDark = theme === "dark" || (theme === "system" && prefersDark);
 
     if (isDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
     } else {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     }
   })();
 </script>
 
 <script>
-  type Theme = 'light' | 'dark' | 'system' | null;
+  type Theme = "light" | "dark" | "system" | null;
 
   function getCurrentTheme(): Theme {
-    return (localStorage.getItem('currentTheme') ?? 'system') as Theme;
+    return (localStorage.getItem("currentTheme") ?? "system") as Theme;
   }
 
   function updateTheme(theme: Theme): void {
     if (theme !== null) {
-      localStorage.setItem('currentTheme', theme);
+      localStorage.setItem("currentTheme", theme);
     } else {
-      localStorage.removeItem('currentTheme');
+      localStorage.removeItem("currentTheme");
     }
 
     applyTheme(theme);
@@ -103,37 +103,37 @@
 
   function applyTheme(theme: Theme): void {
     const isDark =
-      theme === 'dark' ||
-      (theme === 'system' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches);
+      theme === "dark" ||
+      (theme === "system" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
 
     if (isDark) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
     } else {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     }
 
     (window as any)._updateTheme?.(theme);
   }
 
   function initThemeToggle(): void {
-    const buttons = document.querySelectorAll('.theme-button');
+    const buttons = document.querySelectorAll(".theme-button");
     const currentTheme = getCurrentTheme();
 
     buttons.forEach((button) => {
-      const buttonTheme = button.getAttribute('data-theme');
+      const buttonTheme = button.getAttribute("data-theme");
       if (buttonTheme === currentTheme) {
-        button.classList.add('active');
+        button.classList.add("active");
       }
 
-      button.addEventListener('click', () => {
-        const selectedTheme = button.getAttribute('data-theme') as Theme;
+      button.addEventListener("click", () => {
+        const selectedTheme = button.getAttribute("data-theme") as Theme;
 
-        buttons.forEach((b) => b.classList.remove('active'));
+        buttons.forEach((b) => b.classList.remove("active"));
 
-        button.classList.add('active');
+        button.classList.add("active");
 
         updateTheme(selectedTheme);
       });
@@ -142,21 +142,21 @@
     applyTheme(currentTheme);
 
     window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', () => {
-        if (getCurrentTheme() === 'system') {
-          applyTheme('system');
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", () => {
+        if (getCurrentTheme() === "system") {
+          applyTheme("system");
         }
       });
   }
 
-  document.addEventListener('DOMContentLoaded', initThemeToggle);
+  document.addEventListener("DOMContentLoaded", initThemeToggle);
 
-  document.addEventListener('astro:page-load', initThemeToggle);
+  document.addEventListener("astro:page-load", initThemeToggle);
 
   if (
-    document.readyState === 'interactive' ||
-    document.readyState === 'complete'
+    document.readyState === "interactive" ||
+    document.readyState === "complete"
   ) {
     initThemeToggle();
   }

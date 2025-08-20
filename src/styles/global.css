@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import './typography.css' layer(components);
+@import "tailwindcss";
+@import "./typography.css" layer(components);
 @variant dark (&:where(.dark, .dark *));
 
 :root ::-webkit-scrollbar {
@@ -31,7 +31,7 @@ html {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
-  font-family: 'Cambria', 'Georgia', serif;
+  font-family: "Cambria", "Georgia", serif;
 }
 * {
   transition:

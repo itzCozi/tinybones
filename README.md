@@ -13,6 +13,7 @@ Visit us at [blog.exploit.cat](https://blog.exploit.cat/) to explore our latest 
 - **SEO-friendly:** Sitemap, an [RSS feed](https://blog.exploit.cat/rss.xml), and Open Graph protocol support
 - **Accessible to all:** System, dark, and light mode support for optimal reading experience
 - **Community-driven:** Join our community of programmers and contribute your expertise
+- **Comments system:** Built-in support for Giscus comments (see [GISCUS_SETUP.md](./GISCUS_SETUP.md) for setup instructions)
 
 ## Core Web Vitals
 

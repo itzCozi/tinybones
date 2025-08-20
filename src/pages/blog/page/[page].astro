@@ -1,11 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Posts from '@/parts/Posts.astro';
-import SeoPage from '@/components/SeoPage.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Posts from "@/parts/Posts.astro";
+import SeoPage from "@/components/SeoPage.astro";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog');
+  const allPosts = await getCollection("blog");
   const pageSize = 5;
   const totalPages = Math.ceil(allPosts.length / pageSize);
 

@@ -1,8 +1,8 @@
 ---
-import { formatDate, calculateReadingTime } from '@/lib/util';
+import { formatDate, calculateReadingTime } from "@/lib/util";
 
 const { post } = Astro.props;
-const readingTime = calculateReadingTime(post.body || '');
+const readingTime = calculateReadingTime(post.body || "");
 ---
 
 <li>

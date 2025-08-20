@@ -234,7 +234,7 @@ Denote a code block by wrapping a section of valid code in triple backticks (`).
 
 ```js
 function hello() {
-  console.log('hello world');
+  console.log("hello world");
 }
 ```
 

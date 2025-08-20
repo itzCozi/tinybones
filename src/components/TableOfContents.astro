@@ -9,7 +9,7 @@ interface Props {
   content?: string;
 }
 
-const { content = '' } = Astro.props;
+const { content = "" } = Astro.props;
 
 function extractHeadings(content: string): Heading[] {
   const headingRegex = /^(#{1,6})\s+(.+)$/gm;
@@ -22,8 +22,8 @@ function extractHeadings(content: string): Heading[] {
 
     const id = text
       .toLowerCase()
-      .replace(/[^\w\s-]/g, '')
-      .replace(/\s+/g, '-')
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
       .trim();
 
     headings.push({ id, text, level });
@@ -38,9 +38,7 @@ const headings = extractHeadings(content);
 {
   headings.length > 0 && (
     <div class="toc-container">
-      <h3 class="toc-title mb-4 text-lg font-semibold text-black dark:text-white">
-        Table of Contents
-      </h3>
+      <h3 class="toc-title mb-4 text-lg font-semibold">Table of Contents</h3>
       <nav class="toc-nav">
         <ul class="toc-list space-y-2">
           {headings.map((heading) => (
@@ -84,27 +82,27 @@ const headings = extractHeadings(content);
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const prose = document.querySelector('.prose');
+  document.addEventListener("DOMContentLoaded", () => {
+    const prose = document.querySelector(".prose");
     if (!prose) return;
 
-    const headings = prose.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const headings = prose.querySelectorAll("h1, h2, h3, h4, h5, h6");
 
     headings.forEach((heading) => {
       if (!heading.id) {
-        const text = heading.textContent || '';
+        const text = heading.textContent || "";
         const id = text
           .toLowerCase()
-          .replace(/[^\w\s-]/g, '')
-          .replace(/\s+/g, '-')
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
           .trim();
         heading.id = id;
       }
     });
 
-    const tocLinks = document.querySelectorAll('.toc-link');
+    const tocLinks = document.querySelectorAll(".toc-link");
     const observerOptions = {
-      rootMargin: '-20% 0% -80% 0%',
+      rootMargin: "-20% 0% -80% 0%",
       threshold: 0,
     };
 
@@ -114,8 +112,8 @@ const headings = extractHeadings(content);
         const tocLink = document.querySelector(`.toc-link[href="#${id}"]`);
 
         if (entry.isIntersecting) {
-          tocLinks.forEach((link) => link.classList.remove('toc-active'));
-          tocLink?.classList.add('toc-active');
+          tocLinks.forEach((link) => link.classList.remove("toc-active"));
+          tocLink?.classList.add("toc-active");
         }
       });
     }, observerOptions);
