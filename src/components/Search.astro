@@ -22,7 +22,6 @@
 </div>
 
 <script>
-  // Define the Post type for TypeScript
   type Post = {
     title: string;
     description: string;
@@ -33,7 +32,6 @@
     tags: string[];
   };
 
-  // Initialize search functionality when the DOM is loaded
   document.addEventListener('DOMContentLoaded', initSearch);
 
   async function initSearch() {
@@ -43,7 +41,6 @@
     
     if (!searchInput || !searchResults || !searchForm) return;
     
-    // Load all blog posts data
     let posts: Post[] = [];
     
     try {
@@ -54,7 +51,6 @@
       return;
     }
 
-    // Handle search input
     searchInput.addEventListener('input', () => {
       const query = searchInput.value.toLowerCase().trim();
       
@@ -72,21 +68,18 @@
       displayResults(filteredPosts);
     });
     
-    // Show/hide results based on focus
     searchInput.addEventListener('focus', () => {
       if (searchInput.value.trim().length >= 2) {
         searchResults.classList.remove('hidden');
       }
     });
     
-    // Close search results when clicking outside
     document.addEventListener('click', (e) => {
       if (!searchForm.contains(e.target as Node)) {
         searchResults.classList.add('hidden');
       }
     });
     
-    // Prevent form submission
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
     });
@@ -107,7 +100,6 @@
         const query = (document.getElementById('search-input') as HTMLInputElement).value.toLowerCase().trim();
         const resultItem = document.createElement('a');
         
-        // Make sure the URL is valid and not undefined
         if (!post.url || post.url.includes('undefined')) {
           console.error('Invalid URL for post:', post);
         }
@@ -126,7 +118,6 @@
         resultItem.appendChild(title);
         resultItem.appendChild(date);
         
-        // If the match is in the content, show a snippet
         if (post.content && post.content.toLowerCase().includes(query) && 
             !post.title.toLowerCase().includes(query) && 
             !post.description?.toLowerCase().includes(query)) {
@@ -136,7 +127,6 @@
           const endIndex = Math.min(post.content.length, contentIndex + query.length + 50);
           let snippet = post.content.substring(startIndex, endIndex);
           
-          // Add ellipsis if we're not starting from the beginning or ending at the end
           if (startIndex > 0) snippet = '...' + snippet;
           if (endIndex < post.content.length) snippet = snippet + '...';
           

@@ -29,7 +29,6 @@ const readingTime = calculateReadingTime(entry.body || '');
 <BaseLayout>
   <SeoPost slot="head" entry={entry} />
   <div class="blog-post-container">
-    <!-- Header Section -->
     <div class="blog-header mb-8">
       {
         entry.data.image && (
@@ -55,16 +54,12 @@ const readingTime = calculateReadingTime(entry.body || '');
       />
     </div>
 
-    <!-- Main Content with TOC -->
-    <div class="blog-content-wrapper lg:grid lg:grid-cols-4 lg:gap-8">
-      <!-- Table of Contents - Desktop -->
+    <div class="blog-content-wrapper lg:grid lg:grid-cols-4 lg:gap-10">
       <aside class="hidden lg:block lg:col-span-1">
         <TableOfContents content={entry.body || ''} />
       </aside>
 
-      <!-- Main Article Content -->
       <article class="lg:col-span-3">
-        <!-- Table of Contents - Mobile -->
         <div class="lg:hidden mb-8">
           <TableOfContents content={entry.body || ''} />
         </div>

@@ -19,7 +19,6 @@
   );
   --prose-blockquote-border-color: var(--color-neutral-300);
 
-  /* Dark mode colors from the first file */
   &:where(.dark, .dark *) {
     --prose-color: var(--color-neutral-300);
     --prose-heading-color: var(--color-white);
@@ -38,7 +37,6 @@
     --prose-blockquote-border-color: var(--color-neutral-600);
   }
 
-  /* System dark mode colors from the first file */
   @media (prefers-color-scheme: dark) {
     &:where(.system, .system *) {
       --prose-color: var(--color-neutral-300);

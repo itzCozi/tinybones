@@ -5,15 +5,13 @@ export async function GET(context) {
   const posts = await getCollection('blog');
   
   const searchData = posts.map(post => {
-    // Get raw Markdown content from post.body
     let contentText = '';
     
     try {
-      // post.body contains the raw markdown content
       contentText = post.body
-        .replace(/\s+/g, ' ') // Normalize whitespace
+        .replace(/\s+/g, ' ')
         .trim()
-        .substring(0, 5000); // Limit content size for performance
+        .substring(0, 5000);
     } catch (err) {
       console.error(`Error processing content for ${post.slug}:`, err);
     }
