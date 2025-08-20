@@ -1,0 +1,166 @@
+---
+---
+
+<div class="search-container relative w-full">
+  <form id="search-form" class="flex items-center w-full" role="search">
+    <div class="relative w-full">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral-500 dark:text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input
+        type="search"
+        id="search-input"
+        class="w-full p-2 pl-10 text-sm text-neutral-900 rounded-md border border-neutral-300 dark:bg-dark-bg dark:border-neutral-700 dark:text-white"
+        placeholder="Search anything"
+        aria-label="Search anything"
+      />
+    </div>
+    <div id="search-results" class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-dark-bg border border-neutral-300 dark:border-neutral-700 rounded-md max-h-60 overflow-auto z-10 hidden"></div>
+  </form>
+</div>
+
+<script>
+  // Define the Post type for TypeScript
+  type Post = {
+    title: string;
+    description: string;
+    content?: string;
+    url: string;
+    pubDate: string;
+    author: string;
+    tags: string[];
+  };
+
+  // Initialize search functionality when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', initSearch);
+
+  async function initSearch() {
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results') as HTMLDivElement;
+    const searchForm = document.getElementById('search-form');
+    
+    if (!searchInput || !searchResults || !searchForm) return;
+    
+    // Load all blog posts data
+    let posts: Post[] = [];
+    
+    try {
+      const response = await fetch('/search-index.json');
+      posts = await response.json();
+    } catch (error) {
+      console.error('Error loading search index:', error);
+      return;
+    }
+
+    // Handle search input
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase().trim();
+      
+      if (query.length < 2) {
+        searchResults.classList.add('hidden');
+        return;
+      }
+      
+      const filteredPosts = posts.filter(post => 
+        post.title.toLowerCase().includes(query) || 
+        post.description?.toLowerCase().includes(query) ||
+        post.content?.toLowerCase().includes(query)
+      );
+      
+      displayResults(filteredPosts);
+    });
+    
+    // Show/hide results based on focus
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim().length >= 2) {
+        searchResults.classList.remove('hidden');
+      }
+    });
+    
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!searchForm.contains(e.target as Node)) {
+        searchResults.classList.add('hidden');
+      }
+    });
+    
+    // Prevent form submission
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+
+    function displayResults(results: Post[]) {
+      searchResults.innerHTML = '';
+      searchResults.classList.remove('hidden');
+      
+      if (results.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.className = 'p-3 text-sm text-neutral-600 dark:text-neutral-300';
+        noResults.textContent = 'No results found';
+        searchResults.appendChild(noResults);
+        return;
+      }
+      
+      results.slice(0, 5).forEach(post => {
+        const query = (document.getElementById('search-input') as HTMLInputElement).value.toLowerCase().trim();
+        const resultItem = document.createElement('a');
+        
+        // Make sure the URL is valid and not undefined
+        if (!post.url || post.url.includes('undefined')) {
+          console.error('Invalid URL for post:', post);
+        }
+        
+        resultItem.href = post.url || '#';
+        resultItem.className = 'block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-900';
+        
+        const title = document.createElement('div');
+        title.className = 'font-medium text-neutral-900 dark:text-white';
+        title.textContent = post.title;
+        
+        const date = document.createElement('div');
+        date.className = 'text-xs text-neutral-500 dark:text-neutral-400';
+        date.textContent = new Date(post.pubDate).toLocaleDateString();
+        
+        resultItem.appendChild(title);
+        resultItem.appendChild(date);
+        
+        // If the match is in the content, show a snippet
+        if (post.content && post.content.toLowerCase().includes(query) && 
+            !post.title.toLowerCase().includes(query) && 
+            !post.description?.toLowerCase().includes(query)) {
+          
+          const contentIndex = post.content.toLowerCase().indexOf(query);
+          const startIndex = Math.max(0, contentIndex - 50);
+          const endIndex = Math.min(post.content.length, contentIndex + query.length + 50);
+          let snippet = post.content.substring(startIndex, endIndex);
+          
+          // Add ellipsis if we're not starting from the beginning or ending at the end
+          if (startIndex > 0) snippet = '...' + snippet;
+          if (endIndex < post.content.length) snippet = snippet + '...';
+          
+          const contentSnippet = document.createElement('div');
+          contentSnippet.className = 'text-xs text-neutral-600 dark:text-neutral-300 mt-1';
+          contentSnippet.textContent = snippet;
+          resultItem.appendChild(contentSnippet);
+        }
+        
+        searchResults.appendChild(resultItem);
+      });
+    }
+  }
+</script>
+
+<style>
+  .search-container {
+    width: 200px;
+  }
+  
+  @media (max-width: 768px) {
+    .search-container {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+</style>

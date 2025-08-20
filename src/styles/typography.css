@@ -64,7 +64,7 @@
   }
 
   color: var(--prose-color);
-  max-width: 80ch;
+  max-width: 105ch;
   font-size: 1rem;
   line-height: 2;
 
@@ -310,9 +310,6 @@
     font-weight: 500;
     font-family: inherit;
     color: var(--tw-prose-kbd);
-    box-shadow:
-      0 0 0 1px rgb(var(--tw-prose-kbd-shadows) / 10%),
-      0 3px 0 rgb(var(--tw-prose-kbd-shadows) / 10%);
     font-size: 0.875em;
     border-radius: 0.3125rem;
     padding-top: 0.1875em;
