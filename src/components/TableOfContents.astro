@@ -1,0 +1,144 @@
+---
+interface Heading {
+  id: string;
+  text: string;
+  level: number;
+}
+
+interface Props {
+  content?: string;
+}
+
+const { content = '' } = Astro.props;
+
+// Extract headings from markdown content
+function extractHeadings(content: string): Heading[] {
+  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+  const headings: Heading[] = [];
+  let match;
+
+  while ((match = headingRegex.exec(content)) !== null) {
+    const level = match[1].length;
+    const text = match[2].trim();
+    
+    // Create a simple ID from the heading text
+    const id = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .trim();
+    
+    headings.push({ id, text, level });
+  }
+
+  return headings;
+}
+
+const headings = extractHeadings(content);
+---
+
+{headings.length > 0 && (
+  <div class="toc-container">
+    <h3 class="toc-title text-lg font-semibold mb-4 text-black dark:text-white">
+      Table of Contents
+    </h3>
+    <nav class="toc-nav">
+      <ul class="toc-list space-y-2">
+        {headings.map(heading => (
+          <li class={`toc-item toc-level-${heading.level}`}>
+            <a 
+              href={`#${heading.id}`}
+              class="toc-link block text-sm text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link transition-colors duration-200"
+              style={`padding-left: ${(heading.level - 1) * 0.75}rem`}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+)}
+
+<style>
+  .toc-container {
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .toc-link:hover {
+    text-decoration: underline;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html {
+    scroll-padding-top: 5rem;
+  }
+</style>
+
+<script>
+  // Add IDs to headings in the content for anchor links
+  document.addEventListener('DOMContentLoaded', () => {
+    const prose = document.querySelector('.prose');
+    if (!prose) return;
+
+    const headings = prose.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    
+    headings.forEach(heading => {
+      if (!heading.id) {
+        const text = heading.textContent || '';
+        const id = text
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .trim();
+        heading.id = id;
+      }
+    });
+
+    // Highlight current section in TOC
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observerOptions = {
+      rootMargin: '-20% 0% -80% 0%',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.id;
+        const tocLink = document.querySelector(`.toc-link[href="#${id}"]`);
+        
+        if (entry.isIntersecting) {
+          // Remove active class from all links
+          tocLinks.forEach(link => link.classList.remove('toc-active'));
+          // Add active class to current link
+          tocLink?.classList.add('toc-active');
+        }
+      });
+    }, observerOptions);
+
+    headings.forEach(heading => {
+      if (heading.id) {
+        observer.observe(heading);
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  .toc-active {
+    color: var(--color-link) !important;
+    font-weight: 600;
+  }
+
+  .dark .toc-active {
+    color: var(--color-dark-link) !important;
+  }
+</style>
