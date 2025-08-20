@@ -22,3 +22,6 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# Prettier ignore giscus component
+src/components/Giscus.astro

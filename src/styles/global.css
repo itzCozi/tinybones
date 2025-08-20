@@ -16,6 +16,15 @@
   background-color: #505050;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a0a0a0 transparent;
+}
+
+.dark * {
+  scrollbar-color: #505050 transparent;
+}
+
 :root {
   color-scheme: light dark;
 }
