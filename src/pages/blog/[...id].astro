@@ -65,7 +65,7 @@ const readingTime = calculateReadingTime(entry.body || "");
           <TableOfContents content={entry.body || ""} />
         </div>
 
-        <div class="prose mx-auto max-w-none lg:mx-0">
+        <div class="prose mx-auto max-w-none lg:mx-0" id="blog-content">
           <Content />
         </div>
 
@@ -75,3 +75,97 @@ const readingTime = calculateReadingTime(entry.body || "");
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  function highlightSearchTerm() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTerm = urlParams.get('search');
+    
+    if (!searchTerm) return;
+    
+    const blogContent = document.getElementById('blog-content');
+    if (!blogContent) return;
+    
+    // Function to escape special regex characters
+    function escapeRegExp(string: string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    
+    // Function to highlight text within a text node
+    function highlightTextNode(textNode: Text, searchText: string) {
+      const parent = textNode.parentNode;
+      if (!parent) return;
+      
+      const text = textNode.textContent || '';
+      const escapedSearchText = escapeRegExp(searchText);
+      const regex = new RegExp(`(${escapedSearchText})`, 'gi');
+      
+      if (regex.test(text)) {
+        const highlightedHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = highlightedHTML;
+        
+        // Replace the text node with the highlighted content
+        const fragment = document.createDocumentFragment();
+        while (tempDiv.firstChild) {
+          fragment.appendChild(tempDiv.firstChild);
+        }
+        parent.replaceChild(fragment, textNode);
+      }
+    }
+    
+    // Function to walk through all text nodes
+    function walkTextNodes(node: Node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        highlightTextNode(node as Text, searchTerm!);
+      } else {
+        // Skip already highlighted content
+        if (node.nodeType === Node.ELEMENT_NODE && (node as Element).classList?.contains('search-highlight')) {
+          return;
+        }
+        
+        const children = Array.from(node.childNodes);
+        children.forEach(child => walkTextNodes(child));
+      }
+    }
+    
+    // Highlight all occurrences
+    walkTextNodes(blogContent);
+    
+    // Scroll to the first highlighted term
+    setTimeout(() => {
+      const firstHighlight = document.querySelector('.search-highlight');
+      if (firstHighlight) {
+        firstHighlight.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }
+    }, 100);
+  }
+  
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', highlightSearchTerm);
+  } else {
+    highlightSearchTerm();
+  }
+  
+  // Run on Astro page transitions
+  document.addEventListener('astro:page-load', highlightSearchTerm);
+</script>
+
+<style>
+  .search-highlight {
+    background-color: #fef08a;
+    color: #854d0e;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+  
+  :global(.dark) .search-highlight {
+    background-color: #ca8a04;
+    color: #fef3c7;
+  }
+</style>

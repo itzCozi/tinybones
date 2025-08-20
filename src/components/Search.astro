@@ -158,13 +158,19 @@
           console.error("Invalid URL for post:", post);
         }
 
-        resultItem.href = post.url || "#";
+        resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
         resultItem.className =
           "block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-900";
 
         const title = document.createElement("div");
         title.className = "font-medium text-neutral-900 dark:text-white";
-        title.textContent = post.title;
+        
+        // Highlight search term in title
+        const highlightedTitle = post.title.replace(
+          new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+          '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>'
+        );
+        title.innerHTML = highlightedTitle;
 
         const date = document.createElement("div");
         date.className = "text-xs text-neutral-500 dark:text-neutral-400";
@@ -190,10 +196,16 @@
           if (startIndex > 0) snippet = "..." + snippet;
           if (endIndex < post.content.length) snippet = snippet + "...";
 
+          // Highlight the search term in the snippet
+          const highlightedSnippet = snippet.replace(
+            new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+            '<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">$1</mark>'
+          );
+
           const contentSnippet = document.createElement("div");
           contentSnippet.className =
             "text-xs text-neutral-600 dark:text-neutral-300 mt-1";
-          contentSnippet.textContent = snippet;
+          contentSnippet.innerHTML = highlightedSnippet;
           resultItem.appendChild(contentSnippet);
         }
 
