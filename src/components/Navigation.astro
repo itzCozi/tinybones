@@ -13,7 +13,10 @@ import { Menu } from "lucide-astro";
     <div class="flex w-full items-center justify-between md:w-auto">
       <a href="/" class="text-xl font-bold sm:text-xl">{SITE.title}</a>
       <div class="block md:hidden">
-        <button id="mobile-menu-button" aria-label="Menu">
+        <button 
+          aria-label="Menu" 
+          onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');"
+        >
           <Menu class="mt-2 h-6 w-6" />
         </button>
       </div>
@@ -57,15 +60,3 @@ import { Menu } from "lucide-astro";
     display: flex;
   }
 </style>
-
-<script>
-  const mobileMenuButton = document.getElementById("mobile-menu-button");
-  const mobileMenu = document.getElementById("mobile-menu");
-
-  if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
-      mobileMenu.classList.toggle("show");
-    });
-  }
-</script>
