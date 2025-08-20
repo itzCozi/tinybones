@@ -9,9 +9,12 @@ export function formatDate(
   } = {},
   locale: string = SITE.locale,
 ): string {
+  const currentYear = new Date().getFullYear();
+  const dateYear = date.getFullYear();
+  
   const defaultOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "numeric",
+    year: dateYear === currentYear ? undefined : "numeric",
+    month: "short",
     day: "numeric",
   };
 
@@ -35,4 +38,16 @@ export function calculateReadingTime(content: string): string {
   const wordCount = words.length;
   const readingTimeMinutes = Math.ceil(wordCount / 200);
   return readingTimeMinutes === 1 ? '1 min read' : `${readingTimeMinutes} min read`;
+}
+
+export function paginateArray<T>(array: T[], pageSize: number): T[][] {
+  const pages: T[][] = [];
+  for (let i = 0; i < array.length; i += pageSize) {
+    pages.push(array.slice(i, i + pageSize));
+  }
+  return pages;
+}
+
+export function getTotalPages(totalItems: number, pageSize: number): number {
+  return Math.ceil(totalItems / pageSize);
 }

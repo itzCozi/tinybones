@@ -12,10 +12,9 @@ const readingTime = calculateReadingTime(post.body || '');
   >
     <span class="link">{post.data.title}</span>
     <div
-      class="text-muted-text dark:text-dark-muted-text text-sm font-normal flex flex-col sm:flex-row sm:gap-2 sm:items-center"
+      class="text-muted-text dark:text-dark-muted-text text-sm font-normal flex flex-col sm:flex-row sm:gap-3 sm:items-center"
     >
       <span>{formatDate(post.data.publicationDate)}</span>
-      <span class="hidden sm:inline">•</span>
       <span>{readingTime}</span>
     </div>
   </a>

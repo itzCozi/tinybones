@@ -1,10 +1,30 @@
 ---
 import { getCollection } from "astro:content";
 import Post from "@/components/Post.astro";
+import Pagination from "@/components/Pagination.astro";
 
-const posts = (await getCollection("blog")).sort(
+export interface Props {
+  currentPage?: number;
+  pageSize?: number;
+  showPagination?: boolean;
+  baseUrl?: string;
+}
+
+const { 
+  currentPage = 1, 
+  pageSize = 5, 
+  showPagination = true,
+  baseUrl = "/blog"
+} = Astro.props;
+
+const allPosts = (await getCollection("blog")).sort(
   (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
 );
+
+const totalPages = Math.ceil(allPosts.length / pageSize);
+const startIndex = (currentPage - 1) * pageSize;
+const endIndex = startIndex + pageSize;
+const posts = allPosts.slice(startIndex, endIndex);
 ---
 
 <section class="py-3">
@@ -14,4 +34,11 @@ const posts = (await getCollection("blog")).sort(
   <div class="grid list-none gap-4 p-0">
     {posts.map((post) => <Post post={post} />)}
   </div>
+  {showPagination && (
+    <Pagination 
+      currentPage={currentPage}
+      totalPages={totalPages}
+      baseUrl={baseUrl}
+    />
+  )}
 </section>

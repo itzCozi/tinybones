@@ -116,6 +116,35 @@ html {
   opacity: 1;
 }
 
+.pager-link-1 {
+  color: var(--prose-color);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.pager-link-1:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+}
+
+.dark .pager-link-1 {
+  color: var(--color-neutral-300);
+  opacity: 1;
+}
+
+.pager-link-2 {
+  color: var(--prose-color);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.dark .pager-link-2 {
+  color: var(--color-neutral-300);
+  opacity: 1;
+}
+
 .prose a:hover {
   text-decoration: underline !important;
   text-underline-offset: 3px !important;
