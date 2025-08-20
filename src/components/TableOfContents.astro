@@ -80,7 +80,13 @@ const headings = extractHeadings(content);
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  declare global {
+    interface Window {
+      tocObserver?: IntersectionObserver;
+    }
+  }
+
+  function initTableOfContents() {
     const prose = document.querySelector(".prose");
     if (!prose) return;
 
@@ -97,6 +103,10 @@ const headings = extractHeadings(content);
         heading.id = id;
       }
     });
+
+    if (window.tocObserver) {
+      window.tocObserver.disconnect();
+    }
 
     const tocLinks = document.querySelectorAll(".toc-link");
     const observerOptions = {
@@ -121,7 +131,13 @@ const headings = extractHeadings(content);
         observer.observe(heading);
       }
     });
-  });
+
+    window.tocObserver = observer;
+  }
+
+  document.addEventListener("DOMContentLoaded", initTableOfContents);
+  document.addEventListener("astro:page-load", initTableOfContents);
+  document.addEventListener("search-highlighting-complete", initTableOfContents);
 </script>
 
 <style is:global>

@@ -146,6 +146,10 @@ const readingTime = calculateReadingTime(entry.body || "");
           behavior: "smooth",
           block: "center",
         });
+        
+        setTimeout(() => {
+          document.dispatchEvent(new CustomEvent("search-highlighting-complete"));
+        }, 200);
       }
     }, 100);
   }
