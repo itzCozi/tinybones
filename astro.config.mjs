@@ -7,7 +7,11 @@ export default defineConfig({
   integrations: [sitemap()],
   markdown: {
     shikiConfig: {
-      theme: "dark-plus",
+      themes: {
+        light: "light-plus",
+        dark: "dark-plus",
+      },
+      defaultColor: false,
     },
   },
   site: "https://blog.exploit.cat",
