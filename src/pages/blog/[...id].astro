@@ -69,7 +69,6 @@ const readingTime = calculateReadingTime(entry.body || "");
           <Content />
         </div>
 
-        <!-- Comments Section -->
         <Giscus class="mt-12" />
       </article>
     </div>
@@ -86,12 +85,18 @@ const readingTime = calculateReadingTime(entry.body || "");
     const blogContent = document.getElementById("blog-content");
     if (!blogContent) return;
 
-    // Function to escape special regex characters
+    const contentText = blogContent.textContent || "";
+    const searchTermLower = searchTerm.toLowerCase();
+    const contentContainsSearchTerm = contentText
+      .toLowerCase()
+      .includes(searchTermLower);
+
+    if (!contentContainsSearchTerm) return;
+
     function escapeRegExp(string: string) {
       return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     }
 
-    // Function to highlight text within a text node
     function highlightTextNode(textNode: Text, searchText: string) {
       const parent = textNode.parentNode;
       if (!parent) return;
@@ -108,7 +113,6 @@ const readingTime = calculateReadingTime(entry.body || "");
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = highlightedHTML;
 
-        // Replace the text node with the highlighted content
         const fragment = document.createDocumentFragment();
         while (tempDiv.firstChild) {
           fragment.appendChild(tempDiv.firstChild);
@@ -117,12 +121,10 @@ const readingTime = calculateReadingTime(entry.body || "");
       }
     }
 
-    // Function to walk through all text nodes
     function walkTextNodes(node: Node) {
       if (node.nodeType === Node.TEXT_NODE) {
         highlightTextNode(node as Text, searchTerm!);
       } else {
-        // Skip already highlighted content
         if (
           node.nodeType === Node.ELEMENT_NODE &&
           (node as Element).classList?.contains("search-highlight")
@@ -135,10 +137,8 @@ const readingTime = calculateReadingTime(entry.body || "");
       }
     }
 
-    // Highlight all occurrences
     walkTextNodes(blogContent);
 
-    // Scroll to the first highlighted term
     setTimeout(() => {
       const firstHighlight = document.querySelector(".search-highlight");
       if (firstHighlight) {
@@ -150,14 +150,12 @@ const readingTime = calculateReadingTime(entry.body || "");
     }, 100);
   }
 
-  // Run on page load
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", highlightSearchTerm);
   } else {
     highlightSearchTerm();
   }
 
-  // Run on Astro page transitions
   document.addEventListener("astro:page-load", highlightSearchTerm);
 </script>
 

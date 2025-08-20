@@ -168,14 +168,23 @@
           console.error("Invalid URL for post:", post);
         }
 
-        resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
+        const titleMatch = post.title.toLowerCase().includes(query);
+        const descriptionMatch = post.description
+          ?.toLowerCase()
+          .includes(query);
+
+        if (titleMatch || descriptionMatch) {
+          resultItem.href = post.url || "#";
+        } else {
+          resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
+        }
+
         resultItem.className =
           "block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-900";
 
         const title = document.createElement("div");
         title.className = "font-medium text-neutral-900 dark:text-white";
 
-        // Highlight search term in title
         const highlightedTitle = post.title.replace(
           new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
           '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>'
@@ -206,7 +215,6 @@
           if (startIndex > 0) snippet = "..." + snippet;
           if (endIndex < post.content.length) snippet = snippet + "...";
 
-          // Highlight the search term in the snippet
           const highlightedSnippet = snippet.replace(
             new RegExp(
               `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
