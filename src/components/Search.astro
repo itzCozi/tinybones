@@ -49,9 +49,22 @@
     tags: string[];
   };
 
-  document.addEventListener("DOMContentLoaded", initSearch);
+  let isSearchInitialized = false;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", initSearch);
+  } else {
+    initSearch();
+  }
+
+  document.addEventListener('astro:page-load', initSearch);
+  
+  document.addEventListener('astro:before-preparation', () => {
+    isSearchInitialized = false;
+  });
 
   async function initSearch() {
+    if (isSearchInitialized) return;
     const searchInput = document.getElementById(
       "search-input"
     ) as HTMLInputElement;
@@ -60,23 +73,41 @@
     ) as HTMLDivElement;
     const searchForm = document.getElementById("search-form");
 
-    if (!searchInput || !searchResults || !searchForm) return;
+    if (!searchInput || !searchResults || !searchForm) {
+      console.warn("Search elements not found, retrying...");
+      setTimeout(initSearch, 100);
+      return;
+    }
+
+    isSearchInitialized = true;
+
+    const newSearchInput = searchInput.cloneNode(true) as HTMLInputElement;
+    searchInput.parentNode?.replaceChild(newSearchInput, searchInput);
 
     let posts: Post[] = [];
 
     try {
       const response = await fetch("/search-index.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       posts = await response.json();
     } catch (error) {
       console.error("Error loading search index:", error);
       return;
     }
 
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.toLowerCase().trim();
+    const freshSearchInput = document.getElementById("search-input") as HTMLInputElement;
+    const freshSearchResults = document.getElementById("search-results") as HTMLDivElement;
+    const freshSearchForm = document.getElementById("search-form") as HTMLElement;
+
+    if (!freshSearchInput || !freshSearchResults || !freshSearchForm) return;
+
+    freshSearchInput.addEventListener("input", () => {
+      const query = freshSearchInput.value.toLowerCase().trim();
 
       if (query.length < 2) {
-        searchResults.classList.add("hidden");
+        freshSearchResults.classList.add("hidden");
         return;
       }
 
@@ -87,44 +118,40 @@
           post.content?.toLowerCase().includes(query)
       );
 
-      displayResults(filteredPosts);
+      displayResults(filteredPosts, freshSearchResults, freshSearchInput);
     });
 
-    searchInput.addEventListener("focus", () => {
-      if (searchInput.value.trim().length >= 2) {
-        searchResults.classList.remove("hidden");
+    freshSearchInput.addEventListener("focus", () => {
+      if (freshSearchInput.value.trim().length >= 2) {
+        freshSearchResults.classList.remove("hidden");
       }
     });
 
     document.addEventListener("click", (e) => {
-      if (!searchForm.contains(e.target as Node)) {
-        searchResults.classList.add("hidden");
+      if (!freshSearchForm.contains(e.target as Node)) {
+        freshSearchResults.classList.add("hidden");
       }
     });
 
-    searchForm.addEventListener("submit", (e) => {
+    freshSearchForm.addEventListener("submit", (e) => {
       e.preventDefault();
     });
 
-    function displayResults(results: Post[]) {
-      searchResults.innerHTML = "";
-      searchResults.classList.remove("hidden");
+    function displayResults(results: Post[], resultsElement: HTMLDivElement, inputElement: HTMLInputElement) {
+      resultsElement.innerHTML = "";
+      resultsElement.classList.remove("hidden");
 
       if (results.length === 0) {
         const noResults = document.createElement("div");
         noResults.className =
           "p-3 text-sm text-neutral-600 dark:text-neutral-300";
         noResults.textContent = "No results found";
-        searchResults.appendChild(noResults);
+        resultsElement.appendChild(noResults);
         return;
       }
 
       results.slice(0, 5).forEach((post) => {
-        const query = (
-          document.getElementById("search-input") as HTMLInputElement
-        ).value
-          .toLowerCase()
-          .trim();
+        const query = inputElement.value.toLowerCase().trim();
         const resultItem = document.createElement("a");
 
         if (!post.url || post.url.includes("undefined")) {
@@ -170,7 +197,7 @@
           resultItem.appendChild(contentSnippet);
         }
 
-        searchResults.appendChild(resultItem);
+        resultsElement.appendChild(resultItem);
       });
     }
   }

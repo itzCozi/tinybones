@@ -5,6 +5,9 @@ import compress from "astro-compress";
 
 // https://astro.build/config
 export default defineConfig({
+  experimental: {
+    clientPrerender: true,
+  },
   integrations: [
     sitemap(),
     compress({
@@ -43,7 +46,17 @@ export default defineConfig({
           manualChunks: {
             vendor: ["astro"],
           },
+          // Ensure proper script loading
+          format: 'es',
+          entryFileNames: 'assets/[name].[hash].js',
+          chunkFileNames: 'assets/[name].[hash].js',
         },
+      },
+      // Preserve function names for better debugging
+      minify: 'terser',
+      terserOptions: {
+        keep_fnames: true,
+        keep_classnames: true,
       },
     },
   },
