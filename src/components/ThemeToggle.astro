@@ -118,21 +118,38 @@
     (window as any)._updateTheme?.(theme);
   }
 
+  function updateActiveButton(): void {
+    const buttons = document.querySelectorAll(".theme-button");
+    const currentTheme = getCurrentTheme();
+    buttons.forEach((b) => b.classList.remove("active"));
+
+    let activeTheme: string;
+    if (currentTheme === "system") {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      activeTheme = prefersDark ? "dark" : "light";
+    } else {
+      activeTheme = currentTheme || "light";
+    }
+
+    buttons.forEach((button) => {
+      const buttonTheme = button.getAttribute("data-theme");
+      if (buttonTheme === activeTheme) {
+        button.classList.add("active");
+      }
+    });
+  }
+
   function initThemeToggle(): void {
     const buttons = document.querySelectorAll(".theme-button");
     const currentTheme = getCurrentTheme();
 
     buttons.forEach((button) => {
-      const buttonTheme = button.getAttribute("data-theme");
-      if (buttonTheme === currentTheme) {
-        button.classList.add("active");
-      }
-
       button.addEventListener("click", () => {
         const selectedTheme = button.getAttribute("data-theme") as Theme;
 
         buttons.forEach((b) => b.classList.remove("active"));
-
         button.classList.add("active");
 
         updateTheme(selectedTheme);
@@ -140,18 +157,19 @@
     });
 
     applyTheme(currentTheme);
+    updateActiveButton();
 
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", () => {
         if (getCurrentTheme() === "system") {
           applyTheme("system");
+          updateActiveButton();
         }
       });
   }
 
   document.addEventListener("DOMContentLoaded", initThemeToggle);
-
   document.addEventListener("astro:page-load", initThemeToggle);
 
   if (
