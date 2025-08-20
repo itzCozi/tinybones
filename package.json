@@ -1,0 +1,26 @@
+{
+  "name": "cats-with-power-tools",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/rss": "^4.0.12",
+    "@astrojs/sitemap": "^3.5.0",
+    "@tailwindcss/vite": "^4.1.12",
+    "astro": "^5.13.2",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.14"
+  }
+}

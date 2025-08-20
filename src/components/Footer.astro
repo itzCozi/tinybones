@@ -1,0 +1,27 @@
+---
+import { SITE, SOCIAL_LINKS } from "@/siteConfig";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="mx-auto flex w-full flex-col items-start gap-6 pt-16 pb-20 sm:flex-row sm:items-center sm:justify-between sm:gap-8"
+>
+    <ThemeToggle />
+    <div class="flex flex-row gap-4 items-center">
+      {SOCIAL_LINKS.map((link) => (
+        <a 
+          href={link.href} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="social-link"
+          aria-label={link.label}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+  <span class="prose">{year}, {SITE.author}</span>
+</footer>

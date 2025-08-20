@@ -1,0 +1,22 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+import Introduction from "@/parts/Introduction.astro";
+import Posts from "@/parts/Posts.astro";
+import Projects from "@/parts/Projects.astro";
+import SeoPage from "@/components/SeoPage.astro";
+---
+
+<BaseLayout>
+  <SeoPage slot="head" />
+  <div>
+    <Introduction />
+    <hr
+      class="border-muted-text dark:border-dark-muted-text my-12 border-[0.5px] opacity-10 dark:opacity-15"
+    />
+    <Posts />
+    <div class="mt-8">
+      <Projects />
+    </div>
+  </div>
+</BaseLayout>

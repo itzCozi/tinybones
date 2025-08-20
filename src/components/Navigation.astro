@@ -1,0 +1,28 @@
+---
+import { NAV_LINKS, SITE } from "@/siteConfig.ts";
+---
+
+<header
+  class="mx-auto flex max-w-screen-md flex-wrap items-center justify-between p-3 pb-8 font-sans sm:p-6"
+>
+  <a
+    href="/"
+    class="text-lg font-semibold text-black sm:text-xl dark:text-white"
+    >{SITE.title}</a
+  >
+  <nav>
+    <ul class="flex list-none items-center gap-5 p-0">
+      {
+        Object.keys(NAV_LINKS).map((navItemKey) => {
+          return (
+            <li>
+              <a href={NAV_LINKS[navItemKey].path} class="nav-link">
+                {NAV_LINKS[navItemKey].label}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</header>
