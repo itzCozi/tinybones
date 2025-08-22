@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import compress from "astro-compress";
+import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,6 +11,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap(),
+    mdx(),
     compress({
       CSS: true,
       HTML: {
@@ -46,13 +48,11 @@ export default defineConfig({
           manualChunks: {
             vendor: ["astro"],
           },
-          // Ensure proper script loading
           format: "es",
           entryFileNames: "assets/[name].[hash].js",
           chunkFileNames: "assets/[name].[hash].js",
         },
       },
-      // Preserve function names for better debugging
       minify: "terser",
       terserOptions: {
         keep_fnames: true,

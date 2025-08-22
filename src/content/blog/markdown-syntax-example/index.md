@@ -392,8 +392,16 @@ Use three or more hyphens (-) for the column headers and use pipes (|) to separa
 
 ---
 
+## MDX Support
+
+This blog also supports MDX (Markdown with JSX) which allows you to use React-like components in your content. 
+
+See the [MDX Syntax Example](/blog/mdx-syntax-example) for details on using MDX, including the built-in InfoBox component for admonitions and creating your own custom components.
+
+---
+
 ## Conclusion
 
 Refer to [markdownguide.org](https://www.markdownguide.org/) for best practices as well as extended syntax.
 
----
+footnote example*

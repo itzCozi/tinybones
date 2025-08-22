@@ -12,22 +12,26 @@ interface Props {
 const { content = "" } = Astro.props;
 
 function extractHeadings(content: string): Heading[] {
-  const headingRegex = /^(#{1,6})\s+(.+)$/gm;
   const headings: Heading[] = [];
-  let match;
+  const segments = content.split(/```[\s\S]*?```|~~~[\s\S]*?~~~/g);
+  
+  segments.forEach(segment => {
+    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+    let match;
+    
+    while ((match = headingRegex.exec(segment)) !== null) {
+      const level = match[1].length;
+      const text = match[2].trim();
 
-  while ((match = headingRegex.exec(content)) !== null) {
-    const level = match[1].length;
-    const text = match[2].trim();
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
 
-    const id = text
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .trim();
-
-    headings.push({ id, text, level });
-  }
+      headings.push({ id, text, level });
+    }
+  });
 
   return headings;
 }

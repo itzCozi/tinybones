@@ -1,0 +1,87 @@
+---
+title: MDX Syntax Example
+description: A guide to using MDX in your blog posts with custom components.
+publicationDate: 2025-08-21T12:00:00Z
+---
+
+import InfoBox from '@/components/mdx/InfoBox.astro';
+
+# MDX in tinybones
+
+This blog supports MDX (Markdown with JSX), allowing you to use React-like components directly in your markdown content. MDX combines the simplicity of markdown with the power of components.
+
+## Using InfoBox Component
+
+The blog comes with a built-in InfoBox component that you can use to display admonitions. Here's how to use it:
+
+<InfoBox>
+  This is a default information box that you can use to highlight important information.
+</InfoBox>
+
+<InfoBox type="warning">
+  This is a warning box to alert users about potential issues.
+</InfoBox>
+
+<InfoBox type="danger">
+  This is an error box to indicate something that went wrong.
+</InfoBox>
+
+<InfoBox type="note">
+  This is a note box for additional context or asides.
+</InfoBox>
+
+## Custom Titles
+
+You can also customize the title of the InfoBox:
+
+<InfoBox title="Custom Title">
+  This InfoBox has a custom title instead of the default "Information".
+</InfoBox>
+
+## The Code
+
+To use the InfoBox component in your MDX file, first import it at the top of your file:
+
+```mdx
+---
+title: Your Blog Post Title
+description: Your description here
+publicationDate: 2025-08-21
+---
+
+import InfoBox from '@/components/mdx/InfoBox.astro';
+
+# Your content here
+
+<InfoBox type="info">
+  Your important information here.
+</InfoBox>
+```
+
+## Available InfoBox Types
+
+The InfoBox component supports the following types:
+- `info` (default)
+- `warning`
+- `danger`
+- `note`
+
+But of course you can add your own with ease.
+
+## Creating Your Own Components
+
+You can create your own components and use them in MDX. Just create a new `.astro` file in the `src/components/mdx/` directory, and then import and use it in your MDX files.
+
+<InfoBox type="note" title="Developer Note">
+  MDX is a powerful tool that allows you to combine the simplicity of Markdown with the expressiveness of JSX. 
+  This makes your content more interactive and engaging for readers.
+</InfoBox>
+
+## Dynamic Content
+
+One of the benefits of using MDX is that you can include dynamic content. For example:
+
+{(function() {
+  const currentDate = new Date();
+  return <p>This page was rendered on {currentDate.toLocaleDateString()}.</p>;
+})()}

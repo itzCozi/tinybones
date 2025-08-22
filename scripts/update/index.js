@@ -12,13 +12,11 @@ import path from 'path';
 import { execSync } from 'child_process';
 import readline from 'readline';
 
-// Create readline interface for user prompts
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-// Get user confirmation
 const confirm = async (question) => {
   return new Promise((resolve) => {
     rl.question(`${question} (y/n): `, (answer) => {
@@ -27,11 +25,10 @@ const confirm = async (question) => {
   });
 };
 
-// Main update function
 const updateTinybones = async () => {
   try {
     console.log('🦴 TinyBones Update Script');
-    console.log('=========================');
+    console.log('============================');
     console.log('This script will update your TinyBones blog with the latest template code');
     console.log('while preserving your content.');
     console.log('\n⚠️ Warning: Make sure to commit or back up your changes before proceeding!');
@@ -43,10 +40,8 @@ const updateTinybones = async () => {
       return;
     }
 
-    // Get the current working directory (blog root)
     const blogRoot = process.cwd();
     
-    // Load config file if it exists, otherwise use defaults
     const configPath = path.join(blogRoot, '.tinybones-config.json');
     let config = {
       preservePaths: [
@@ -80,16 +75,13 @@ const updateTinybones = async () => {
       console.log('Using default configuration (no .tinybones-config.json found)');
     }
     
-    // Convert relative paths to absolute
     const contentPaths = config.preservePaths.map(relPath => path.join(blogRoot, relPath));
     
-    // Temporary directory for backup
     const tempDir = path.join(blogRoot, '.temp_update_backup');
     
     console.log('\n📦 Backing up your content...');
     fs.ensureDirSync(tempDir);
     
-    // Backup user content
     for (const contentPath of contentPaths) {
       const relativePath = path.relative(blogRoot, contentPath);
       const backupPath = path.join(tempDir, relativePath);
@@ -104,12 +96,10 @@ const updateTinybones = async () => {
     console.log('\n🔄 Fetching the latest TinyBones template...');
     
     try {
-      // Get template repository details
       const templateRepo = config.template.repository || 'itzCozi/tinybones';
       const templateBranch = config.template.branch || 'main';
       const remoteName = 'tinybones-template';
       
-      // Check if the remote exists
       try {
         execSync(`git remote get-url ${remoteName}`, { stdio: 'ignore' });
         execSync(`git remote remove ${remoteName}`, { stdio: 'ignore' });
@@ -117,22 +107,18 @@ const updateTinybones = async () => {
         // Remote doesn't exist, which is fine
       }
       
-      // Add the template repository as a remote
       console.log(`Adding ${templateRepo} as a remote...`);
       execSync(`git remote add ${remoteName} https://github.com/${templateRepo}.git`, { stdio: 'inherit' });
       
-      // Fetch the latest changes from the template repository
       console.log(`Fetching latest template changes from ${templateRepo}:${templateBranch}...`);
       execSync(`git fetch ${remoteName} ${templateBranch}`, { stdio: 'inherit' });
       
-      // Create a temporary branch for the update
       const tempBranch = `tinybones-update-${Date.now()}`;
       console.log(`Creating temporary branch: ${tempBranch}`);
       execSync(`git checkout -b ${tempBranch} ${remoteName}/${templateBranch}`, { stdio: 'inherit' });
       
       console.log('\n🔄 Restoring your content...');
       
-      // Restore user content from backup
       for (const contentPath of contentPaths) {
         const relativePath = path.relative(blogRoot, contentPath);
         const backupPath = path.join(tempDir, relativePath);
@@ -145,7 +131,6 @@ const updateTinybones = async () => {
         }
       }
       
-      // Restore the config file itself
       if (fs.existsSync(configPath)) {
         const backupConfigPath = path.join(tempDir, '.tinybones-config.json');
         if (fs.existsSync(backupConfigPath)) {
@@ -155,7 +140,6 @@ const updateTinybones = async () => {
       
       console.log('\n📦 Installing dependencies...');
       
-      // Detect package manager by checking for lock files
       let packageManager = 'npm';
       if (fs.existsSync(path.join(blogRoot, 'pnpm-lock.yaml'))) {
         packageManager = 'pnpm';
@@ -177,7 +161,6 @@ const updateTinybones = async () => {
       console.error('\n❌ Update failed:', error.message);
       console.log('Attempting to restore from backup...');
       
-      // Restore user content from backup on failure
       for (const contentPath of contentPaths) {
         const relativePath = path.relative(blogRoot, contentPath);
         const backupPath = path.join(tempDir, relativePath);
@@ -193,7 +176,6 @@ const updateTinybones = async () => {
       console.log('Try to manually resolve the issues and run the update again.');
     }
     
-    // Clean up temporary directory
     fs.removeSync(tempDir);
     
   } catch (error) {

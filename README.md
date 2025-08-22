@@ -12,6 +12,7 @@ A minimal blog template built with [Astro](https://astro.build/). Perfect for de
 - **SEO-friendly:** Sitemap, RSS feed, and Open Graph protocol support out of the box
 - **Accessible:** System, dark, and light mode support with keyboard navigation
 - **Developer-friendly:** TypeScript, Tailwind CSS, and modern tooling
+- **MDX support:** Write interactive blog posts with custom components including built-in InfoBox admonitions
 - **Comments system:** Built-in support for Giscus comments
 
 ## Core Web Vitals
