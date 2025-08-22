@@ -14,11 +14,11 @@ const { content = "" } = Astro.props;
 function extractHeadings(content: string): Heading[] {
   const headings: Heading[] = [];
   const segments = content.split(/```[\s\S]*?```|~~~[\s\S]*?~~~/g);
-  
-  segments.forEach(segment => {
+
+  segments.forEach((segment) => {
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
     let match;
-    
+
     while ((match = headingRegex.exec(segment)) !== null) {
       const level = match[1].length;
       const text = match[2].trim();
@@ -141,7 +141,10 @@ const headings = extractHeadings(content);
 
   document.addEventListener("DOMContentLoaded", initTableOfContents);
   document.addEventListener("astro:page-load", initTableOfContents);
-  document.addEventListener("search-highlighting-complete", initTableOfContents);
+  document.addEventListener(
+    "search-highlighting-complete",
+    initTableOfContents
+  );
 </script>
 
 <style is:global>

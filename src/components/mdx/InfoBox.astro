@@ -1,40 +1,40 @@
 ---
-import { AlertTriangle, AlertCircle, FileText, Info } from 'lucide-astro';
+import { AlertTriangle, AlertCircle, FileText, Info } from "lucide-astro";
 
 interface Props {
-  type?: 'warning' | 'danger' | 'note' | 'default';
+  type?: "warning" | "danger" | "note" | "default";
   title?: string;
 }
 
-const { type = 'default', title } = Astro.props;
+const { type = "default", title } = Astro.props;
 
 const typeStyles = {
   default: {
-    bg: 'bg-transparent',
-    border: 'border-neutral-400 dark:border-neutral-600',
-    text: 'font-semibold',
-    title: title || 'Information',
+    bg: "bg-transparent",
+    border: "border-neutral-400 dark:border-neutral-600",
+    text: "font-semibold",
+    title: title || "Information",
     icon: Info,
   },
   warning: {
-    bg: 'bg-yellow-50 dark:bg-yellow-950/50',
-    border: 'border-yellow-300 dark:border-yellow-900/50',
-    text: 'text-yellow-700 dark:text-yellow-200 font-semibold',
-    title: title || 'Warning',
+    bg: "bg-yellow-50 dark:bg-yellow-950/50",
+    border: "border-yellow-300 dark:border-yellow-900/50",
+    text: "text-yellow-700 dark:text-yellow-200 font-semibold",
+    title: title || "Warning",
     icon: AlertTriangle,
   },
   danger: {
-    bg: 'bg-red-50 dark:bg-red-950/50',
-    border: 'border-red-300 dark:border-red-900/50',
-    text: 'text-red-800 dark:text-red-200 font-semibold',
-    title: title || 'Danger',
+    bg: "bg-red-50 dark:bg-red-950/50",
+    border: "border-red-300 dark:border-red-900/50",
+    text: "text-red-800 dark:text-red-200 font-semibold",
+    title: title || "Danger",
     icon: AlertCircle,
   },
   note: {
-    bg: 'bg-neutral-200/35 dark:bg-neutral-900/50',
-    border: 'border-neutral-400 dark:border-neutral-800',
-    text: 'font-semibold',
-    title: title || 'Note',
+    bg: "bg-neutral-200/35 dark:bg-neutral-900/50",
+    border: "border-neutral-400 dark:border-neutral-800",
+    text: "font-semibold",
+    title: title || "Note",
     icon: FileText,
   },
 };

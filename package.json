@@ -24,7 +24,7 @@
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.2",
     "astro-compress": "^2.3.8",
-    "fs-extra": "^11.2.0",
+    "fs-extra": "^11.3.1",
     "lucide": "^0.540.0",
     "lucide-astro": "^0.540.0",
     "sharp": "^0.34.3",
