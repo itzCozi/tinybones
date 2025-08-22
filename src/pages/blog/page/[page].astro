@@ -1,7 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Posts from "@/parts/Posts.astro";
+import Posts from "@/components/Posts.astro";
 import SeoPage from "@/components/SeoPage.astro";
 
 export async function getStaticPaths() {
@@ -24,6 +24,6 @@ const { currentPage } = Astro.props;
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title={`Blog - Page ${currentPage}`} />
+  <SeoPage slot="head" title={`Blog - pg${currentPage}`} />
   <Posts currentPage={currentPage} showPagination={true} baseUrl="/blog" />
 </BaseLayout>

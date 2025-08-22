@@ -7,19 +7,21 @@ interface Props {
 }
 
 const { title = SITE.title, description = SITE.description } = Astro.props;
+const formattedTitle =
+  title === SITE.title ? title : `${title} | ${SITE.title}`;
 ---
 
-<title>{title}</title>
+<title>{formattedTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={SITE.href} />
 
-<meta property="og:title" content={title} />
+<meta property="og:title" content={formattedTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:image:alt" content={title} />
+<meta property="og:image:alt" content={formattedTitle} />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content={SITE.locale} />
 
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={formattedTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image:alt" content={title} />
+<meta name="twitter:image:alt" content={formattedTitle} />
 <meta name="twitter:card" content="summary_large_image" />
