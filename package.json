@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "update-template": "node ./scripts/update/index.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -17,6 +18,7 @@
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.2",
     "astro-compress": "^2.3.8",
+    "fs-extra": "^11.2.0",
     "lucide": "^0.540.0",
     "lucide-astro": "^0.540.0",
     "sharp": "^0.34.3",
