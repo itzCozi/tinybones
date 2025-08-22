@@ -337,9 +337,6 @@
     background-color: rgba(175, 184, 193, 0.2);
     padding: 0.2em 0.4em;
     border-radius: 6px;
-    font-family:
-      ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono",
-      Menlo, monospace;
   }
 
   &:where(.dark, .dark *)

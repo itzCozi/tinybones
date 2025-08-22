@@ -5,6 +5,7 @@ publicationDate: 2025-08-21T12:00:00Z
 ---
 
 import InfoBox from "@/components/mdx/InfoBox.astro";
+import { CircleHelp, AlertOctagon, Lightbulb } from "lucide-astro";
 
 # MDX in tinybones
 
@@ -31,19 +32,20 @@ The blog comes with a built-in InfoBox component that you can use to display adm
   This is a note box for additional context or asides.
 </InfoBox>
 
-## Custom Titles
+## Custom Titles and Icons
 
-You can also customize the title of the InfoBox:
+You can customize both the title and icon of the InfoBox:
 
-<InfoBox title="Custom Title">
-  This InfoBox has a custom title instead of the default "Information".
+<InfoBox title="Custom Title" icon={CircleHelp}>
+  This InfoBox has a custom title instead of the default "Information" and a
+  custom icon.
 </InfoBox>
 
 ## The Code
 
 To use the InfoBox component in your MDX file, first import it at the top of your file:
 
-```mdx
+```
 ---
 title: Your Blog Post Title
 description: Your description here
@@ -51,6 +53,7 @@ publicationDate: 2025-08-21
 ---
 
 import InfoBox from "@/components/mdx/InfoBox.astro";
+import { CircleHelp } from "lucide-astro";
 
 # Your content here
 

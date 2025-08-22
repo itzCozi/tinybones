@@ -4,38 +4,43 @@ import { AlertTriangle, AlertCircle, FileText, Info } from "lucide-astro";
 interface Props {
   type?: "warning" | "danger" | "note" | "default";
   title?: string;
+  icon?: typeof Info;
 }
 
-const { type = "default", title } = Astro.props;
+const { type = "default", title, icon } = Astro.props;
 
 const typeStyles = {
   default: {
     bg: "bg-transparent",
     border: "border-neutral-400 dark:border-neutral-600",
     text: "font-semibold",
+    contentText: "",
     title: title || "Information",
-    icon: Info,
+    icon: icon || Info,
   },
   warning: {
-    bg: "bg-yellow-50 dark:bg-yellow-950/50",
+    bg: "bg-yellow-100 dark:bg-yellow-950/50",
     border: "border-yellow-300 dark:border-yellow-900/50",
-    text: "text-yellow-700 dark:text-yellow-200 font-semibold",
+    text: "text-yellow-800 dark:text-orange-200 font-semibold",
+    contentText: "text-yellow-800/85 dark:text-orange-200/85",
     title: title || "Warning",
-    icon: AlertTriangle,
+    icon: icon || AlertTriangle,
   },
   danger: {
-    bg: "bg-red-50 dark:bg-red-950/50",
+    bg: "bg-red-100 dark:bg-red-950/50",
     border: "border-red-300 dark:border-red-900/50",
     text: "text-red-800 dark:text-red-200 font-semibold",
+    contentText: "text-red-800/85 dark:text-red-200/85",
     title: title || "Danger",
-    icon: AlertCircle,
+    icon: icon || AlertCircle,
   },
   note: {
     bg: "bg-neutral-200/35 dark:bg-neutral-900/50",
     border: "border-neutral-400 dark:border-neutral-800",
     text: "font-semibold",
+    contentText: "",
     title: title || "Note",
-    icon: FileText,
+    icon: icon || FileText,
   },
 };
 
@@ -43,13 +48,13 @@ const styles = typeStyles[type];
 ---
 
 <div class={`p-4 my-6 rounded-md border ${styles.bg} ${styles.border}`}>
-  <div class={`font-medium flex items-center gap-2 mb-2 ${styles.text}`}>
+  <div class={`font-medium flex items-center gap-2 mb-1 ${styles.text}`}>
     <span>
       <styles.icon size={20} />
     </span>
     <span>{styles.title}</span>
   </div>
-  <div class="prose dark:prose-invert max-w-none">
+  <div class={`prose dark:prose-invert max-w-none ${styles.contentText}`}>
     <slot />
   </div>
 </div>
