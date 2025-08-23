@@ -184,3 +184,24 @@ html {
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
 }
+
+.code-block-wrapper {
+  position: relative;
+}
+
+.copy-code-button {
+  position: absolute;
+  margin-right: 0.3rem;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.copy-code-button:hover {
+  text-decoration: underline;
+}
+
