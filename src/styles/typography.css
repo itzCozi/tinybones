@@ -563,7 +563,6 @@
     margin-bottom: 0;
   }
 
-  /* GitHub-style task lists */
   :where(li):has(input[type="checkbox"]):not(
       :where([class~="not-prose"], [class~="not-prose"] *)
     ) {
@@ -578,7 +577,6 @@
     vertical-align: middle;
   }
 
-  /* GitHub-style alerts/callouts */
   :where(.markdown-alert):not(
     :where([class~="not-prose"], [class~="not-prose"] *)
   ) {

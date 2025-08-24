@@ -1,0 +1,12 @@
+---
+interface Props {
+  title: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<div class={`tab-panel pt-4 px-2 ${className || ""}`} data-title={title}>
+  <slot />
+</div>
