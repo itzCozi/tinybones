@@ -9,7 +9,7 @@
     var(--color-neutral-700) 25%,
     transparent
   );
-  --prose-link-underline-color: var(--color-link);
+  --prose-link-underline-color: currentColor;
   --prose-th-borders: var(--color-neutral-300);
   --prose-td-borders: var(--color-neutral-200);
   --prose-hr-color: color-mix(
@@ -30,7 +30,7 @@
       var(--color-neutral-300) 35%,
       transparent
     );
-    --prose-link-underline-color: var(--color-dark-link);
+    --prose-link-underline-color: currentColor;
     --prose-th-borders: var(--color-neutral-600);
     --prose-td-borders: var(--color-neutral-700);
     --prose-hr-color: color-mix(in oklab, var(--color-white) 10%, transparent);
@@ -49,7 +49,7 @@
         var(--color-neutral-300) 35%,
         transparent
       );
-      --prose-link-underline-color: var(--color-blue-400);
+      --prose-link-underline-color: currentColor;
       --prose-th-borders: var(--color-neutral-600);
       --prose-td-borders: var(--color-neutral-700);
       --prose-hr-color: color-mix(
@@ -95,6 +95,7 @@
   :where(a):not(:where([class~="not-prose"], [class~="not-prose"] *)):hover {
     text-decoration: underline;
     text-underline-offset: 3px;
+    text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
   }
 
@@ -214,15 +215,8 @@
     font-weight: 600;
     font-size: 2em;
     margin-top: 0;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
-    padding-bottom: 0.3em;
-    border-bottom: 1px solid #d0d7de;
-  }
-
-  &:where(.dark, .dark *)
-    :where(h1):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-    border-bottom-color: #30363d;
   }
 
   :where(h1 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -234,16 +228,9 @@
     color: var(--prose-heading-color);
     font-weight: 600;
     font-size: 1.5em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
-    padding-bottom: 0.3em;
-    border-bottom: 1px solid #d0d7de;
-  }
-
-  &:where(.dark, .dark *)
-    :where(h2):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-    border-bottom-color: #30363d;
   }
 
   :where(h2 strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -255,8 +242,8 @@
     color: var(--prose-heading-color);
     font-weight: 600;
     font-size: 1.25em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
   }
 
@@ -269,8 +256,8 @@
     color: var(--prose-heading-color);
     font-weight: 600;
     font-size: 1em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
   }
 
@@ -283,8 +270,8 @@
     color: var(--prose-heading-color);
     font-weight: 600;
     font-size: 0.875em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
   }
 
@@ -292,8 +279,8 @@
     color: #656d76;
     font-weight: 600;
     font-size: 0.85em;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+    margin-bottom: 0.4em;
     line-height: 1.25;
   }
 

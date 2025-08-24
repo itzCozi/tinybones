@@ -75,7 +75,7 @@ html {
 
 .link {
   --prose-link-color: var(--color-link);
-  --prose-link-underline-color: var(--color-link);
+  --prose-link-underline-color: currentColor;
 
   color: var(--prose-link-color);
   font-weight: var(--font-weight-semibold);
@@ -86,14 +86,14 @@ html {
   &:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: var(--prose-link-underline-color);
+    text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
   }
 }
 
 .dark .link {
   --prose-link-color: var(--color-dark-link);
-  --prose-link-underline-color: var(--color-dark-link);
+  --prose-link-underline-color: currentColor;
 }
 
 .nav-link {
@@ -163,7 +163,7 @@ html {
 .prose a:hover {
   text-decoration: underline !important;
   text-underline-offset: 3px !important;
-  text-decoration-color: var(--prose-link-underline-color) !important;
+  text-decoration-color: currentColor !important;
   text-decoration-thickness: 1px !important;
 }
 
