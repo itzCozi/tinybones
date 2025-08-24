@@ -161,7 +161,6 @@ const headings = extractHeadings(content);
     window.tocObserver = observer;
   }
 
-  document.addEventListener("DOMContentLoaded", initTableOfContents);
   document.addEventListener("astro:page-load", initTableOfContents);
   document.addEventListener(
     "search-highlighting-complete",

@@ -51,12 +51,6 @@
 
   let isSearchInitialized = false;
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initSearch);
-  } else {
-    initSearch();
-  }
-
   document.addEventListener("astro:page-load", initSearch);
 
   document.addEventListener("astro:before-preparation", () => {

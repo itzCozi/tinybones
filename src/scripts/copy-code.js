@@ -54,5 +54,4 @@ function initializeCopyButtons() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initializeCopyButtons);
 document.addEventListener("astro:page-load", initializeCopyButtons);
