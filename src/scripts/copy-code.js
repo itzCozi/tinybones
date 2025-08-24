@@ -1,7 +1,12 @@
-document.addEventListener("DOMContentLoaded", function () {
+function initializeCopyButtons() {
   const codeBlocks = document.querySelectorAll("pre");
 
   codeBlocks.forEach((codeBlock) => {
+    // Skip if this code block already has a copy button
+    if (codeBlock.parentNode.classList.contains("code-block-wrapper")) {
+      return;
+    }
+
     const wrapper = document.createElement("div");
     wrapper.className = "code-block-wrapper";
 
@@ -47,4 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-});
+}
+
+document.addEventListener("DOMContentLoaded", initializeCopyButtons);
+document.addEventListener("astro:page-load", initializeCopyButtons);
