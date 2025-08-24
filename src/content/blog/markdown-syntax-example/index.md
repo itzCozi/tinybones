@@ -4,6 +4,10 @@ description: A page displaying common elements used in Markdown documents.
 publicationDate: 2025-03-20T01:29:19Z
 ---
 
+# Markdown in TinyBones
+
+Markdown is the primary format for writing content in this blog. Below are examples of common Markdown syntax (all markdown syntax is supported).
+
 ## Headings
 
 To create headings, use hash symbols (#) followed by a space. The number of hash symbols indicates the heading level.

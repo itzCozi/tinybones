@@ -106,25 +106,26 @@ const headings = extractHeadings(content);
           .trim();
         heading.id = id;
       }
-      
+
       if (!heading.querySelector(".heading-link")) {
         const anchor = document.createElement("a");
         anchor.className = "heading-link";
         anchor.href = `#${heading.id}`;
         anchor.setAttribute("aria-label", "Link to this section");
         anchor.textContent = "#";
-        
+
         anchor.addEventListener("click", (e) => {
           e.preventDefault();
           const url = new URL(window.location.href);
           url.hash = heading.id;
-          navigator.clipboard.writeText(url.toString())
+          navigator.clipboard
+            .writeText(url.toString())
             .then(() => {
               window.location.hash = heading.id;
             })
             .catch(console.error);
         });
-        
+
         heading.appendChild(anchor);
       }
     });
