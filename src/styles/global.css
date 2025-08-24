@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./typography.css" layer(components);
+@import "./heading-links.css";
 @variant dark (&:where(.dark, .dark *));
 
 :root ::-webkit-scrollbar {
