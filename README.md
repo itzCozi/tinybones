@@ -17,18 +17,20 @@ A minimal blog template built with [Astro](https://astro.build/). Perfect for de
 
 ## Core Web Vitals
 
-Performance: **100**  
+Best Practices: **100**  
 Accessibility: **100**  
-SEO: **100**  
+Performance: **100**  
+SEO: **100**
+
+![Web Vitals](.github/web-vitals.png)
 
 ## Getting Started
-
 
 1. Click the "Use this template" button at the top of the repository
 2. Clone your new repository to your local machine
 3. Install dependencies: `pnpm install`
 4. Update `src/siteConfig.ts` with your site details
-5. Add your content to `src/content/blog/` and `src/content/projects/`
+5. Add your content to `src/content/blog/` and `src/content/projects/` its that easy!
 6. Start writing and customizing!
 
 ## Customization
@@ -40,7 +42,6 @@ SEO: **100**
 ## Keeping Your Site Updated
 
 TinyBones includes a built-in update mechanism that allows you to get the latest template improvements while preserving your content.
-
 To update your TinyBones-based blog:
 
 1. Make sure you have committed all your changes (or create a backup)
@@ -49,9 +50,20 @@ To update your TinyBones-based blog:
 4. Commit the updated code to your repository
 
 The update script preserves the following directories and files:
+
 - Your content: `src/content/`
 - Your site configuration: `src/siteConfig.ts`
 - Your public assets: `public/`
+
+## Building and Deploying
+
+To build your blog for production, run:
+
+```bash
+pnpm build
+```
+
+This will generate static files in the `dist/` directory. You can then deploy these files to any static hosting provider like Vercel, Netlify, or my favorite Cloudflare Pages (which is completely free and super easy). For most providers all you have to do is link your GitHub repository and set your build command to `pnpm build` and your output directory to `dist/`.
 
 ## Package Manager
 

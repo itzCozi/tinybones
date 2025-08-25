@@ -4,6 +4,10 @@ description: A page displaying common elements used in Markdown documents.
 publicationDate: 2025-03-20T01:29:19Z
 ---
 
+# Markdown in TinyBones
+
+Markdown is the primary format for writing content in this blog. Below are examples of common Markdown syntax (all markdown syntax is supported).
+
 ## Headings
 
 To create headings, use hash symbols (#) followed by a space. The number of hash symbols indicates the heading level.
@@ -394,7 +398,7 @@ Use three or more hyphens (-) for the column headers and use pipes (|) to separa
 
 ## MDX Support
 
-This blog also supports MDX (Markdown with JSX) which allows you to use React-like components in your content. 
+This blog also supports MDX (Markdown with JSX) which allows you to use React-like components in your content.
 
 See the [MDX Syntax Example](/blog/mdx-syntax-example) for details on using MDX, including the built-in InfoBox component for admonitions and creating your own custom components.
 
@@ -404,4 +408,4 @@ See the [MDX Syntax Example](/blog/mdx-syntax-example) for details on using MDX,
 
 Refer to [markdownguide.org](https://www.markdownguide.org/) for best practices as well as extended syntax.
 
-footnote example*
+footnote example\*

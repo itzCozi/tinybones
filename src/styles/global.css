@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./typography.css" layer(components);
+@import "./heading-links.css";
 @variant dark (&:where(.dark, .dark *));
 
 :root ::-webkit-scrollbar {
@@ -40,7 +41,7 @@ html {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
-  font-family: "Cambria", "Georgia", serif;
+  font-family: "Cambria", "Georgia", "Times New Roman", "Times", serif;
 }
 * {
   transition:
@@ -50,6 +51,15 @@ html {
     fill 0.2s ease,
     stroke 0.2s ease;
   font-family: inherit;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
 @variant dark {
@@ -75,7 +85,7 @@ html {
 
 .link {
   --prose-link-color: var(--color-link);
-  --prose-link-underline-color: var(--color-link);
+  --prose-link-underline-color: currentColor;
 
   color: var(--prose-link-color);
   font-weight: var(--font-weight-semibold);
@@ -86,14 +96,14 @@ html {
   &:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: var(--prose-link-underline-color);
+    text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
   }
 }
 
 .dark .link {
   --prose-link-color: var(--color-dark-link);
-  --prose-link-underline-color: var(--color-dark-link);
+  --prose-link-underline-color: currentColor;
 }
 
 .nav-link {
@@ -163,7 +173,7 @@ html {
 .prose a:hover {
   text-decoration: underline !important;
   text-underline-offset: 3px !important;
-  text-decoration-color: var(--prose-link-underline-color) !important;
+  text-decoration-color: currentColor !important;
   text-decoration-thickness: 1px !important;
 }
 
@@ -183,4 +193,24 @@ html {
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+.code-block-wrapper {
+  position: relative;
+}
+
+.copy-code-button {
+  position: absolute;
+  margin-right: 0.3rem;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  color: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.copy-code-button:hover {
+  text-decoration: underline;
 }

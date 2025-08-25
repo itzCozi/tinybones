@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-import Introduction from "@/parts/Introduction.astro";
-import Posts from "@/parts/Posts.astro";
-import Projects from "@/parts/Projects.astro";
+import Introduction from "@/components/Introduction.astro";
+import Posts from "@/components/Posts.astro";
+import Projects from "@/components/Projects.astro";
 import SeoPage from "@/components/SeoPage.astro";
 ---
 
@@ -11,7 +11,7 @@ import SeoPage from "@/components/SeoPage.astro";
   <SeoPage slot="head" />
   <div>
     <Introduction />
-    <div class="flex flex-col gap-5 mt-10">
+    <div class="mt-10 flex flex-col gap-5">
       <Posts />
       <Projects />
     </div>

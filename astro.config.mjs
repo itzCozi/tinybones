@@ -26,11 +26,7 @@ export default defineConfig({
   ],
   markdown: {
     shikiConfig: {
-      themes: {
-        light: "github-light",
-        dark: "github-dark",
-      },
-      defaultColor: false,
+      theme: "dark-plus",
     },
   },
   site: "https://yourdomain.com",

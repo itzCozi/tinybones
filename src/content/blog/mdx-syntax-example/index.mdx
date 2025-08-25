@@ -4,18 +4,98 @@ description: A guide to using MDX in your blog posts with custom components.
 publicationDate: 2025-08-21T12:00:00Z
 ---
 
-import InfoBox from '@/components/mdx/InfoBox.astro';
+import InfoBox from "@/components/mdx/InfoBox.astro";
+import Tabs from "@/components/mdx/Tabs.astro";
+import TabPanel from "@/components/mdx/TabPanel.astro";
+import { CircleHelp, AlertOctagon, Lightbulb } from "lucide-astro";
 
-# MDX in tinybones
+# MDX in TinyBones
 
 This blog supports MDX (Markdown with JSX), allowing you to use React-like components directly in your markdown content. MDX combines the simplicity of markdown with the power of components.
+
+## Using Tabs Component
+
+The blog also includes a Tabs component that allows you to organize content into separate tabs. This is perfect for showing different approaches, code examples in different languages, or organizing related information:
+
+<Tabs>
+  <TabPanel title="JavaScript">
+    ```javascript
+    function greet(name) {
+      return `Hello, ${name}!`;
+    }
+    
+    console.log(greet("World"));
+    ```
+  </TabPanel>
+  
+  <TabPanel title="Python">
+    ```python
+    def greet(name):
+        return f"Hello, {name}!"
+    
+    print(greet("World"))
+    ```
+  </TabPanel>
+  
+  <TabPanel title="TypeScript">
+    ```typescript
+    function greet(name: string): string {
+      return `Hello, ${name}!`;
+    }
+    
+    console.log(greet("World"));
+    ```
+  </TabPanel>
+</Tabs>
+
+You can also use tabs for different types of content:
+
+<Tabs>
+  <TabPanel title="Overview">
+    This is a general overview of the feature. It provides a high-level
+    explanation that's accessible to all readers regardless of their technical
+    background.
+  </TabPanel>
+
+<TabPanel title="Technical Details">
+  Here are the technical implementation details: - Uses client-side JavaScript
+  for interactivity - Fully accessible with keyboard navigation - Supports
+  dark/light theme transitions - Built with Tailwind CSS for consistent styling
+</TabPanel>
+
+  <TabPanel title="Examples">
+    <InfoBox type="note">
+      You can even include other components inside tab panels!
+    </InfoBox>
+    This demonstrates how flexible the tabs component is for organizing content.
+  </TabPanel>
+</Tabs>
+
+## The Code
+
+To use the Tabs component in your MDX file, import both components at the top:
+
+```astro
+import Tabs from "@/components/mdx/Tabs.astro"; import TabPanel from
+"@/components/mdx/TabPanel.astro";
+```
+
+Then use them like this:
+
+```jsx
+<Tabs defaultTab={1}>
+  <TabPanel title="First Tab">Content for the first tab goes here.</TabPanel>
+  <TabPanel title="Second Tab">Content for the second tab goes here.</TabPanel>
+</Tabs>
+```
 
 ## Using InfoBox Component
 
 The blog comes with a built-in InfoBox component that you can use to display admonitions. Here's how to use it:
 
 <InfoBox>
-  This is a default information box that you can use to highlight important information.
+  This is a default information box that you can use to highlight important
+  information.
 </InfoBox>
 
 <InfoBox type="warning">
@@ -30,37 +110,38 @@ The blog comes with a built-in InfoBox component that you can use to display adm
   This is a note box for additional context or asides.
 </InfoBox>
 
-## Custom Titles
+## Custom Titles and Icons
 
-You can also customize the title of the InfoBox:
+You can customize both the title and icon of the InfoBox:
 
-<InfoBox title="Custom Title">
-  This InfoBox has a custom title instead of the default "Information".
+<InfoBox title="Custom Title" icon={CircleHelp}>
+  This InfoBox has a custom title instead of the default "Information" and a
+  custom icon.
 </InfoBox>
 
 ## The Code
 
 To use the InfoBox component in your MDX file, first import it at the top of your file:
 
-```mdx
+```
 ---
 title: Your Blog Post Title
 description: Your description here
 publicationDate: 2025-08-21
 ---
 
-import InfoBox from '@/components/mdx/InfoBox.astro';
+import InfoBox from "@/components/mdx/InfoBox.astro";
+import { CircleHelp } from "lucide-astro";
 
 # Your content here
 
-<InfoBox type="info">
-  Your important information here.
-</InfoBox>
+<InfoBox type="info">Your important information here.</InfoBox>
 ```
 
 ## Available InfoBox Types
 
 The InfoBox component supports the following types:
+
 - `info` (default)
 - `warning`
 - `danger`
@@ -73,8 +154,9 @@ But of course you can add your own with ease.
 You can create your own components and use them in MDX. Just create a new `.astro` file in the `src/components/mdx/` directory, and then import and use it in your MDX files.
 
 <InfoBox type="note" title="Developer Note">
-  MDX is a powerful tool that allows you to combine the simplicity of Markdown with the expressiveness of JSX. 
-  This makes your content more interactive and engaging for readers.
+  MDX is a powerful tool that allows you to combine the simplicity of Markdown
+  with the expressiveness of JSX. This makes your content more interactive and
+  engaging for readers.
 </InfoBox>
 
 ## Dynamic Content
@@ -82,6 +164,6 @@ You can create your own components and use them in MDX. Just create a new `.astr
 One of the benefits of using MDX is that you can include dynamic content. For example:
 
 {(function() {
-  const currentDate = new Date();
-  return <p>This page was rendered on {currentDate.toLocaleDateString()}.</p>;
+const currentDate = new Date();
+return <p>This page was rendered on {currentDate.toLocaleDateString()}.</p>;
 })()}

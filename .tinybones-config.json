@@ -1,10 +1,6 @@
 {
   "version": "1.0.0",
-  "preservePaths": [
-    "src/content",
-    "public",
-    "src/siteConfig.ts"
-  ],
+  "preservePaths": ["src/content", "public", "src/siteConfig.ts"],
   "template": {
     "repository": "itzCozi/tinybones",
     "branch": "main"

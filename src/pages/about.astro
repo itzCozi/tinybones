@@ -1,9 +1,39 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
 import SeoPage from "@/components/SeoPage.astro";
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" />
+  <SeoPage slot="head" title="About" />
+
+  <section class="prose">
+    <p>
+      TinyBones is a clean, minimal blog template built with Astro for
+      simplicity and focus. It's designed for writers, developers, and creators
+      who want to focus on their content without distractions while having
+      complete control over it all.
+    </p>
+
+    <h2>Features</h2>
+    <ul>
+      <li>📝 Markdown and MDX support for flexible content creation</li>
+      <li>🔍 SEO optimized with meta tags and structured data</li>
+      <li>⚡ Lightning-fast static site generation with Astro</li>
+      <li>🎨 Clean, minimal design that puts content first</li>
+      <li>💬 Optional Giscus comments integration</li>
+      <li>📱 Fully responsive & accessible design</li>
+      <li>📦 Out of the box MDX components</li>
+    </ul>
+
+    <h2>Getting Started</h2>
+    <p>TinyBones is perfect for:</p>
+    <ul>
+      <li>Personal blogs and portfolios</li>
+      <li>Writing and creative content</li>
+      <li>Technical documentation</li>
+      <li>Anything in between</li>
+      <li>Project showcases</li>
+    </ul>
+    <p>Simply customize the site, add your content, and deploy.</p>
+  </section>
 </BaseLayout>

@@ -146,18 +146,14 @@ const readingTime = calculateReadingTime(entry.body || "");
           behavior: "smooth",
           block: "center",
         });
-        
+
         setTimeout(() => {
-          document.dispatchEvent(new CustomEvent("search-highlighting-complete"));
+          document.dispatchEvent(
+            new CustomEvent("search-highlighting-complete")
+          );
         }, 200);
       }
     }, 100);
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", highlightSearchTerm);
-  } else {
-    highlightSearchTerm();
   }
 
   document.addEventListener("astro:page-load", highlightSearchTerm);

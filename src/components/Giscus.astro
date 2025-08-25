@@ -31,25 +31,32 @@ const shouldRender = GISCUS_CONFIG.enabled &&
       lang: GISCUS_CONFIG.lang,
       loading: GISCUS_CONFIG.loading,
     }}>
-      const script = document.createElement('script');
-      script.src = 'https://giscus.app/client.js';
-      script.setAttribute('data-repo', repo);
-      script.setAttribute('data-repo-id', repoId);
-      script.setAttribute('data-category', category);
-      script.setAttribute('data-category-id', categoryId);
-      script.setAttribute('data-mapping', mapping);
-      script.setAttribute('data-strict', strict ? '1' : '0');
-      script.setAttribute('data-reactions-enabled', reactionsEnabled ? '1' : '0');
-      script.setAttribute('data-emit-metadata', emitMetadata ? '1' : '0');
-      script.setAttribute('data-input-position', inputPosition);
-      script.setAttribute('data-theme', theme);
-      script.setAttribute('data-lang', lang);
-      script.setAttribute('data-loading', loading);
-      script.crossOrigin = 'anonymous';
-      script.async = true;
-      
-      const container = document.getElementById('giscus-comments');
-      if (container) {
+      function initializeGiscus() {
+        const container = document.getElementById('giscus-comments');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        const script = document.createElement('script');
+        script.src = 'https://giscus.app/client.js';
+        script.setAttribute('data-repo', repo);
+        script.setAttribute('data-repo-id', repoId);
+        script.setAttribute('data-category', category);
+        script.setAttribute('data-category-id', categoryId);
+        script.setAttribute('data-mapping', mapping);
+        script.setAttribute('data-strict', strict ? '1' : '0');
+        script.setAttribute('data-reactions-enabled', reactionsEnabled ? '1' : '0');
+        script.setAttribute('data-emit-metadata', emitMetadata ? '1' : '0');
+        script.setAttribute('data-input-position', inputPosition);
+        script.setAttribute('data-lang', lang);
+        script.setAttribute('data-loading', loading);
+        script.crossOrigin = 'anonymous';
+        script.async = true;
+
+        const isDark = document.documentElement.classList.contains('dark');
+        const currentTheme = isDark ? 'noborder_gray' : 'light';
+        script.setAttribute('data-theme', currentTheme);
+
         container.appendChild(script);
       }
 
@@ -66,13 +73,7 @@ const shouldRender = GISCUS_CONFIG.enabled &&
         }
       }
 
-      function setInitialGiscusTheme() {
-        const isDark = document.documentElement.classList.contains('dark');
-        const initialTheme = isDark ? 'noborder_gray' : 'light';
-        script.setAttribute('data-theme', initialTheme);
-      }
-
-      setInitialGiscusTheme();
+      initializeGiscus();
 
       if (typeof window !== 'undefined') {
         window._updateTheme = function() {
@@ -80,6 +81,12 @@ const shouldRender = GISCUS_CONFIG.enabled &&
             updateGiscusTheme();
           }, 100);
         };
+
+        document.addEventListener('astro:page-load', () => {
+          setTimeout(() => {
+            initializeGiscus();
+          }, 100);
+        });
 
         document.addEventListener('astro:after-swap', () => {
           setTimeout(() => {
@@ -105,9 +112,9 @@ const shouldRender = GISCUS_CONFIG.enabled &&
 )}
 
 {!shouldRender && GISCUS_CONFIG.enabled && (
-  <div class={`giscus-placeholder ${className}`}>
-    <div class="border border-dashed border-neutral-400 dark:border-neutral-500 rounded-lg p-8 text-center">
-      <h3 class="text-lg font-semibold mb-2">
+  <div class={`${className}`}>
+    <div class="border border-dashed border-neutral-400 dark:border-neutral-500 rounded-lg p-6 flex flex-col items-center justify-center text-center gap-2">
+      <h3 class="text-lg font-semibold">
         Comments Not Configured
       </h3>
       <p class="text-sm">
@@ -119,11 +126,7 @@ const shouldRender = GISCUS_CONFIG.enabled &&
 
 <style>
   .giscus-container {
-    margin-top: 2rem;
-  }
-  
-  .giscus-placeholder {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
   }
   
   :global(.giscus-frame) {
