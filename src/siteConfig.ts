@@ -53,11 +53,11 @@ export const NAV_LINKS: NavigationLinks = {
 // 2. Set up Giscus on your GitHub repository: https://giscus.app/
 // 3. Fill in your repository details below
 export const GISCUS_CONFIG: GiscusConfig = {
-  enabled: false,
-  repo: "",
-  repoId: "",
-  category: "",
-  categoryId: "",
+  enabled: true,
+  repo: "itzcozi/keyboard-cat",
+  repoId: "R_kgDONgUFAA",
+  category: "Announcements",
+  categoryId: "DIC_kwDONgUFAM4CuYkr",
   mapping: "pathname",
   strict: false,
   reactionsEnabled: true,

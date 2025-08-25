@@ -105,9 +105,9 @@ const shouldRender = GISCUS_CONFIG.enabled &&
 )}
 
 {!shouldRender && GISCUS_CONFIG.enabled && (
-  <div class={`giscus-placeholder ${className}`}>
-    <div class="border border-dashed border-neutral-400 dark:border-neutral-500 rounded-lg p-8 text-center">
-      <h3 class="text-lg font-semibold mb-2">
+  <div class={`${className}`}>
+    <div class="border border-dashed border-neutral-400 dark:border-neutral-500 rounded-lg p-6 flex flex-col items-center justify-center text-center gap-2">
+      <h3 class="text-lg font-semibold">
         Comments Not Configured
       </h3>
       <p class="text-sm">
@@ -119,11 +119,7 @@ const shouldRender = GISCUS_CONFIG.enabled &&
 
 <style>
   .giscus-container {
-    margin-top: 2rem;
-  }
-  
-  .giscus-placeholder {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
   }
   
   :global(.giscus-frame) {
