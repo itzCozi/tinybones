@@ -14,6 +14,7 @@ const { content = "" } = Astro.props;
 function extractHeadings(content: string): Heading[] {
   const headings: Heading[] = [];
   const segments = content.split(/```[\s\S]*?```|~~~[\s\S]*?~~~/g);
+  const idCounts = new Map<string, number>();
 
   segments.forEach((segment) => {
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
@@ -23,11 +24,18 @@ function extractHeadings(content: string): Heading[] {
       const level = match[1].length;
       const text = match[2].trim();
 
-      const id = text
+      let baseId = text
         .toLowerCase()
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-")
         .trim();
+
+      let id = baseId;
+      const count = idCounts.get(baseId) || 0;
+      if (count > 0) {
+        id = `${baseId}-${count}`;
+      }
+      idCounts.set(baseId, count + 1);
 
       headings.push({ id, text, level });
     }
@@ -95,15 +103,25 @@ const headings = extractHeadings(content);
     if (!prose) return;
 
     const headings = prose.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    const idCounts = new Map<string, number>();
 
     headings.forEach((heading) => {
       if (!heading.id) {
         const text = heading.textContent || "";
-        const id = text
+        let baseId = text
           .toLowerCase()
           .replace(/[^\w\s-]/g, "")
           .replace(/\s+/g, "-")
           .trim();
+
+        // Handle duplicate IDs by appending a counter
+        let id = baseId;
+        const count = idCounts.get(baseId) || 0;
+        if (count > 0) {
+          id = `${baseId}-${count}`;
+        }
+        idCounts.set(baseId, count + 1);
+        
         heading.id = id;
       }
 
