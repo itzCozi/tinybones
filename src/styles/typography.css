@@ -319,7 +319,6 @@
 
   :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
     color: var(--prose-code-color);
-    font-weight: 600;
     font-size: 0.875em;
     background-color: rgba(175, 184, 193, 0.2);
     padding: 0.2em 0.4em;

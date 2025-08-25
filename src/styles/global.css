@@ -41,7 +41,7 @@ html {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
-  font-family: "Cambria", "Georgia", serif;
+  font-family: "Cambria", "Georgia", "Times New Roman", "Times", serif;
 }
 * {
   transition:
@@ -51,6 +51,15 @@ html {
     fill 0.2s ease,
     stroke 0.2s ease;
   font-family: inherit;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }
 
 @variant dark {
