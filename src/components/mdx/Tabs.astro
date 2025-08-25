@@ -123,6 +123,5 @@ const { defaultTab = 0, class: className } = Astro.props;
     });
   }
 
-  // Re-initialize tabs when navigating between pages using Astro's View Transitions
   document.addEventListener("astro:page-load", initializeTabs);
 </script>
