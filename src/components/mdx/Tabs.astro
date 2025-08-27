@@ -29,12 +29,15 @@ const { defaultTab = 0, class: className } = Astro.props;
 
       if (!tabButtonsContainer || tabPanels.length === 0) return;
 
+      // Check if tabs are already initialized to prevent duplicates
+      if (tabButtonsContainer.children.length > 0) return;
+
       tabPanels.forEach((panel, index) => {
         const button = document.createElement("button");
         const title = panel.getAttribute("data-title") || `Tab ${index + 1}`;
 
         button.textContent = title;
-        button.className = `tab-button px-3 font-medium border-b-1 transition-all duration-200 whitespace-nowrap focus:outline-none ${
+        button.className = `tab-button px-3 font-medium border-b-1 transition-all duration-200 whitespace-nowrap ${
           index === defaultTab
             ? "border-black text-black/90 dark:text-white/90 dark:border-white"
             : "border-transparent hover:text-black/90 hover:dark:text-white/90 cursor-pointer"
@@ -124,8 +127,8 @@ const { defaultTab = 0, class: className } = Astro.props;
   }
 
   document.addEventListener("astro:page-load", initializeTabs);
-  
-  if (document.readyState !== 'loading') {
+
+  if (document.readyState !== "loading") {
     initializeTabs();
   }
 </script>

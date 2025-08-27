@@ -179,11 +179,11 @@ const headings = extractHeadings(content);
   }
 
   document.addEventListener("astro:page-load", initTableOfContents);
-  
-  if (document.readyState !== 'loading') {
+
+  if (document.readyState !== "loading") {
     initTableOfContents();
   }
-  
+
   document.addEventListener(
     "search-highlighting-complete",
     initTableOfContents

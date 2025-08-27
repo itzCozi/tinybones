@@ -17,72 +17,75 @@ const recentPosts = allPosts.slice(0, 5);
     aria-expanded="false"
     aria-haspopup="true"
   >
-    <Menu class="h-5 w-5 transition-transform duration-200" id="blog-dropdown-icon" />
+    <Menu
+      class="h-5 w-5 transition-transform duration-200"
+      id="blog-dropdown-icon"
+    />
   </button>
 
   <div
     id="blog-dropdown-menu"
-    class="absolute left-0 mt-2 w-80 max-h-80 overflow-y-auto origin-top-left rounded-md bg-white dark:bg-neutral-950 ring-1 ring-black/20 dark:ring-white/20 ring-opacity-5 focus:outline-none z-50 hidden"
+    class="ring-opacity-5 absolute left-0 z-50 mt-2 hidden max-h-80 w-80 origin-top-left overflow-y-auto rounded-md bg-white ring-1 ring-black/20 dark:bg-neutral-950 dark:ring-white/20"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="blog-dropdown-button"
     tabindex="-1"
   >
     <div class="py-1" role="none">
-      {recentPosts.length > 0 ? (
-        <>
-          {recentPosts.map((post, index) => (
-            <a
-              href={`/blog/${post.id}`}
-              class="block px-4 py-3 text-sm hover:bg-neutral-100/70 dark:hover:bg-neutral-900/70 transition-colors duration-150 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0"
-              role="menuitem"
-              tabindex="-1"
-            >
-              <div class="font-medium truncate">{post.data.title}</div>
-              <div class="text-xs mt-1">
-                {post.data.publicationDate.toLocaleDateString()}
-              </div>
-            </a>
-          ))}
+      {
+        recentPosts.length > 0 ? (
+          <>
+            {recentPosts.map((post, index) => (
+              <a
+                href={`/blog/${post.id}`}
+                class="block border-b border-neutral-200 px-4 py-3 text-sm transition-colors duration-150 last:border-b-0 hover:bg-neutral-100/70 dark:border-neutral-700 dark:hover:bg-neutral-900/70"
+                role="menuitem"
+                tabindex="-1"
+              >
+                <div class="truncate font-medium">{post.data.title}</div>
+                <div class="mt-1 text-xs">
+                  {post.data.publicationDate.toLocaleDateString()}
+                </div>
+              </a>
+            ))}
             <a
               href="/blog"
-              class="block px-4 py-3 text-sm link"
+              class="link block px-4 py-3 text-sm"
               role="menuitem"
               tabindex="-1"
             >
               View all posts →
             </a>
-        </>
-      ) : (
-        <div class="px-4 py-3 text-sm">
-          No blog posts found
-        </div>
-      )}
+          </>
+        ) : (
+          <div class="px-4 py-3 text-sm">No blog posts found</div>
+        )
+      }
     </div>
   </div>
 </div>
 
 <script>
   function initBlogDropdown() {
-    const button = document.getElementById('blog-dropdown-button');
-    const menu = document.getElementById('blog-dropdown-menu');
-    const icon = document.getElementById('blog-dropdown-icon');
+    const button = document.getElementById("blog-dropdown-button");
+    const menu = document.getElementById("blog-dropdown-menu");
+    const icon = document.getElementById("blog-dropdown-icon");
 
     if (!button || !menu || !icon) return;
 
     const newButton = button.cloneNode(true);
     button.parentNode?.replaceChild(newButton, button);
 
-    const freshButton = document.getElementById('blog-dropdown-button');
-    const freshMenu = document.getElementById('blog-dropdown-menu');
-    const freshIcon = document.getElementById('blog-dropdown-icon');
-    
+    const freshButton = document.getElementById("blog-dropdown-button");
+    const freshMenu = document.getElementById("blog-dropdown-menu");
+    const freshIcon = document.getElementById("blog-dropdown-icon");
+
     if (!freshButton || !freshMenu || !freshIcon) return;
 
-    freshButton.addEventListener('click', (e) => {
+    freshButton.addEventListener("click", (e) => {
       e.stopPropagation();
-      const isExpanded = freshButton.getAttribute('aria-expanded') === 'true';
-      
+      const isExpanded = freshButton.getAttribute("aria-expanded") === "true";
+
       if (isExpanded) {
         closeDropdown();
       } else {
@@ -90,36 +93,39 @@ const recentPosts = allPosts.slice(0, 5);
       }
     });
 
-    document.addEventListener('click', (e) => {
-      if (!freshButton.contains(e.target as Node) && !freshMenu.contains(e.target as Node)) {
+    document.addEventListener("click", (e) => {
+      if (
+        !freshButton.contains(e.target as Node) &&
+        !freshMenu.contains(e.target as Node)
+      ) {
         closeDropdown();
       }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
         closeDropdown();
       }
     });
 
     function openDropdown() {
       if (!freshMenu || !freshButton || !freshIcon) return;
-      freshMenu.classList.remove('hidden');
-      freshButton.setAttribute('aria-expanded', 'true');
-      freshIcon.style.transform = 'rotate(180deg)';
+      freshMenu.classList.remove("hidden");
+      freshButton.setAttribute("aria-expanded", "true");
+      freshIcon.style.transform = "rotate(180deg)";
     }
 
     function closeDropdown() {
       if (!freshMenu || !freshButton || !freshIcon) return;
-      freshMenu.classList.add('hidden');
-      freshButton.setAttribute('aria-expanded', 'false');
-      freshIcon.style.transform = 'rotate(0deg)';
+      freshMenu.classList.add("hidden");
+      freshButton.setAttribute("aria-expanded", "false");
+      freshIcon.style.transform = "rotate(0deg)";
     }
   }
 
-  document.addEventListener('astro:page-load', initBlogDropdown);
-  
-  if (document.readyState !== 'loading') {
+  document.addEventListener("astro:page-load", initBlogDropdown);
+
+  if (document.readyState !== "loading") {
     initBlogDropdown();
   }
 </script>

@@ -39,9 +39,6 @@ import { Menu } from "lucide-astro";
       <ul
         class="flex w-full list-none flex-col items-start gap-4 p-0 md:mr-4 md:w-auto md:flex-row md:items-center md:gap-5"
       >
-        <li class="block md:hidden">
-          <BlogDropdown />
-        </li>
         {
           Object.keys(NAV_LINKS).map((navItemKey) => {
             return (

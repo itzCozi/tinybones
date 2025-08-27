@@ -9,7 +9,7 @@ export const SITE: SiteConfiguration = {
   title: "TinyBones",
   description: "A minimal blog template for your thoughts",
   href: "https://yourdomain.com/",
-  author: "Your Name",
+  author: "BadDeveloper",
   locale: "en-US",
 };
 
