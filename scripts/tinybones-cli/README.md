@@ -52,6 +52,7 @@ tinybones create new-post
 ```
 
 You'll be prompted for:
+
 - Title
 - Description
 - Format (MDX or Markdown)
@@ -65,6 +66,7 @@ tinybones create new-project
 ```
 
 You'll be prompted for:
+
 - Title
 - Description
 
@@ -93,6 +95,7 @@ tinybones update
 ```
 
 Updates your blog with the latest TinyBones template while preserving your content. This command:
+
 - Backs up your content
 - Fetches the latest template
 - Applies the template changes
