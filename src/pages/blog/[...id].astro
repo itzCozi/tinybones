@@ -157,6 +157,10 @@ const readingTime = calculateReadingTime(entry.body || "");
   }
 
   document.addEventListener("astro:page-load", highlightSearchTerm);
+  
+  if (document.readyState !== 'loading') {
+    highlightSearchTerm();
+  }
 </script>
 
 <style>

@@ -1,6 +1,7 @@
 ---
 import { NAV_LINKS, SITE } from "@/siteConfig.ts";
 import Search from "./Search.astro";
+import BlogDropdown from "./BlogDropdown.astro";
 import { Menu } from "lucide-astro";
 ---
 
@@ -11,7 +12,12 @@ import { Menu } from "lucide-astro";
     class="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3"
   >
     <div class="flex w-full items-center justify-between md:w-auto">
-      <a href="/" class="text-xl font-bold sm:text-xl">{SITE.title}</a>
+      <div class="flex items-center gap-3">
+        <div class="hidden md:block">
+          <BlogDropdown />
+        </div>
+        <a href="/" class="text-xl font-bold sm:text-xl">{SITE.title}</a>
+      </div>
       <div class="block md:hidden">
         <button
           aria-label="Menu"
@@ -33,6 +39,9 @@ import { Menu } from "lucide-astro";
       <ul
         class="flex w-full list-none flex-col items-start gap-4 p-0 md:mr-4 md:w-auto md:flex-row md:items-center md:gap-5"
       >
+        <li class="block md:hidden">
+          <BlogDropdown />
+        </li>
         {
           Object.keys(NAV_LINKS).map((navItemKey) => {
             return (

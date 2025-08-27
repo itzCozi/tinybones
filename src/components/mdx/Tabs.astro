@@ -124,4 +124,8 @@ const { defaultTab = 0, class: className } = Astro.props;
   }
 
   document.addEventListener("astro:page-load", initializeTabs);
+  
+  if (document.readyState !== 'loading') {
+    initializeTabs();
+  }
 </script>

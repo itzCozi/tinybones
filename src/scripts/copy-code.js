@@ -54,3 +54,7 @@ function initializeCopyButtons() {
 }
 
 document.addEventListener("astro:page-load", initializeCopyButtons);
+
+if (document.readyState !== 'loading') {
+  initializeCopyButtons();
+}

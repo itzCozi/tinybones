@@ -170,11 +170,8 @@
   }
 
   document.addEventListener("astro:page-load", initThemeToggle);
-
-  if (
-    document.readyState === "interactive" ||
-    document.readyState === "complete"
-  ) {
+  
+  if (document.readyState !== 'loading') {
     initThemeToggle();
   }
 </script>

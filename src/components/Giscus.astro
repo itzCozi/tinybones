@@ -73,8 +73,6 @@ const shouldRender = GISCUS_CONFIG.enabled &&
         }
       }
 
-      initializeGiscus();
-
       if (typeof window !== 'undefined') {
         window._updateTheme = function() {
           setTimeout(() => {
@@ -87,6 +85,12 @@ const shouldRender = GISCUS_CONFIG.enabled &&
             initializeGiscus();
           }, 100);
         });
+        
+        if (document.readyState !== 'loading') {
+          setTimeout(() => {
+            initializeGiscus();
+          }, 100);
+        }
 
         document.addEventListener('astro:after-swap', () => {
           setTimeout(() => {
