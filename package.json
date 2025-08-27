@@ -14,7 +14,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
-    "update-template": "node ./scripts/update/index.js"
+    "update-template": "tinybones update",
+    "setup-cli": "cd ./scripts/tinybones-cli && npm install && npm link",
+    "tb": "tinybones"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

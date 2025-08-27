@@ -114,7 +114,6 @@ const headings = extractHeadings(content);
           .replace(/\s+/g, "-")
           .trim();
 
-        // Handle duplicate IDs by appending a counter
         let id = baseId;
         const count = idCounts.get(baseId) || 0;
         if (count > 0) {

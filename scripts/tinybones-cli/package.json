@@ -1,0 +1,24 @@
+{
+  "name": "tinybones-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for managing your TinyBones blog",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "tinybones": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.3.1",
+    "inquirer": "^9.2.15",
+    "ora": "^8.0.1",
+    "slug": "^8.2.3"
+  },
+  "engines": {
+    "node": ">=14.16"
+  }
+}

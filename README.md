@@ -14,6 +14,7 @@ A minimal blog template built with [Astro](https://astro.build/). Perfect for de
 - **Developer-friendly:** TypeScript, Tailwind CSS, and modern tooling
 - **MDX support:** Write interactive blog posts with custom components including built-in InfoBox admonitions
 - **Comments system:** Built-in support for Giscus comments
+- **CLI tool:** Create and manage blog posts and projects from the command line
 
 ## Core Web Vitals
 
@@ -21,8 +22,6 @@ Best Practices: **100**
 Accessibility: **100**  
 Performance: **100**  
 SEO: **100**
-
-![Web Vitals](.github/web-vitals.png)
 
 ## Getting Started
 
@@ -39,13 +38,27 @@ SEO: **100**
 - Modify colors and styling in `src/styles/`
 - Add your content in `src/content/blog/`
 
+## CLI Tool
+
+TinyBones comes with a built-in CLI tool to help you manage your blog content:
+
+1. Set up the CLI tool: `pnpm setup-cli`
+2. Use it to manage your blog:
+   - Create a new blog post: `pnpm tb create new-post`
+   - Create a new project: `pnpm tb create new-project`
+   - List all posts: `pnpm tb list posts`
+   - List all projects: `pnpm tb list projects`
+   - Update template: `pnpm tb update`
+
+For more details, see the [CLI documentation](./scripts/tinybones-cli/README.md).
+
 ## Keeping Your Site Updated
 
 TinyBones includes a built-in update mechanism that allows you to get the latest template improvements while preserving your content.
 To update your TinyBones-based blog:
 
 1. Make sure you have committed all your changes (or create a backup)
-2. Run: `pnpm update-template`
+2. Run: `pnpm tb update` (or the legacy command: `pnpm update-template`)
 3. Review the changes and resolve any conflicts if needed
 4. Commit the updated code to your repository
 
