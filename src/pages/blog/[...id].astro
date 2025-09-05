@@ -8,7 +8,7 @@ import SeoPost from "@/components/SeoPost.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import Giscus from "@/components/Giscus.astro";
 
-import { formatDate, calculateReadingTime } from "@/lib/util";
+import { formatDate, calculateReadingTime, formatAuthors } from "@/lib/util";
 
 interface Props {
   entry: CollectionEntry<"blog">;
@@ -44,12 +44,24 @@ const readingTime = calculateReadingTime(entry.body || "");
       <h1 class="text-[36px] leading-snug font-bold text-balance">
         {entry.data.title}
       </h1>
-      <p
+      <div
         class="text-muted-text dark:text-dark-muted-text mt-3 flex items-center justify-between"
       >
-        <span>{formatDate(entry.data.publicationDate)}</span>
-        <span>{readingTime}</span>
-      </p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+          <span>{formatDate(entry.data.publicationDate)}</span>
+          {
+            entry.data.authors && entry.data.authors.length > 0 && (
+              <>
+                <span class="hidden sm:inline text-sm">•</span>
+                <span class="text-sm">
+                  {formatAuthors(entry.data.authors)}
+                </span>
+              </>
+            )
+          }
+        </div>
+        <span class="hidden sm:inline">{readingTime}</span>
+      </div>
       <hr
         class="border-muted-text dark:border-dark-muted-text mt-4 mb-12 border-[0.5px] opacity-10 dark:opacity-15"
       />

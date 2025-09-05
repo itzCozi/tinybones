@@ -1,5 +1,15 @@
 import { SITE } from "@/siteConfig.ts";
 
+function getOrdinalSuffix(day: number): string {
+  if (day > 3 && day < 21) return "th";
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+}
+
 export function formatDate(
   date: Date,
   options: {
@@ -20,7 +30,15 @@ export function formatDate(
 
   const formatOptions = { ...defaultOptions, ...options };
 
-  return new Intl.DateTimeFormat(locale, formatOptions).format(date);
+  // Get the formatted date using Intl.DateTimeFormat
+  const formattedDate = new Intl.DateTimeFormat(locale, formatOptions).format(date);
+  
+  // Extract the day number and add ordinal suffix
+  const day = date.getDate();
+  const ordinalSuffix = getOrdinalSuffix(day);
+  
+  // Replace the day number with the day number + ordinal suffix
+  return formattedDate.replace(new RegExp(`\\b${day}\\b`), `${day}${ordinalSuffix}`);
 }
 
 export function calculateReadingTime(content: string): string {
@@ -52,4 +70,23 @@ export function paginateArray<T>(array: T[], pageSize: number): T[][] {
 
 export function getTotalPages(totalItems: number, pageSize: number): number {
   return Math.ceil(totalItems / pageSize);
+}
+
+export function formatAuthors(authors: string[] | undefined): string {
+  if (!authors || authors.length === 0) {
+    return "";
+  }
+
+  if (authors.length === 1) {
+    return `By ${authors[0]}`;
+  }
+
+  if (authors.length === 2) {
+    return `By ${authors[0]} and ${authors[1]}`;
+  }
+
+  // For 3 or more authors: "By author1, author2 and author3"
+  const lastAuthor = authors[authors.length - 1];
+  const otherAuthors = authors.slice(0, -1);
+  return `By ${otherAuthors.join(", ")} and ${lastAuthor}`;
 }
