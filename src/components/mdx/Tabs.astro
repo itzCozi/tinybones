@@ -28,8 +28,6 @@ const { defaultTab = 0, class: className } = Astro.props;
       );
 
       if (!tabButtonsContainer || tabPanels.length === 0) return;
-
-      // Check if tabs are already initialized to prevent duplicates
       if (tabButtonsContainer.children.length > 0) return;
 
       tabPanels.forEach((panel, index) => {

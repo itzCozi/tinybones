@@ -29,15 +29,9 @@ export function formatDate(
   };
 
   const formatOptions = { ...defaultOptions, ...options };
-
-  // Get the formatted date using Intl.DateTimeFormat
   const formattedDate = new Intl.DateTimeFormat(locale, formatOptions).format(date);
-  
-  // Extract the day number and add ordinal suffix
   const day = date.getDate();
   const ordinalSuffix = getOrdinalSuffix(day);
-  
-  // Replace the day number with the day number + ordinal suffix
   return formattedDate.replace(new RegExp(`\\b${day}\\b`), `${day}${ordinalSuffix}`);
 }
 
@@ -85,7 +79,6 @@ export function formatAuthors(authors: string[] | undefined): string {
     return `By ${authors[0]} and ${authors[1]}`;
   }
 
-  // For 3 or more authors: "By author1, author2 and author3"
   const lastAuthor = authors[authors.length - 1];
   const otherAuthors = authors.slice(0, -1);
   return `By ${otherAuthors.join(", ")} and ${lastAuthor}`;

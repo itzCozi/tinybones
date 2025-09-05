@@ -148,7 +148,6 @@ const shareLinks = [
         try {
           await navigator.clipboard.writeText(url);
           
-          // Visual feedback
           const originalContent = button.innerHTML;
           button.innerHTML = `
             <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -161,7 +160,6 @@ const shareLinks = [
           }, 2000);
         } catch (err) {
           console.error('Failed to copy URL:', err);
-          // Fallback for browsers without clipboard API
           const textArea = document.createElement('textarea');
           textArea.value = url;
           textArea.style.position = 'fixed';
@@ -173,7 +171,6 @@ const shareLinks = [
           
           try {
             document.execCommand('copy');
-            // Visual feedback for fallback
             const originalContent = button.innerHTML;
             button.innerHTML = `
               <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -193,14 +190,12 @@ const shareLinks = [
     });
   }
 
-  // Initialize on page load
   if (document.readyState !== 'loading') {
     initSocialShare();
   } else {
     document.addEventListener('DOMContentLoaded', initSocialShare);
   }
 
-  // Re-initialize on Astro page transitions
   document.addEventListener('astro:page-load', initSocialShare);
 </script>
 
