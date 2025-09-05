@@ -29,7 +29,7 @@ export default defineConfig({
       theme: "dark-plus",
     },
   },
-  site: "https://yourdomain.com",
+  site: "https://tinybones.pages.dev",
   output: "static",
   prefetch: {
     prefetchAll: true,

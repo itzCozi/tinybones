@@ -6,9 +6,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
 import SeoPost from "@/components/SeoPost.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
+import ShareButtons from "@/components/ShareButtons.astro";
 import Giscus from "@/components/Giscus.astro";
 
 import { formatDate, calculateReadingTime, formatAuthors } from "@/lib/util";
+import { SITE } from "@/siteConfig";
 
 interface Props {
   entry: CollectionEntry<"blog">;
@@ -80,6 +82,12 @@ const readingTime = calculateReadingTime(entry.body || "");
         <div class="prose mx-auto max-w-none lg:mx-0" id="blog-content">
           <Content />
         </div>
+
+        <ShareButtons 
+          title={entry.data.title} 
+          url={`${SITE.href.replace(/\/$/, '')}/blog/${entry.id}`}
+          description={entry.data.description}
+        />
 
         <Giscus class="mt-12" />
       </article>

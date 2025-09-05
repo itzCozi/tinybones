@@ -8,7 +8,7 @@ import type {
 export const SITE: SiteConfiguration = {
   title: "TinyBones",
   description: "A minimal blog template for your thoughts",
-  href: "https://yourdomain.com/",
+  href: "https://tinybones.pages.dev/",
   author: "BadDeveloper",
   locale: "en-US",
 };
@@ -16,15 +16,15 @@ export const SITE: SiteConfiguration = {
 export const SOCIAL_LINKS: SocialLink[] = [
   {
     label: "GitHub",
-    href: "https://github.com/yourusername",
+    href: "https://github.com/itzcozi/tinybones",
   },
   {
     label: "Twitter",
-    href: "https://twitter.com/yourusername",
+    href: "https://twitter.com/sudoflix",
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/yourusername",
+    href: "https://linkedin.com/in/cooperransom",
   },
 ];
 
