@@ -54,10 +54,8 @@ const readingTime = calculateReadingTime(entry.body || "");
           {
             entry.data.authors && entry.data.authors.length > 0 && (
               <>
-                <span class="hidden sm:inline text-sm">•</span>
-                <span class="text-sm">
-                  {formatAuthors(entry.data.authors)}
-                </span>
+                <span class="hidden text-sm sm:inline">•</span>
+                <span class="text-sm">{formatAuthors(entry.data.authors)}</span>
               </>
             )
           }
@@ -83,9 +81,9 @@ const readingTime = calculateReadingTime(entry.body || "");
           <Content />
         </div>
 
-        <ShareButtons 
-          title={entry.data.title} 
-          url={`${SITE.href.replace(/\/$/, '')}/blog/${entry.id}`}
+        <ShareButtons
+          title={entry.data.title}
+          url={`${SITE.href.replace(/\/$/, "")}/blog/${entry.id}`}
           description={entry.data.description}
         />
 

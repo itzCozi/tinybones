@@ -23,14 +23,14 @@
     "@astrojs/mdx": "^4.3.4",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.5.1",
-    "@tailwindcss/vite": "^4.1.12",
-    "astro": "^5.13.4",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.13.5",
     "astro-compress": "^2.3.8",
     "fs-extra": "^11.3.1",
     "lucide": "^0.540.0",
     "lucide-astro": "^0.540.0",
     "sharp": "^0.34.3",
-    "tailwindcss": "^4.1.12",
+    "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
   },
   "devDependencies": {

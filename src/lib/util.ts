@@ -3,10 +3,14 @@ import { SITE } from "@/siteConfig.ts";
 function getOrdinalSuffix(day: number): string {
   if (day > 3 && day < 21) return "th";
   switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
   }
 }
 
@@ -29,10 +33,15 @@ export function formatDate(
   };
 
   const formatOptions = { ...defaultOptions, ...options };
-  const formattedDate = new Intl.DateTimeFormat(locale, formatOptions).format(date);
+  const formattedDate = new Intl.DateTimeFormat(locale, formatOptions).format(
+    date
+  );
   const day = date.getDate();
   const ordinalSuffix = getOrdinalSuffix(day);
-  return formattedDate.replace(new RegExp(`\\b${day}\\b`), `${day}${ordinalSuffix}`);
+  return formattedDate.replace(
+    new RegExp(`\\b${day}\\b`),
+    `${day}${ordinalSuffix}`
+  );
 }
 
 export function calculateReadingTime(content: string): string {
