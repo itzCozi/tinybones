@@ -32,7 +32,7 @@ const readingTime = calculateReadingTime(entry.body || "");
 <BaseLayout>
   <SeoPost slot="head" entry={entry} />
   <div class="blog-post-container">
-    <div class="blog-header mb-8">
+    <div class="blog-header mb-6">
       {
         entry.data.image && (
           <Image
@@ -47,7 +47,7 @@ const readingTime = calculateReadingTime(entry.body || "");
         {entry.data.title}
       </h1>
       <div
-        class="text-muted-text dark:text-dark-muted-text mt-3 flex items-center justify-between"
+        class="text-muted-text dark:text-dark-muted-text mt-2 flex items-center justify-between"
       >
         <div class="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
           <span>{formatDate(entry.data.publicationDate)}</span>
@@ -62,9 +62,6 @@ const readingTime = calculateReadingTime(entry.body || "");
         </div>
         <span class="hidden sm:inline">{readingTime}</span>
       </div>
-      <hr
-        class="border-muted-text dark:border-dark-muted-text mt-4 mb-12 border-[0.5px] opacity-10 dark:opacity-15"
-      />
     </div>
 
     <div class="blog-content-wrapper lg:grid lg:grid-cols-4 lg:gap-10">

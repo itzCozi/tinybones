@@ -35,7 +35,7 @@ const recentPosts = allPosts.slice(0, 5);
       {
         recentPosts.length > 0 ? (
           <>
-            {recentPosts.map((post, index) => (
+            {recentPosts.map((post) => (
               <a
                 href={`/blog/${post.id}`}
                 class="block border-b border-neutral-200 px-4 py-3 text-sm transition-colors duration-150 last:border-b-0 hover:bg-neutral-100/70 dark:border-neutral-700 dark:hover:bg-neutral-900/70"
