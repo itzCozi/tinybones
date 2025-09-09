@@ -2,7 +2,7 @@
 title: Markdown Syntax Example
 description: A page displaying common elements used in Markdown documents.
 publicationDate: 2025-03-20T01:29:19Z
-authors: ["John Doe", "Jane Smith"]
+authors: ["Cooper Ransom"]
 ---
 
 # Markdown in TinyBones

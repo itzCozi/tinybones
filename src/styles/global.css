@@ -105,6 +105,29 @@ samp {
   --prose-link-underline-color: currentColor;
 }
 
+.link-toc {
+  --prose-link-color: var(--color-link);
+  --prose-link-underline-color: currentColor;
+
+  color: var(--prose-link-color);
+  font-weight: inherit;
+  text-decoration: none;
+  & code {
+    font-weight: inherit;
+  }
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 1px;
+  }
+}
+
+.dark .link-toc {
+  --prose-link-color: var(--color-dark-link);
+  --prose-link-underline-color: currentColor;
+}
+
 .nav-link {
   color: var(--prose-color);
   text-decoration: none;

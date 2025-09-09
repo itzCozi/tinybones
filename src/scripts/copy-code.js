@@ -38,16 +38,44 @@ function initializeCopyButtons() {
       } catch (err) {
         console.error("Failed to copy code: ", err);
 
-        const textArea = document.createElement("textarea");
-        textArea.value = codeText;
-        document.body.appendChild(textArea);
-        textArea.select();
         try {
-          document.execCommand("copy");
+          const textArea = document.createElement("textarea");
+          textArea.value = codeText;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          if (document.getSelection) {
+            const selection = document.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(textArea);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+          
+          copyButton.textContent = "Copied";
+          copyButton.classList.add("copied");
+          
+          setTimeout(() => {
+            copyButton.textContent = "Copy";
+            copyButton.classList.remove("copied");
+          }, 2000);
+          
         } catch (fallbackErr) {
           console.error("Fallback copy failed: ", fallbackErr);
+          copyButton.textContent = "Copy failed";
+          
+          setTimeout(() => {
+            copyButton.textContent = "Copy";
+          }, 2000);
+        } finally {
+          if (document.body.contains(textArea)) {
+            document.body.removeChild(textArea);
+          }
         }
-        document.body.removeChild(textArea);
       }
     });
   });

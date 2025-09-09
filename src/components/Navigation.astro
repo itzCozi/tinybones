@@ -6,24 +6,24 @@ import { Menu } from "lucide-astro";
 ---
 
 <header
-  class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10 border-b border-neutral-200 dark:border-neutral-800"
+  class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10"
 >
   <div
     class="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3"
   >
     <div class="flex w-full items-center justify-between md:w-auto">
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-4">
         <div class="hidden md:block">
           <BlogDropdown />
         </div>
-        <a href="/" class="text-xl font-bold sm:text-xl">{SITE.title}</a>
+        <a href="/" class="text-xl font-bold">{SITE.title}</a>
       </div>
       <div class="block md:hidden">
         <button
           aria-label="Menu"
           onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');"
         >
-          <Menu class="mt-2 h-6 w-6" />
+          <Menu class="h-6 w-6" />
         </button>
       </div>
     </div>
