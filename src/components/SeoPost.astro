@@ -1,18 +1,72 @@
 ---
-import { type CollectionEntry } from "astro:content";
 import { SITE } from "@/siteConfig";
 
-const { entry } = Astro.props;
-const post = entry as CollectionEntry<"blog">;
+// Use a relaxed type for entries to avoid TS issues with generated content types in .astro files
+const { entry } = Astro.props as { entry: any };
+const post = entry as any;
 
 const postTitle = post.data.title || SITE.title;
 const postDescription = post.data.description || SITE.description;
+const url = new URL(Astro.url.pathname, SITE.href).toString();
+const imageUrl = post?.data?.image?.src
+  ? new URL(post.data.image.src, SITE.href).toString()
+  : undefined;
+const authorsList = (post.data.authors?.length ? post.data.authors : [SITE.author]);
+const tagsList = post.data.tags ?? [];
+const datePublishedVal = post.data.publicationDate?.toISOString?.()
+  ? post.data.publicationDate.toISOString()
+  : undefined;
+
+// Precompute JSON-LD objects to ensure variables are used and typed
+const articleLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: postTitle,
+  description: postDescription,
+  url,
+  mainEntityOfPage: url,
+  inLanguage: SITE.locale,
+  image: imageUrl ? [imageUrl] : undefined,
+  datePublished: datePublishedVal,
+  dateModified: datePublishedVal,
+  author: authorsList.map((name: string) => ({ "@type": "Person", name })),
+  keywords: tagsList.length ? tagsList.join(", ") : undefined,
+} as const;
+
+const breadcrumbsLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: new URL("/", SITE.href).toString(),
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Blog",
+      item: new URL("/blog", SITE.href).toString(),
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: postTitle,
+      item: url,
+    },
+  ],
+} as const;
+// Mark as used for TypeScript so they don't trigger no-unused-locals hints
+void articleLd;
+void breadcrumbsLd;
+
 ---
 
 <title>{`${postTitle} | ${SITE.title}`}</title>
 <meta name="title" content={`${postTitle} | ${SITE.title}`} />
 <meta name="description" content={postDescription} />
-<link rel="canonical" href={SITE.href} />
+<link rel="canonical" href={url} />
 
 <meta property="og:title" content={postTitle} />
 <meta property="og:description" content={postDescription} />
@@ -22,7 +76,7 @@ const postDescription = post.data.description || SITE.description;
   )
 }
 <meta property="og:image:alt" content={postTitle} />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
 <meta property="og:locale" content={SITE.locale} />
 
 <meta name="twitter:title" content={postTitle} />
@@ -38,9 +92,16 @@ const postDescription = post.data.description || SITE.description;
 <meta name="twitter:image:alt" content={postTitle} />
 <meta name="twitter:card" content="summary_large_image" />
 
-{
-  post?.data.tags &&
-    post.data.tags.map((tag: string) => {
-      return <meta property="article:tag" content={tag} />;
-    })
-}
+{post?.data.tags && post.data.tags.map((tag: string) => (
+  <meta property="article:tag" content={tag} />
+))}
+
+<!-- Structured Data: Article / BlogPosting -->
+<script is:inline type="application/ld+json">
+  {JSON.stringify(articleLd, (_, value) => (value === undefined ? undefined : value))}
+</script>
+
+<!-- Structured Data: Breadcrumbs -->
+<script is:inline type="application/ld+json">
+  {JSON.stringify(breadcrumbsLd, (_, value) => (value === undefined ? undefined : value))}
+</script>

@@ -10,7 +10,9 @@ export default defineConfig({
     clientPrerender: true,
   },
   integrations: [
-    sitemap(),
+    sitemap({
+      exclude: ["/rss.xml", "/robots.txt", "/search-index.json"],
+    }),
     mdx(),
     compress({
       CSS: true,

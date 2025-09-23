@@ -64,6 +64,30 @@ const shareLinks = [
 
 <div class="social-share-compact">
   <div class="flex flex-wrap items-center justify-center gap-5">
+    <button
+      class="social-link social-share-icon web-share-button"
+      aria-label="Share"
+      title="Share"
+      data-title={title}
+      data-text={description || title}
+      data-url={url}
+      hidden
+    >
+      <svg
+        class="size-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="18" cy="5" r="3"></circle>
+        <circle cx="6" cy="12" r="3"></circle>
+        <circle cx="18" cy="19" r="3"></circle>
+        <path d="M8.59 13.51l6.83 3.98M15.41 6.51L8.59 10.49"></path>
+      </svg>
+    </button>
     {
       shareLinks.map((link) => (
         <a
@@ -122,65 +146,58 @@ const shareLinks = [
         </a>
       ))
     }
-    <button
-      class="social-link social-share-icon copy-url-button"
-      aria-label="Copy URL"
-      title="Copy URL to clipboard"
-      data-url={url}
-    >
-      <svg
-        class="size-5"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
-        <path d="m4 16c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2"></path>
-      </svg>
-    </button>
   </div>
 </div>
 
 <script>
   function initSocialShare() {
-    const copyButtons = document.querySelectorAll(".copy-url-button");
+    // Native Web Share
+    const webShareButtons = document.querySelectorAll(
+      ".web-share-button"
+    );
 
-    copyButtons.forEach((button) => {
-      button.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const url = (button as HTMLElement).dataset.url;
+    webShareButtons.forEach((button) => {
+      const isSupported = typeof navigator !== "undefined" && !!navigator.share;
+      if (isSupported) {
+        (button as HTMLButtonElement).hidden = false;
+        button.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const el = button as HTMLElement;
+          const data = {
+            title: el.dataset.title || document.title,
+            text: el.dataset.text || el.dataset.title || document.title,
+            url: el.dataset.url || location.href,
+          } as ShareData;
 
-        if (!url) return;
-
-        try {
-          await navigator.clipboard.writeText(url);
-
-          button.innerHTML = `
-            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="20,6 9,17 4,12"/>
-            </svg>
-          `;
-        } catch (err) {
-          console.error("Failed to copy URL:", err);
-          
           try {
-            const textArea = document.createElement("textarea");
-            textArea.value = url;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            textArea.style.top = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            document.body.removeChild(textArea);
-          } catch (fallbackErr) {
-            console.error("Fallback copy failed:", fallbackErr);
+            await navigator.share(data);
+            // Success feedback
+            button.innerHTML = `
+              <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20,6 9,17 4,12"/>
+              </svg>
+            `;
+          } catch (err) {
+            // Ignore aborts, fallback to copy for other errors
+            // @ts-ignore - name may not exist on all error types
+            if (!err || err.name === "AbortError") return;
+
+            try {
+              const url = el.dataset.url || location.href;
+              await navigator.clipboard.writeText(url);
+              button.innerHTML = `
+                <svg class=\"size-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n                  <polyline points=\"20,6 9,17 4,12\"/>\n                </svg>
+              `;
+            } catch (copyErr) {
+              console.error("Share failed, copy failed as fallback:", copyErr);
+            }
           }
-        }
-      });
+        });
+      } else {
+        (button as HTMLButtonElement).hidden = true;
+      }
     });
+
   }
 
   if (document.readyState !== "loading") {
@@ -225,9 +242,5 @@ const shareLinks = [
 
   :global(.dark) .social-share-icon:hover {
     background-color: #70707030;
-  }
-
-  .copy-url-button {
-    cursor: pointer;
   }
 </style>

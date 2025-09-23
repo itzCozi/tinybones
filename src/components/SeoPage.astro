@@ -1,5 +1,5 @@
 ---
-import { SITE } from "@/siteConfig.ts";
+import { SITE } from "@/siteConfig";
 
 interface Props {
   title?: string;
@@ -9,11 +9,12 @@ interface Props {
 const { title = SITE.title, description = SITE.description } = Astro.props;
 const formattedTitle =
   title === SITE.title ? title : `${title} | ${SITE.title}`;
+const url = new URL(Astro.url.pathname, SITE.href).toString();
 ---
 
 <title>{formattedTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={SITE.href} />
+<link rel="canonical" href={url} />
 
 <meta property="og:title" content={formattedTitle} />
 <meta property="og:description" content={description} />
@@ -25,3 +26,46 @@ const formattedTitle =
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image:alt" content={formattedTitle} />
 <meta name="twitter:card" content="summary_large_image" />
+
+<!-- Structured Data: WebPage -->
+<script is:inline type="application/ld+json">
+  {JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: formattedTitle,
+      description,
+      url,
+      inLanguage: SITE.locale,
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE.title,
+        url: SITE.href,
+      },
+    }
+  )}
+</script>
+
+<!-- Structured Data: Breadcrumbs -->
+<script is:inline type="application/ld+json">
+  {JSON.stringify(
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: new URL("/", SITE.href).toString(),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: title ?? "Page",
+          item: url,
+        },
+      ],
+    }
+  )}
+</script>
