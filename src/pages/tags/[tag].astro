@@ -18,9 +18,11 @@ const allPosts = (await getCollection("blog")).filter((p) => (p.data.tags || [])
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title={`Tag: ${tag}`} description={`Posts tagged with ${tag}`} />
+  <SeoPage slot="head" title={`${tag}`} description={`Posts tagged with ${tag}`} />
   <section class="py-3">
-    <h1 class="mb-4 text-2xl font-bold">Tag: {tag}</h1>
+    <h1 class="mb-4 text-2xl font-bold">
+      <a href="/authors" title="Authors" class="hover:underline">Tags</a>/{tag}
+    </h1>
     {allPosts.length === 0 ? (
       <p class="text-neutral-600 dark:text-neutral-300">No posts for this tag yet.</p>
     ) : (

@@ -1,6 +1,6 @@
 {
   "name": "tinybones-cli",
-  "version": "1.0.0",
+  "private": true,
   "description": "CLI tool for managing your TinyBones blog",
   "type": "module",
   "main": "index.js",

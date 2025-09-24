@@ -41,10 +41,6 @@ export const NAV_LINKS: NavigationLinks = {
     path: "/projects",
     label: "Projects",
   },
-  tags: {
-    path: "/tags",
-    label: "Tags",
-  },
 };
 
 // Giscus Comments Configuration

@@ -498,7 +498,7 @@ async function main() {
   program
     .name("tinybones")
     .description("CLI tool for managing your TinyBones blog")
-    .version("1.0.0");
+    // Version intentionally omitted to avoid manual upkeep
 
   program
     .command("create")

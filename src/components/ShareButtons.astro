@@ -63,7 +63,15 @@ const shareLinks = [
 ---
 
 <div class="social-share-compact">
-  <div class="flex flex-wrap items-center justify-center gap-5">
+  <a
+    href="#"
+    class="back-to-top"
+    aria-label="Back to top"
+    title="Back to top"
+  >
+    Back to Top
+  </a>
+  <div class="flex flex-wrap items-center justify-center gap-5 mt-7">
     <button
       class="social-link social-share-icon web-share-button"
       aria-label="Share"
@@ -198,6 +206,15 @@ const shareLinks = [
       }
     });
 
+    const backToTop = document.querySelector(
+      ".social-share-compact .back-to-top"
+    ) as HTMLElement | null;
+    if (backToTop) {
+      backToTop.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
   }
 
   if (document.readyState !== "loading") {
@@ -211,6 +228,7 @@ const shareLinks = [
 
 <style>
   .social-share-compact {
+    position: relative;
     border-top: 1px solid #aaaaaa;
     padding-top: 1rem;
     margin-top: 1rem;
@@ -242,5 +260,27 @@ const shareLinks = [
 
   :global(.dark) .social-share-icon:hover {
     background-color: #70707030;
+  }
+
+  .back-to-top {
+    position: absolute;
+    color: var(--color-neutral-800);
+    top: 0.4rem;
+    left: 0.28rem;
+    font-size: 0.85rem;
+  }
+
+  .back-to-top:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-neutral-800);
+    text-underline-offset: 3px;
+  }
+
+  :global(.dark) .back-to-top {
+    color: var(--color-neutral-200);
+  }
+
+  :global(.dark) .back-to-top:hover {
+    text-decoration-color: var(--color-neutral-200);
   }
 </style>

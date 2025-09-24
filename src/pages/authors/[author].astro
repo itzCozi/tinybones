@@ -27,9 +27,11 @@ const displayName = allPosts.length > 0
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title={`Author: ${displayName}`} description={`Posts written by ${displayName}`} />
+  <SeoPage slot="head" title={`${displayName}`} description={`Posts written by ${displayName}`} />
   <section class="py-3">
-    <h1 class="mb-4 text-2xl font-bold">Author: {displayName}</h1>
+    <h1 class="mb-4 text-2xl font-bold">
+      <a href="/authors" title="Authors" class="hover:underline">Authors</a>/{displayName}
+    </h1>
     {allPosts.length === 0 ? (
       <p class="text-neutral-600 dark:text-neutral-300">No posts by this author yet.</p>
     ) : (

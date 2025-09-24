@@ -1,7 +1,7 @@
 {
   "name": "tinybones",
   "type": "module",
-  "version": "1.0.0",
+  "private": true,
   "engines": {
     "node": ">=14.16",
     "pnpm": ">=6.0.0"

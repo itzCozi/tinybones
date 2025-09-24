@@ -16,13 +16,6 @@ A minimal blog template built with [Astro](https://astro.build/). Perfect for de
 - **Comments system:** Built-in support for Giscus comments
 - **CLI tool:** Create and manage blog posts and projects from the command line
 
-## Core Web Vitals
-
-Best Practices: **100**  
-Accessibility: **100**  
-Performance: **100**  
-SEO: **100**
-
 ## Getting Started
 
 1. Click the "Use this template" button at the top of the repository
