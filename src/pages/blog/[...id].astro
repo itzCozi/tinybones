@@ -72,7 +72,7 @@ const readingTime = calculateReadingTime(entry.body || "");
                   By {entry.data.authors.map((a, idx) => (
                     <>
                       {idx > 0 && (idx === entry.data.authors!.length - 1 ? " and " : ", ")}
-                      <a href={`/authors/${slugifyAuthor(a)}`} class="link" title={a}>{a}</a>
+                      <a href={`/authors/${slugifyAuthor(a)}`} class="underlined" title={a}>{a}</a>
                     </>
                   ))}
                 </span>
@@ -210,18 +210,3 @@ const readingTime = calculateReadingTime(entry.body || "");
     highlightSearchTerm();
   }
 </script>
-
-<style>
-  .search-highlight {
-    background-color: #fef08a;
-    color: #854d0e;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-weight: 500;
-  }
-
-  :global(.dark) .search-highlight {
-    background-color: #ca8a04;
-    color: #fef3c7;
-  }
-</style>
