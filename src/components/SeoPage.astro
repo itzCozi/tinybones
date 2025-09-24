@@ -7,63 +7,95 @@ interface Props {
 }
 
 const { title = SITE.title, description = SITE.description } = Astro.props;
-const formattedTitle =
-  title === SITE.title ? title : `${title} | ${SITE.title}`;
+const formattedTitle = title === SITE.title ? title : `${title} | ${SITE.title}`;
 const url = new URL(Astro.url.pathname, SITE.href).toString();
 ---
 
 <title>{formattedTitle}</title>
-<meta name="description" content={description} />
-<link rel="canonical" href={url} />
+<meta
+  name="description"
+  content={description}
+/>
+<link
+  rel="canonical"
+  href={url}
+/>
 
-<meta property="og:title" content={formattedTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:image:alt" content={formattedTitle} />
-<meta property="og:type" content="website" />
-<meta property="og:locale" content={SITE.locale} />
+<meta
+  property="og:title"
+  content={formattedTitle}
+/>
+<meta
+  property="og:description"
+  content={description}
+/>
+<meta
+  property="og:image:alt"
+  content={formattedTitle}
+/>
+<meta
+  property="og:type"
+  content="website"
+/>
+<meta
+  property="og:locale"
+  content={SITE.locale}
+/>
 
-<meta name="twitter:title" content={formattedTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image:alt" content={formattedTitle} />
-<meta name="twitter:card" content="summary_large_image" />
+<meta
+  name="twitter:title"
+  content={formattedTitle}
+/>
+<meta
+  name="twitter:description"
+  content={description}
+/>
+<meta
+  name="twitter:image:alt"
+  content={formattedTitle}
+/>
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+/>
 
-<script is:inline type="application/ld+json">
-  {JSON.stringify(
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      name: formattedTitle,
-      description,
-      url,
-      inLanguage: SITE.locale,
-      isPartOf: {
-        "@type": "WebSite",
-        name: SITE.title,
-        url: SITE.href,
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: formattedTitle,
+    description,
+    url,
+    inLanguage: SITE.locale,
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE.title,
+      url: SITE.href,
+    },
+  })}
+/>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: new URL("/", SITE.href).toString(),
       },
-    }
-  )}
-</script>
-
-<script is:inline type="application/ld+json">
-  {JSON.stringify(
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: new URL("/", SITE.href).toString(),
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: title ?? "Page",
-          item: url,
-        },
-      ],
-    }
-  )}
-</script>
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: title ?? "Page",
+        item: url,
+      },
+    ],
+  })}
+/>

@@ -5,11 +5,12 @@ import SeoPage from "@/components/SeoPage.astro";
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title="404" />
+  <SeoPage
+    slot="head"
+    title="404"
+  />
   <div class="mx-auto mt-8 text-center">
     <p class="mb-3 text-2xl font-bold text-balance">Page Not Found</p>
-    <p class="text-balance">
-      Whatever you're looking for doesn't appear to be here. Sorry.
-    </p>
+    <p class="text-balance">Whatever you're looking for doesn't appear to be here. Sorry.</p>
   </div>
 </BaseLayout>

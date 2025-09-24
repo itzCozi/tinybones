@@ -58,8 +58,7 @@ const headings = extractHeadings(content);
               <a
                 href={`#${heading.id}`}
                 class="toc-link text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link block text-sm transition-colors duration-200"
-                style={`padding-left: ${(heading.level - 1) * 0.75}rem`}
-              >
+                style={`padding-left: ${(heading.level - 1) * 0.75}rem`}>
                 {heading.text}
               </a>
             </li>
@@ -184,10 +183,7 @@ const headings = extractHeadings(content);
     initTableOfContents();
   }
 
-  document.addEventListener(
-    "search-highlighting-complete",
-    initTableOfContents
-  );
+  document.addEventListener("search-highlighting-complete", initTableOfContents);
 </script>
 
 <style is:global>

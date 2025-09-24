@@ -10,15 +10,10 @@ export interface Props {
   baseUrl?: string;
 }
 
-const {
-  currentPage = 1,
-  pageSize = 5,
-  showPagination = true,
-  baseUrl = "/blog",
-} = Astro.props;
+const { currentPage = 1, pageSize = 5, showPagination = true, baseUrl = "/blog" } = Astro.props;
 
 const allPosts = (await getCollection("blog")).sort(
-  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf()
+  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
 );
 
 const totalPages = Math.ceil(allPosts.length / pageSize);

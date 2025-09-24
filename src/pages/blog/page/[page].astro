@@ -24,6 +24,13 @@ const { currentPage } = Astro.props;
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title={`Blog - pg${currentPage}`} />
-  <Posts currentPage={currentPage} showPagination={true} baseUrl="/blog" />
+  <SeoPage
+    slot="head"
+    title={`Blog - pg${currentPage}`}
+  />
+  <Posts
+    {currentPage}
+    showPagination={true}
+    baseUrl="/blog"
+  />
 </BaseLayout>

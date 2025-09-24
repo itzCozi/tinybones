@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import { Menu } from "lucide-astro";
 
 const allPosts = (await getCollection("blog")).sort(
-  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf()
+  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
 );
 
 const recentPosts = allPosts.slice(0, 5);
@@ -15,10 +15,9 @@ const recentPosts = allPosts.slice(0, 5);
     type="button"
     class="mt-1.5 text-sm font-medium hover:cursor-pointer"
     aria-expanded="false"
-    aria-haspopup="true"
-  >
+    aria-haspopup="true">
     <Menu
-      class="h-5.5 w-5.5 mt-0.5 transition-transform duration-200"
+      class="mt-0.5 h-5.5 w-5.5 transition-transform duration-200"
       id="blog-dropdown-icon"
     />
   </button>
@@ -29,37 +28,32 @@ const recentPosts = allPosts.slice(0, 5);
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="blog-dropdown-button"
-    tabindex="-1"
-  >
-    <div class="py-1" role="none">
+    tabindex="-1">
+    <div
+      class="py-1"
+      role="none">
       {
-        recentPosts.length > 0 ? (
+        recentPosts.length > 0 ?
           <>
             {recentPosts.map((post) => (
               <a
                 href={`/blog/${post.id}`}
                 class="block border-b border-neutral-200 px-4 py-3 text-sm transition-colors duration-150 last:border-b-0 hover:bg-neutral-100/70 dark:border-neutral-700 dark:hover:bg-neutral-900/70"
                 role="menuitem"
-                tabindex="-1"
-              >
+                tabindex="-1">
                 <div class="truncate font-medium">{post.data.title}</div>
-                <div class="mt-1 text-xs">
-                  {post.data.publicationDate.toLocaleDateString()}
-                </div>
+                <div class="mt-1 text-xs">{post.data.publicationDate.toLocaleDateString()}</div>
               </a>
             ))}
             <a
               href="/blog"
               class="link block px-4 py-3 text-sm"
               role="menuitem"
-              tabindex="-1"
-            >
+              tabindex="-1">
               View all posts
             </a>
           </>
-        ) : (
-          <div class="px-4 py-3 text-sm">No blog posts found</div>
-        )
+        : <div class="px-4 py-3 text-sm">No blog posts found</div>
       }
     </div>
   </div>
@@ -94,10 +88,7 @@ const recentPosts = allPosts.slice(0, 5);
     });
 
     document.addEventListener("click", (e) => {
-      if (
-        !freshButton.contains(e.target as Node) &&
-        !freshMenu.contains(e.target as Node)
-      ) {
+      if (!freshButton.contains(e.target as Node) && !freshMenu.contains(e.target as Node)) {
         closeDropdown();
       }
     });

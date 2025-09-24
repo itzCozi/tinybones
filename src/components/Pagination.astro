@@ -19,55 +19,46 @@ function getPageUrl(page: number): string {
   totalPages > 1 && (
     <nav
       class="mt-8 flex items-center justify-center gap-4"
-      aria-label="Pagination"
-    >
-      {currentPage > 1 ? (
+      aria-label="Pagination">
+      {currentPage > 1 ?
         <a
           href={getPageUrl(currentPage - 1)}
           class="pager-link-1 flex items-center px-3 text-sm font-medium"
-          aria-label="Previous page"
-        >
+          aria-label="Previous page">
           Previous
         </a>
-      ) : (
-        <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
+      : <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
           Previous
         </span>
-      )}
+      }
 
       <div class="flex">
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) =>
-          page === currentPage ? (
+          page === currentPage ?
             <span
               class="pager-link-2 cursor-not-allowed px-2 text-sm font-medium"
-              aria-current="page"
-            >
+              aria-current="page">
               {page}
             </span>
-          ) : (
-            <a
+          : <a
               href={getPageUrl(page)}
-              class="pager-link-1 px-2 text-sm font-medium"
-            >
+              class="pager-link-1 px-2 text-sm font-medium">
               {page}
-            </a>
-          )
+            </a>,
         )}
       </div>
 
-      {currentPage < totalPages ? (
+      {currentPage < totalPages ?
         <a
           href={getPageUrl(currentPage + 1)}
           class="pager-link-1 flex items-center px-3 text-sm font-medium"
-          aria-label="Next page"
-        >
+          aria-label="Next page">
           Next
         </a>
-      ) : (
-        <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
+      : <span class="pager-link-2 flex cursor-not-allowed items-center px-3 text-sm font-medium">
           Next
         </span>
-      )}
+      }
     </nav>
   )
 }

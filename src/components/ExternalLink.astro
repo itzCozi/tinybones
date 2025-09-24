@@ -3,7 +3,9 @@ const { href } = Astro.props;
 ---
 
 <li class="flex items-center gap-1.5">
-  <a href={href} class="link">
+  <a
+    {href}
+    class="link">
     <slot />
   </a>
   <svg

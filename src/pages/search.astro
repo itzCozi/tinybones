@@ -4,11 +4,19 @@ import SeoPage from "@/components/SeoPage.astro";
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title="Search" description="Search posts on TinyBones" />
+  <SeoPage
+    slot="head"
+    title="Search"
+    description="Search posts on TinyBones"
+  />
 
   <section>
     <h1 class="mb-4 text-2xl font-bold">Search</h1>
-    <form action="/search" method="get" role="search" class="mb-4 flex gap-2">
+    <form
+      action="/search"
+      method="get"
+      role="search"
+      class="mb-4 flex gap-2">
       <input
         type="search"
         name="q"
@@ -17,12 +25,17 @@ import SeoPage from "@/components/SeoPage.astro";
         placeholder="Search posts"
         aria-label="Search posts"
       />
-      <button type="submit" class="rounded-md border border-neutral-400 px-3 py-2 text-sm dark:border-neutral-600">
+      <button
+        type="submit"
+        class="rounded-md border border-neutral-400 px-3 py-2 text-sm dark:border-neutral-600">
         Search
       </button>
     </form>
 
-    <div id="results" class="grid list-none gap-3 p-0"></div>
+    <div
+      id="results"
+      class="grid list-none gap-3 p-0">
+    </div>
   </section>
 </BaseLayout>
 
@@ -31,13 +44,16 @@ import SeoPage from "@/components/SeoPage.astro";
   async function runSearch() {
     const params = new URLSearchParams(window.location.search);
     const q = (params.get("q") || "").trim();
-  const input = document.getElementById("q");
-  if (input) (input as HTMLInputElement).value = q;
+    const input = document.getElementById("q");
+    if (input) (input as HTMLInputElement).value = q;
     const resultsEl = document.getElementById("results");
     if (!resultsEl) return;
 
     if (!q || q.length < 2) {
-      resultsEl.innerHTML = q ? `<div class="text-sm text-neutral-600 dark:text-neutral-300">Type at least 2 characters.</div>` : "";
+      resultsEl.innerHTML =
+        q ?
+          `<div class="text-sm text-neutral-600 dark:text-neutral-300">Type at least 2 characters.</div>`
+        : "";
       return;
     }
 
@@ -51,19 +67,29 @@ import SeoPage from "@/components/SeoPage.astro";
     }
 
     const query = q.toLowerCase();
-    const filtered = posts.filter((p) =>
-      p.title?.toLowerCase().includes(query) ||
-      p.description?.toLowerCase().includes(query) ||
-      p.content?.toLowerCase().includes(query)
+    const filtered = posts.filter(
+      (p) =>
+        p.title?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query) ||
+        p.content?.toLowerCase().includes(query),
     );
 
-    function esc(str) { return (str || "").replace(/[&<>"']/g, (ch) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch as any])); }
+    function esc(str) {
+      return (str || "").replace(
+        /[&<>"']/g,
+        (ch) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch as any],
+      );
+    }
     function highlight(text) {
       if (!text) return "";
       const safe = esc(text);
       const queryEsc = esc(q);
       const re = new RegExp(queryEsc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
-      return safe.replace(re, (m) => `<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">${m}</mark>`);
+      return safe.replace(
+        re,
+        (m) => `<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">${m}</mark>`,
+      );
     }
 
     if (filtered.length === 0) {
@@ -71,25 +97,30 @@ import SeoPage from "@/components/SeoPage.astro";
       return;
     }
 
-    resultsEl.innerHTML = filtered.map((p) => {
-      const snippetSource = p.description || p.content || "";
-      let snippet = snippetSource;
-      const idx = snippetSource.toLowerCase().indexOf(query);
-      if (idx >= 0) {
-        const start = Math.max(0, idx - 60);
-        const end = Math.min(snippetSource.length, idx + q.length + 60);
-        snippet = (start > 0 ? "…" : "") + snippetSource.slice(start, end) + (end < snippetSource.length ? "…" : "");
-      } else {
-        snippet = snippetSource.slice(0, 140) + (snippetSource.length > 140 ? "…" : "");
-      }
-      return `
+    resultsEl.innerHTML = filtered
+      .map((p) => {
+        const snippetSource = p.description || p.content || "";
+        let snippet = snippetSource;
+        const idx = snippetSource.toLowerCase().indexOf(query);
+        if (idx >= 0) {
+          const start = Math.max(0, idx - 60);
+          const end = Math.min(snippetSource.length, idx + q.length + 60);
+          snippet =
+            (start > 0 ? "…" : "") +
+            snippetSource.slice(start, end) +
+            (end < snippetSource.length ? "…" : "");
+        } else {
+          snippet = snippetSource.slice(0, 140) + (snippetSource.length > 140 ? "…" : "");
+        }
+        return `
         <a class="block rounded-md border border-neutral-300 p-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href="${p.url}?search=${encodeURIComponent(q)}">
           <div class="font-medium text-neutral-900 dark:text-white">${highlight(p.title)}</div>
           <div class="text-xs text-neutral-500 dark:text-neutral-400">${new Date(p.pubDate).toLocaleDateString?.() || ""}</div>
           <div class="mt-1 text-sm text-neutral-700 dark:text-neutral-300">${highlight(snippet)}</div>
         </a>
       `;
-    }).join("");
+      })
+      .join("");
   }
 
   document.addEventListener("astro:page-load", runSearch);

@@ -14,23 +14,24 @@ const {
 ---
 
 <div class={`search-container relative w-full ${mode === "modal" ? "h-full" : ""}`}>
-  <form id={formId} class={`${mode === "modal" ? "flex w-full flex-col items-stretch" : "flex w-full items-center"}`} role="search">
+  <form
+    id={formId}
+    class={`${mode === "modal" ? "flex w-full flex-col items-stretch" : "flex w-full items-center"}`}
+    role="search">
     <div class="relative w-full">
-      <div
-        class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
-      >
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-4 w-4 text-neutral-500 dark:text-neutral-300"
           fill="none"
           viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+          stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
         </svg>
       </div>
       <input
@@ -43,210 +44,215 @@ const {
     </div>
     <div
       id={resultsId}
-      class={`dark:bg-dark-bg ${mode === "modal" ? "relative top-0 mt-3 max-h-[calc(100vh-9rem)] w-full" : "absolute top-full mt-1 right-0 left-0"} z-10 hidden overflow-auto rounded-md border border-neutral-300 bg-white dark:border-neutral-700`}
-    >
+      class={`dark:bg-dark-bg ${mode === "modal" ? "relative top-0 mt-3 max-h-[calc(100vh-9rem)] w-full" : "absolute top-full mt-1 right-0 left-0"} z-10 hidden overflow-auto rounded-md border border-neutral-300 bg-white dark:border-neutral-700`}>
     </div>
   </form>
 </div>
 
-<script is:inline define:vars={{ INPUT_ID: inputId, RESULTS_ID: resultsId, FORM_ID: formId, RESULTS_LIMIT: (mode === "modal" ? 5 : 5) }}>
+<script
+  is:inline
+  define:vars={{
+    INPUT_ID: inputId,
+    RESULTS_ID: resultsId,
+    FORM_ID: formId,
+    RESULTS_LIMIT: mode === "modal" ? 5 : 5,
+  }}
+>
   (function (INPUT_ID, RESULTS_ID, FORM_ID) {
-  // @ts-nocheck
-  /**
-   * @typedef {Object} Post
-   * @property {string} title
-   * @property {string} description
-   * @property {string} [content]
-   * @property {string} url
-   * @property {string} pubDate
-   * @property {string} author
-   * @property {string[]} tags
-   */
+    // @ts-nocheck
+    /**
+     * @typedef {Object} Post
+     * @property {string} title
+     * @property {string} description
+     * @property {string} [content]
+     * @property {string} url
+     * @property {string} pubDate
+     * @property {string} author
+     * @property {string[]} tags
+     */
 
-  let isSearchInitialized = false;
+    let isSearchInitialized = false;
 
-  document.addEventListener("astro:page-load", initSearch);
+    document.addEventListener("astro:page-load", initSearch);
 
-  if (document.readyState !== "loading") {
-    initSearch();
-  }
-
-  document.addEventListener("astro:before-preparation", () => {
-    isSearchInitialized = false;
-  });
-
-  async function initSearch() {
-    if (isSearchInitialized) return;
-  const searchInput = document.getElementById(INPUT_ID);
-  const searchResults = document.getElementById(RESULTS_ID);
-  const searchForm = document.getElementById(FORM_ID);
-
-    if (!searchInput || !searchResults || !searchForm) {
-      console.warn("Search elements not found, retrying...");
-      setTimeout(initSearch, 100);
-      return;
+    if (document.readyState !== "loading") {
+      initSearch();
     }
 
-    isSearchInitialized = true;
+    document.addEventListener("astro:before-preparation", () => {
+      isSearchInitialized = false;
+    });
 
-  const newSearchInput = searchInput.cloneNode(true);
-    searchInput.parentNode?.replaceChild(newSearchInput, searchInput);
+    async function initSearch() {
+      if (isSearchInitialized) return;
+      const searchInput = document.getElementById(INPUT_ID);
+      const searchResults = document.getElementById(RESULTS_ID);
+      const searchForm = document.getElementById(FORM_ID);
 
-  /** @type {Post[]} */
-  let posts = [];
-
-    try {
-      const response = await fetch("/search-index.json");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      posts = await response.json();
-    } catch (error) {
-      console.error("Error loading search index:", error);
-      return;
-    }
-
-  const freshSearchInput = document.getElementById(INPUT_ID);
-  const freshSearchResults = document.getElementById(RESULTS_ID);
-  const freshSearchForm = document.getElementById(FORM_ID);
-
-    if (!freshSearchInput || !freshSearchResults || !freshSearchForm) return;
-
-    freshSearchInput.addEventListener("input", () => {
-      const query = freshSearchInput.value.toLowerCase().trim();
-
-      if (query.length < 2) {
-        freshSearchResults.classList.add("hidden");
+      if (!searchInput || !searchResults || !searchForm) {
+        console.warn("Search elements not found, retrying...");
+        setTimeout(initSearch, 100);
         return;
       }
 
-      const filteredPosts = posts.filter(
-        (post) =>
-          post.title.toLowerCase().includes(query) ||
-          post.description?.toLowerCase().includes(query) ||
-          post.content?.toLowerCase().includes(query)
-      );
+      isSearchInitialized = true;
 
-      displayResults(filteredPosts, freshSearchResults, freshSearchInput);
-    });
+      const newSearchInput = searchInput.cloneNode(true);
+      searchInput.parentNode?.replaceChild(newSearchInput, searchInput);
 
-    freshSearchInput.addEventListener("focus", () => {
-      if (freshSearchInput.value.trim().length >= 2) {
-        freshSearchResults.classList.remove("hidden");
-      }
-    });
+      /** @type {Post[]} */
+      let posts = [];
 
-    document.addEventListener("click", (e) => {
-      const target = e.target;
-      if (freshSearchForm && target && !freshSearchForm.contains(target)) {
-        freshSearchResults.classList.add("hidden");
-      }
-    });
-
-    freshSearchForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-    });
-
-    function displayResults(
-      results,
-      resultsElement,
-      inputElement
-    ) {
-      resultsElement.innerHTML = "";
-      resultsElement.classList.remove("hidden");
-
-      if (results.length === 0) {
-        const noResults = document.createElement("div");
-        noResults.className =
-          "p-3 text-sm text-neutral-600 dark:text-neutral-300";
-        noResults.textContent = "No results found";
-        resultsElement.appendChild(noResults);
+      try {
+        const response = await fetch("/search-index.json");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        posts = await response.json();
+      } catch (error) {
+        console.error("Error loading search index:", error);
         return;
       }
 
-      results.slice(0, RESULTS_LIMIT).forEach((post) => {
-        const query = inputElement.value.toLowerCase().trim();
-        const resultItem = document.createElement("a");
+      const freshSearchInput = document.getElementById(INPUT_ID);
+      const freshSearchResults = document.getElementById(RESULTS_ID);
+      const freshSearchForm = document.getElementById(FORM_ID);
 
-        if (!post.url || post.url.includes("undefined")) {
-          console.error("Invalid URL for post:", post);
+      if (!freshSearchInput || !freshSearchResults || !freshSearchForm) return;
+
+      freshSearchInput.addEventListener("input", () => {
+        const query = freshSearchInput.value.toLowerCase().trim();
+
+        if (query.length < 2) {
+          freshSearchResults.classList.add("hidden");
+          return;
         }
 
-        const titleMatch = post.title.toLowerCase().includes(query);
-        const descriptionMatch = post.description
-          ?.toLowerCase()
-          .includes(query);
-
-        if (titleMatch || descriptionMatch) {
-          resultItem.href = post.url || "#";
-        } else {
-          resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
-        }
-
-        resultItem.className =
-          "block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-900";
-
-        const title = document.createElement("div");
-        title.className = "font-medium text-neutral-900 dark:text-white";
-
-        const highlightedTitle = post.title.replace(
-          new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
-          '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>'
+        const filteredPosts = posts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(query) ||
+            post.description?.toLowerCase().includes(query) ||
+            post.content?.toLowerCase().includes(query),
         );
-        title.innerHTML = highlightedTitle;
 
-        const date = document.createElement("div");
-        date.className = "text-xs text-neutral-500 dark:text-neutral-400";
-        date.textContent = new Date(post.pubDate).toLocaleDateString();
+        displayResults(filteredPosts, freshSearchResults, freshSearchInput);
+      });
 
-        resultItem.appendChild(title);
-        resultItem.appendChild(date);
+      freshSearchInput.addEventListener("focus", () => {
+        if (freshSearchInput.value.trim().length >= 2) {
+          freshSearchResults.classList.remove("hidden");
+        }
+      });
 
-        if (
-          post.content &&
-          post.content.toLowerCase().includes(query) &&
-          !post.title.toLowerCase().includes(query) &&
-          !post.description?.toLowerCase().includes(query)
-        ) {
-          const contentIndex = post.content.toLowerCase().indexOf(query);
-          const startIndex = Math.max(0, contentIndex - 50);
-          const endIndex = Math.min(
-            post.content.length,
-            contentIndex + query.length + 50
-          );
-          let snippet = post.content.substring(startIndex, endIndex);
+      document.addEventListener("click", (e) => {
+        const target = e.target;
+        if (freshSearchForm && target && !freshSearchForm.contains(target)) {
+          freshSearchResults.classList.add("hidden");
+        }
+      });
 
-          if (startIndex > 0) snippet = "..." + snippet;
-          if (endIndex < post.content.length) snippet = snippet + "...";
+      freshSearchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+      });
 
-          const highlightedSnippet = snippet.replace(
-            new RegExp(
-              `(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-              "gi"
-            ),
-            '<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">$1</mark>'
-          );
+      function displayResults(results, resultsElement, inputElement) {
+        resultsElement.innerHTML = "";
+        resultsElement.classList.remove("hidden");
 
-          const contentSnippet = document.createElement("div");
-          contentSnippet.className =
-            "text-xs text-neutral-600 dark:text-neutral-300 mt-1";
-          contentSnippet.innerHTML = highlightedSnippet;
-          resultItem.appendChild(contentSnippet);
+        if (results.length === 0) {
+          const noResults = document.createElement("div");
+          noResults.className = "p-3 text-sm text-neutral-600 dark:text-neutral-300";
+          noResults.textContent = "No results found";
+          resultsElement.appendChild(noResults);
+          return;
         }
 
-        resultsElement.appendChild(resultItem);
-      });
+        results.slice(0, RESULTS_LIMIT).forEach((post) => {
+          const query = inputElement.value.toLowerCase().trim();
+          const resultItem = document.createElement("a");
+
+          if (!post.url || post.url.includes("undefined")) {
+            console.error("Invalid URL for post:", post);
+          }
+
+          const titleMatch = post.title.toLowerCase().includes(query);
+          const descriptionMatch = post.description?.toLowerCase().includes(query);
+
+          if (titleMatch || descriptionMatch) {
+            resultItem.href = post.url || "#";
+          } else {
+            resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
+          }
+
+          resultItem.className = "block p-3 hover:bg-neutral-100 dark:hover:bg-neutral-900";
+
+          const title = document.createElement("div");
+          title.className = "font-medium text-neutral-900 dark:text-white";
+
+          const highlightedTitle = post.title.replace(
+            new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
+            '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>',
+          );
+          title.innerHTML = highlightedTitle;
+
+          const date = document.createElement("div");
+          date.className = "text-xs text-neutral-500 dark:text-neutral-400";
+          date.textContent = new Date(post.pubDate).toLocaleDateString();
+
+          resultItem.appendChild(title);
+          resultItem.appendChild(date);
+
+          if (
+            post.content &&
+            post.content.toLowerCase().includes(query) &&
+            !post.title.toLowerCase().includes(query) &&
+            !post.description?.toLowerCase().includes(query)
+          ) {
+            const contentIndex = post.content.toLowerCase().indexOf(query);
+            const startIndex = Math.max(0, contentIndex - 50);
+            const endIndex = Math.min(post.content.length, contentIndex + query.length + 50);
+            let snippet = post.content.substring(startIndex, endIndex);
+
+            if (startIndex > 0) snippet = "..." + snippet;
+            if (endIndex < post.content.length) snippet = snippet + "...";
+
+            const highlightedSnippet = snippet.replace(
+              new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
+              '<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">$1</mark>',
+            );
+
+            const contentSnippet = document.createElement("div");
+            contentSnippet.className = "text-xs text-neutral-600 dark:text-neutral-300 mt-1";
+            contentSnippet.innerHTML = highlightedSnippet;
+            resultItem.appendChild(contentSnippet);
+          }
+
+          resultsElement.appendChild(resultItem);
+        });
+      }
     }
-  }
   })(INPUT_ID, RESULTS_ID, FORM_ID);
 </script>
 
 <style>
-  .search-container { width: 300px; }
+  .search-container {
+    width: 300px;
+  }
 
   @media (max-width: 768px) {
-    .search-container { width: 100%; margin-top: 0.5rem; }
-    :global(#mobile-search-modal) .search-container { width: 100%; height: 100%; margin-top: 0; }
-    :global(#mobile-search-modal) .search-container input[type="search"] { font-size: 1rem; padding-top: 0.375rem; padding-bottom: 0.375rem; }
+    .search-container {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+    :global(#mobile-search-modal) .search-container {
+      width: 100%;
+      height: 100%;
+      margin-top: 0;
+    }
+    :global(#mobile-search-modal) .search-container input[type="search"] {
+      font-size: 1rem;
+      padding-top: 0.375rem;
+      padding-bottom: 0.375rem;
+    }
   }
 </style>

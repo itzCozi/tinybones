@@ -1,4 +1,7 @@
-{
+// .prettierrc.mjs
+/** @type {import("prettier").Config} */
+export default {
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
   "trailingComma": "all",
   "singleQuote": false,
   "insertPragma": true,
@@ -15,5 +18,14 @@
   "tabWidth": 2,
   "singleAttributePerLine": true,
   "semi": true,
-  "experimentalTernaries": true
+  "experimentalTernaries": true,
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": {
+        "parser": "astro",
+        "astroAllowShorthand": false
+      }
+    }
+  ]
 }

@@ -10,9 +10,7 @@ const projects = await getCollection("projects");
   <div class="grid list-none gap-4 p-0">
     {
       projects.map((project) => (
-        <ExternalLink href={project.data.href}>
-          {project.data.title}
-        </ExternalLink>
+        <ExternalLink href={project.data.href}>{project.data.title}</ExternalLink>
       ))
     }
   </div>

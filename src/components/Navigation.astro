@@ -5,55 +5,55 @@ import BlogDropdown from "./BlogDropdown.astro";
 import { Menu, Search as SearchIcon, X } from "lucide-astro";
 ---
 
-<header
-  class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10"
->
+<header class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10">
   <div
-    class="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3"
-  >
+    class="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3">
     <div class="flex w-full items-center justify-between md:w-auto">
       <div class="flex items-center gap-4">
         <div class="hidden md:block">
           <BlogDropdown />
         </div>
-        <a href="/" class="text-xl font-bold">{SITE.title}</a>
+        <a
+          href="/"
+          class="text-xl font-bold"
+          >{SITE.title}</a
+        >
       </div>
       <div class="flex items-center gap-5 md:hidden">
         <button
           aria-label="Search"
-          id="open-search-btn"
-        >
+          id="open-search-btn">
           <SearchIcon class="h-6 w-6" />
         </button>
         <button
           aria-label="Menu"
           id="mobile-menu-toggle"
-          onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');"
-        >
+          onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');">
           <Menu class="h-6 w-6" />
         </button>
       </div>
     </div>
 
     <div class="hidden w-full md:block md:w-auto">
-      <Search formId="search-form-desktop" inputId="search-input-desktop" resultsId="search-results-desktop" />
+      <Search
+        formId="search-form-desktop"
+        inputId="search-input-desktop"
+        resultsId="search-results-desktop"
+      />
     </div>
 
     <nav
       id="mobile-menu"
-      class="mt-4 hidden w-full flex-col items-start md:mt-0 md:flex md:w-auto md:flex-row md:items-center"
-    >
+      class="mt-4 hidden w-full flex-col items-start md:mt-0 md:flex md:w-auto md:flex-row md:items-center">
       <ul
-        class="flex w-full list-none flex-col items-start gap-4 p-0 md:mr-4 md:w-auto md:flex-row md:items-center md:gap-5"
-      >
+        class="flex w-full list-none flex-col items-start gap-4 p-0 md:mr-4 md:w-auto md:flex-row md:items-center md:gap-5">
         {
           Object.keys(NAV_LINKS).map((navItemKey) => {
             return (
               <li>
                 <a
                   href={NAV_LINKS[navItemKey].path}
-                  class="nav-link block py-1"
-                >
+                  class="nav-link block py-1">
                   {NAV_LINKS[navItemKey].label}
                 </a>
               </li>
@@ -67,22 +67,31 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
 
 <div
   id="mobile-search-modal"
-  class="fixed inset-0 z-50 hidden bg-black/60"
->
+  class="fixed inset-0 z-50 hidden bg-black/60">
   <div
-    class="flex h-full w-full flex-col bg-bg p-4 dark:bg-dark-bg"
+    class="bg-bg dark:bg-dark-bg flex h-full w-full flex-col p-4"
     role="dialog"
     aria-modal="true"
-    aria-labelledby="mobile-search-title"
-  >
+    aria-labelledby="mobile-search-title">
     <div class="mb-3 flex items-center justify-between">
-      <h2 id="mobile-search-title" class="text-lg font-semibold">Search</h2>
-      <button id="close-search-btn" aria-label="Close search">
+      <h2
+        id="mobile-search-title"
+        class="text-lg font-semibold">
+        Search
+      </h2>
+      <button
+        id="close-search-btn"
+        aria-label="Close search">
         <X class="h-6 w-6" />
       </button>
     </div>
     <div class="flex-1 overflow-auto">
-      <Search mode="modal" formId="search-form-modal" inputId="search-input-modal" resultsId="search-results-modal" />
+      <Search
+        mode="modal"
+        formId="search-form-modal"
+        inputId="search-input-modal"
+        resultsId="search-results-modal"
+      />
     </div>
   </div>
 </div>
@@ -144,9 +153,9 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
     });
 
     // Close mobile menu when any nav link is clicked (mobile UX nicety)
-    mobileMenu?.querySelectorAll("a").forEach((a) =>
-      a.addEventListener("click", () => closeMobileMenu())
-    );
+    mobileMenu
+      ?.querySelectorAll("a")
+      .forEach((a) => a.addEventListener("click", () => closeMobileMenu()));
   });
 
   // Close on ESC

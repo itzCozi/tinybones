@@ -30,7 +30,10 @@ const readingTime = calculateReadingTime(entry.body || "");
 ---
 
 <BaseLayout>
-  <SeoPost slot="head" entry={entry} />
+  <SeoPost
+    slot="head"
+    {entry}
+  />
   <div class="blog-post-container">
     <div class="blog-header mb-6">
       {
@@ -46,22 +49,23 @@ const readingTime = calculateReadingTime(entry.body || "");
       <h1 class="text-[36px] leading-snug font-bold text-balance">
         {entry.data.title}
       </h1>
-      {entry.data.tags && entry.data.tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 sm:hidden" aria-label="Post tags">
-          {entry.data.tags.map((tag) => (
-            <a
-              href={`/tags/${encodeURIComponent(tag)}`}
-              title={tag}
-              class="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200"
-            >
-              {tag}
-            </a>
-          ))}
-        </div>
-      )}
-      <div
-        class="text-muted-text dark:text-dark-muted-text mt-2 flex items-center justify-between"
-      >
+      {
+        entry.data.tags && entry.data.tags.length > 0 && (
+          <div
+            class="flex flex-wrap gap-2 sm:hidden"
+            aria-label="Post tags">
+            {entry.data.tags.map((tag) => (
+              <a
+                href={`/tags/${encodeURIComponent(tag)}`}
+                title={tag}
+                class="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+      <div class="text-muted-text dark:text-dark-muted-text mt-2 flex items-center justify-between">
         <div class="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
           <span>{formatDate(entry.data.publicationDate)}</span>
           {
@@ -69,10 +73,16 @@ const readingTime = calculateReadingTime(entry.body || "");
               <>
                 <span class="hidden text-sm sm:inline">•</span>
                 <span class="text-sm">
-                  By {entry.data.authors.map((a, idx) => (
+                  By{" "}
+                  {entry.data.authors.map((a, idx) => (
                     <>
                       {idx > 0 && (idx === entry.data.authors!.length - 1 ? " and " : ", ")}
-                      <a href={`/authors/${slugifyAuthor(a)}`} class="underlined" title={a}>{a}</a>
+                      <a
+                        href={`/authors/${slugifyAuthor(a)}`}
+                        class="underlined"
+                        title={a}>
+                        {a}
+                      </a>
                     </>
                   ))}
                 </span>
@@ -82,19 +92,22 @@ const readingTime = calculateReadingTime(entry.body || "");
         </div>
         <span class="hidden sm:inline">{readingTime}</span>
       </div>
-      {entry.data.tags && entry.data.tags.length > 0 && (
-        <div class="mt-3 hidden flex-wrap gap-3 sm:flex" aria-label="Post tags">
-          {entry.data.tags.map((tag) => (
-            <a
-              href={`/tags/${encodeURIComponent(tag)}`}
-              title={tag}
-              class="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200 hover:scale-[102.75%] transition-transform duration-150 ease-out"
-            >
-              {tag}
-            </a>
-          ))}
-        </div>
-      )}
+      {
+        entry.data.tags && entry.data.tags.length > 0 && (
+          <div
+            class="mt-3 hidden flex-wrap gap-3 sm:flex"
+            aria-label="Post tags">
+            {entry.data.tags.map((tag) => (
+              <a
+                href={`/tags/${encodeURIComponent(tag)}`}
+                title={tag}
+                class="inline-flex items-center rounded-full bg-neutral-200 px-3 py-1 text-xs font-medium text-neutral-700 transition-transform duration-150 ease-out hover:scale-[102.75%] dark:bg-neutral-800 dark:text-neutral-200">
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
     </div>
 
     <div class="blog-content-wrapper lg:grid lg:grid-cols-4 lg:gap-10">
@@ -107,7 +120,9 @@ const readingTime = calculateReadingTime(entry.body || "");
           <TableOfContents content={entry.body || ""} />
         </div>
 
-        <div class="prose mx-auto max-w-none lg:mx-0" id="blog-content">
+        <div
+          class="prose mx-auto max-w-none lg:mx-0"
+          id="blog-content">
           <Content />
         </div>
 
@@ -135,9 +150,7 @@ const readingTime = calculateReadingTime(entry.body || "");
 
     const contentText = blogContent.textContent || "";
     const searchTermLower = searchTerm.toLowerCase();
-    const contentContainsSearchTerm = contentText
-      .toLowerCase()
-      .includes(searchTermLower);
+    const contentContainsSearchTerm = contentText.toLowerCase().includes(searchTermLower);
 
     if (!contentContainsSearchTerm) return;
 
@@ -154,10 +167,7 @@ const readingTime = calculateReadingTime(entry.body || "");
       const regex = new RegExp(`(${escapedSearchText})`, "gi");
 
       if (regex.test(text)) {
-        const highlightedHTML = text.replace(
-          regex,
-          '<mark class="search-highlight">$1</mark>'
-        );
+        const highlightedHTML = text.replace(regex, '<mark class="search-highlight">$1</mark>');
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = highlightedHTML;
 
@@ -196,9 +206,7 @@ const readingTime = calculateReadingTime(entry.body || "");
         });
 
         setTimeout(() => {
-          document.dispatchEvent(
-            new CustomEvent("search-highlighting-complete")
-          );
+          document.dispatchEvent(new CustomEvent("search-highlighting-complete"));
         }, 200);
       }
     }, 100);

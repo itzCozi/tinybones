@@ -6,6 +6,13 @@ import SeoPage from "@/components/SeoPage.astro";
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title="Blog" />
-  <Posts currentPage={1} showPagination={true} baseUrl="/blog" />
+  <SeoPage
+    slot="head"
+    title="Blog"
+  />
+  <Posts
+    currentPage={1}
+    showPagination={true}
+    baseUrl="/blog"
+  />
 </BaseLayout>

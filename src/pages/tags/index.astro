@@ -13,19 +13,27 @@ const tags = Array.from(tagMap.entries()).sort((a, b) => a[0].localeCompare(b[0]
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title="Tags" description="Browse posts by tag" />
+  <SeoPage
+    slot="head"
+    title="Tags"
+    description="Browse posts by tag"
+  />
   <section>
     <h1 class="mb-4 text-2xl font-bold">Tags</h1>
-    {tags.length === 0 ? (
-      <p class="text-neutral-600 dark:text-neutral-300">No tags yet.</p>
-    ) : (
-      <ul class="flex list-none flex-wrap gap-2 p-0">
-        {tags.map(([tag, count]) => (
-          <li>
-            <a class="rounded-full border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href={`/tags/${encodeURIComponent(tag)}`}>{tag} <span class="opacity-60">({count})</span></a>
-          </li>
-        ))}
-      </ul>
-    )}
+    {
+      tags.length === 0 ?
+        <p class="text-neutral-600 dark:text-neutral-300">No tags yet.</p>
+      : <ul class="flex list-none flex-wrap gap-2 p-0">
+          {tags.map(([tag, count]) => (
+            <li>
+              <a
+                class="rounded-full border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+                href={`/tags/${encodeURIComponent(tag)}`}>
+                {tag} <span class="opacity-60">({count})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+    }
   </section>
 </BaseLayout>
