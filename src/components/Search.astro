@@ -1,9 +1,20 @@
 ---
-
+export interface Props {
+  mode?: "inline" | "modal";
+  formId?: string;
+  inputId?: string;
+  resultsId?: string;
+}
+const {
+  mode = "inline",
+  formId = "search-form",
+  inputId = "search-input",
+  resultsId = "search-results",
+} = Astro.props as Props;
 ---
 
-<div class="search-container relative w-full">
-  <form id="search-form" class="flex w-full items-center" role="search">
+<div class={`search-container relative w-full ${mode === "modal" ? "h-full" : ""}`}>
+  <form id={formId} class={`${mode === "modal" ? "flex w-full flex-col items-stretch" : "flex w-full items-center"}`} role="search">
     <div class="relative w-full">
       <div
         class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
@@ -24,30 +35,33 @@
       </div>
       <input
         type="search"
-        id="search-input"
+        id={inputId}
         class="dark:bg-dark-bg w-full rounded-md border border-neutral-400 p-2 pl-10 text-sm text-neutral-900 dark:border-neutral-600 dark:text-white"
         placeholder="Search anything"
         aria-label="Search anything"
       />
     </div>
     <div
-      id="search-results"
-      class="dark:bg-dark-bg absolute top-full right-0 left-0 z-10 mt-1 hidden max-h-60 overflow-auto rounded-md border border-neutral-300 bg-white dark:border-neutral-700"
+      id={resultsId}
+      class={`dark:bg-dark-bg ${mode === "modal" ? "relative top-0 mt-3 max-h-[calc(100vh-9rem)] w-full" : "absolute top-full mt-1 right-0 left-0"} z-10 hidden overflow-auto rounded-md border border-neutral-300 bg-white dark:border-neutral-700`}
     >
     </div>
   </form>
 </div>
 
-<script>
-  type Post = {
-    title: string;
-    description: string;
-    content?: string;
-    url: string;
-    pubDate: string;
-    author: string;
-    tags: string[];
-  };
+<script define:vars={{ INPUT_ID: inputId, RESULTS_ID: resultsId, FORM_ID: formId, RESULTS_LIMIT: (mode === "modal" ? 5 : 5) }}>
+  (function (INPUT_ID, RESULTS_ID, FORM_ID) {
+  // @ts-nocheck
+  /**
+   * @typedef {Object} Post
+   * @property {string} title
+   * @property {string} description
+   * @property {string} [content]
+   * @property {string} url
+   * @property {string} pubDate
+   * @property {string} author
+   * @property {string[]} tags
+   */
 
   let isSearchInitialized = false;
 
@@ -63,13 +77,9 @@
 
   async function initSearch() {
     if (isSearchInitialized) return;
-    const searchInput = document.getElementById(
-      "search-input"
-    ) as HTMLInputElement;
-    const searchResults = document.getElementById(
-      "search-results"
-    ) as HTMLDivElement;
-    const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById(INPUT_ID);
+  const searchResults = document.getElementById(RESULTS_ID);
+  const searchForm = document.getElementById(FORM_ID);
 
     if (!searchInput || !searchResults || !searchForm) {
       console.warn("Search elements not found, retrying...");
@@ -79,10 +89,10 @@
 
     isSearchInitialized = true;
 
-    const newSearchInput = searchInput.cloneNode(true) as HTMLInputElement;
+  const newSearchInput = searchInput.cloneNode(true);
     searchInput.parentNode?.replaceChild(newSearchInput, searchInput);
 
-    let posts: Post[] = [];
+  let posts = [];
 
     try {
       const response = await fetch("/search-index.json");
@@ -95,15 +105,9 @@
       return;
     }
 
-    const freshSearchInput = document.getElementById(
-      "search-input"
-    ) as HTMLInputElement;
-    const freshSearchResults = document.getElementById(
-      "search-results"
-    ) as HTMLDivElement;
-    const freshSearchForm = document.getElementById(
-      "search-form"
-    ) as HTMLElement;
+  const freshSearchInput = document.getElementById(INPUT_ID);
+  const freshSearchResults = document.getElementById(RESULTS_ID);
+  const freshSearchForm = document.getElementById(FORM_ID);
 
     if (!freshSearchInput || !freshSearchResults || !freshSearchForm) return;
 
@@ -132,7 +136,8 @@
     });
 
     document.addEventListener("click", (e) => {
-      if (!freshSearchForm.contains(e.target as Node)) {
+      const target = e.target;
+      if (freshSearchForm && target && !freshSearchForm.contains(target)) {
         freshSearchResults.classList.add("hidden");
       }
     });
@@ -142,9 +147,9 @@
     });
 
     function displayResults(
-      results: Post[],
-      resultsElement: HTMLDivElement,
-      inputElement: HTMLInputElement
+      results,
+      resultsElement,
+      inputElement
     ) {
       resultsElement.innerHTML = "";
       resultsElement.classList.remove("hidden");
@@ -158,7 +163,7 @@
         return;
       }
 
-      results.slice(0, 5).forEach((post) => {
+      results.slice(0, RESULTS_LIMIT).forEach((post) => {
         const query = inputElement.value.toLowerCase().trim();
         const resultItem = document.createElement("a");
 
@@ -232,17 +237,15 @@
       });
     }
   }
+  })(INPUT_ID, RESULTS_ID, FORM_ID);
 </script>
 
 <style>
-  .search-container {
-    width: 300px;
-  }
+  .search-container { width: 300px; }
 
   @media (max-width: 768px) {
-    .search-container {
-      width: 100%;
-      margin-top: 0.5rem;
-    }
+    .search-container { width: 100%; margin-top: 0.5rem; }
+    :global(#mobile-search-modal) .search-container { width: 100%; height: 100%; margin-top: 0; }
+    :global(#mobile-search-modal) .search-container input[type="search"] { font-size: 1rem; padding-top: 0.375rem; padding-bottom: 0.375rem; }
   }
 </style>

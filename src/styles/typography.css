@@ -1,5 +1,5 @@
 .prose {
-  --prose-color: var(--color-neutral-700);
+  --prose-color: var(--color-neutral-800);
   --prose-heading-color: var(--color-neutral-950);
   --prose-strong-color: var(--color-neutral-950);
   --prose-link-color: var(--color-link);
@@ -20,7 +20,7 @@
   --prose-blockquote-border-color: var(--color-neutral-300);
 
   &:where(.dark, .dark *) {
-    --prose-color: var(--color-neutral-300);
+    --prose-color: var(--color-neutral-200);
     --prose-heading-color: var(--color-white);
     --prose-strong-color: var(--color-white);
     --prose-link-color: var(--color-dark-link);
@@ -39,7 +39,7 @@
 
   @media (prefers-color-scheme: dark) {
     &:where(.system, .system *) {
-      --prose-color: var(--color-neutral-300);
+      --prose-color: var(--color-neutral-200);
       --prose-heading-color: var(--color-white);
       --prose-strong-color: var(--color-white);
       --prose-link-color: var(--color-white);

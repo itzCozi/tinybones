@@ -2,7 +2,7 @@
 import { NAV_LINKS, SITE } from "@/siteConfig";
 import Search from "./Search.astro";
 import BlogDropdown from "./BlogDropdown.astro";
-import { Menu } from "lucide-astro";
+import { Menu, Search as SearchIcon, X } from "lucide-astro";
 ---
 
 <header
@@ -18,9 +18,16 @@ import { Menu } from "lucide-astro";
         </div>
         <a href="/" class="text-xl font-bold">{SITE.title}</a>
       </div>
-      <div class="block md:hidden">
+      <div class="flex items-center gap-5 md:hidden">
+        <button
+          aria-label="Search"
+          id="open-search-btn"
+        >
+          <SearchIcon class="h-6 w-6" />
+        </button>
         <button
           aria-label="Menu"
+          id="mobile-menu-toggle"
           onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');"
         >
           <Menu class="h-6 w-6" />
@@ -29,7 +36,7 @@ import { Menu } from "lucide-astro";
     </div>
 
     <div class="hidden w-full md:block md:w-auto">
-      <Search />
+      <Search formId="search-form-desktop" inputId="search-input-desktop" resultsId="search-results-desktop" />
     </div>
 
     <nav
@@ -57,6 +64,117 @@ import { Menu } from "lucide-astro";
     </nav>
   </div>
 </header>
+
+<div
+  id="mobile-search-modal"
+  class="fixed inset-0 z-50 hidden bg-black/60"
+>
+  <div
+    class="flex h-full w-full flex-col bg-bg p-4 dark:bg-dark-bg"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mobile-search-title"
+  >
+    <div class="mb-3 flex items-center justify-between">
+      <h2 id="mobile-search-title" class="text-lg font-semibold">Search</h2>
+      <button id="close-search-btn" aria-label="Close search">
+        <X class="h-6 w-6" />
+      </button>
+    </div>
+    <div class="flex-1 overflow-auto">
+      <Search mode="modal" formId="search-form-modal" inputId="search-input-modal" resultsId="search-results-modal" />
+    </div>
+  </div>
+</div>
+
+<script>
+  // Utils that always operate on the current DOM (works across client-side navigations)
+  function getMobileMenu() {
+    return document.getElementById("mobile-menu");
+  }
+  function getMobileMenuToggle() {
+    return document.getElementById("mobile-menu-toggle");
+  }
+  function getSearchModal() {
+    return document.getElementById("mobile-search-modal");
+  }
+  function closeMobileMenu() {
+    const menu = getMobileMenu();
+    if (!menu) return;
+    menu.classList.add("hidden");
+    menu.classList.remove("show");
+  }
+
+  function openSearchModal() {
+    const modal = getSearchModal();
+    modal?.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    setTimeout(() => {
+      const input = document.getElementById("search-input-modal");
+      if (input) (input as HTMLInputElement).focus();
+    }, 50);
+  }
+
+  function closeSearchModal() {
+    const modal = getSearchModal();
+    modal?.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    // Hide results panel if open
+    const results = document.getElementById("search-results-modal");
+    results?.classList.add("hidden");
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const openBtn = document.getElementById("open-search-btn");
+    const closeBtn = document.getElementById("close-search-btn");
+    const modal = getSearchModal();
+    const mobileMenu = getMobileMenu();
+
+    // Ensure menu is closed on navigation
+    closeMobileMenu();
+
+    openBtn?.addEventListener("click", openSearchModal);
+    closeBtn?.addEventListener("click", closeSearchModal);
+
+    // Close when clicking outside the search content panel for the current page's modal
+    modal?.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeSearchModal();
+      }
+    });
+
+    // Close mobile menu when any nav link is clicked (mobile UX nicety)
+    mobileMenu?.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => closeMobileMenu())
+    );
+  });
+
+  // Close on ESC
+  if (!(window as any).__navGlobalBound) {
+    // Close on ESC (works across navigations)
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      const modal = getSearchModal();
+      const menu = getMobileMenu();
+      if (modal && !modal.classList.contains("hidden")) closeSearchModal();
+      if (menu && !menu.classList.contains("hidden")) closeMobileMenu();
+    });
+
+    // Close mobile menu when clicking outside of it (works across navigations)
+    document.addEventListener("click", (e) => {
+      const menu = getMobileMenu();
+      if (!menu || menu.classList.contains("hidden")) return;
+      const target = e.target as Node;
+      const clickedInsideMenu = menu.contains(target);
+      const clickedToggle = getMobileMenuToggle()?.contains(target);
+      if (!clickedInsideMenu && !clickedToggle) {
+        closeMobileMenu();
+      }
+    });
+
+    (window as any).__navGlobalBound = true;
+  }
+</script>
 
 <style>
   #mobile-menu.show {
