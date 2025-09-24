@@ -9,7 +9,7 @@ import TableOfContents from "@/components/TableOfContents.astro";
 import ShareButtons from "@/components/ShareButtons.astro";
 import Giscus from "@/components/Giscus.astro";
 
-import { formatDate, calculateReadingTime, formatAuthors } from "@/lib/util";
+import { formatDate, calculateReadingTime, slugifyAuthor } from "@/lib/util";
 import { SITE } from "@/siteConfig";
 
 interface Props {
@@ -55,7 +55,14 @@ const readingTime = calculateReadingTime(entry.body || "");
             entry.data.authors && entry.data.authors.length > 0 && (
               <>
                 <span class="hidden text-sm sm:inline">•</span>
-                <span class="text-sm">{formatAuthors(entry.data.authors)}</span>
+                <span class="text-sm">
+                  By {entry.data.authors.map((a, idx) => (
+                    <>
+                      {idx > 0 && (idx === entry.data.authors!.length - 1 ? " and " : ", ")}
+                      <a href={`/authors/${slugifyAuthor(a)}`} class="underline-offset-2 hover:underline">{a}</a>
+                    </>
+                  ))}
+                </span>
               </>
             )
           }

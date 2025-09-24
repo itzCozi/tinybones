@@ -1,0 +1,42 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SeoPage from "@/components/SeoPage.astro";
+import Post from "@/components/Post.astro";
+import { slugifyAuthor } from "@/lib/util";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const authorSet = new Set<string>();
+  for (const p of posts) {
+    (p.data.authors || []).forEach((a: string) => authorSet.add(a));
+  }
+  // Emit slug as the param
+  return Array.from(authorSet).map((author) => ({ params: { author: slugifyAuthor(author) } }));
+}
+
+const { author: authorSlug } = Astro.params;
+const allPosts = (await getCollection("blog"))
+  .filter((p) => (p.data.authors || []).some((a: string) => slugifyAuthor(a) === authorSlug))
+  .sort((a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf());
+
+// Derive the display name from the first matching post's authors
+const displayName = allPosts.length > 0
+  ? (allPosts[0].data.authors || []).find((a: string) => slugifyAuthor(a) === authorSlug) || authorSlug
+  : authorSlug;
+---
+
+<BaseLayout>
+  <SeoPage slot="head" title={`Author: ${displayName}`} description={`Posts written by ${displayName}`} />
+  <section class="py-3">
+    <h1 class="mb-4 text-2xl font-bold">Author: {displayName}</h1>
+    {allPosts.length === 0 ? (
+      <p class="text-neutral-600 dark:text-neutral-300">No posts by this author yet.</p>
+    ) : (
+      <div class="grid list-none gap-4 p-0">
+        {allPosts.map((post) => <Post post={post} />)}
+      </div>
+    )}
+  </section>
+  
+</BaseLayout>

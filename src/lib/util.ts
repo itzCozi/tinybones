@@ -75,6 +75,17 @@ export function getTotalPages(totalItems: number, pageSize: number): number {
   return Math.ceil(totalItems / pageSize);
 }
 
+export function slugifyAuthor(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+    .replace(/['’`]/g, "") // drop apostrophes
+    .replace(/[^a-z0-9]+/g, "-") // non-alphanumerics to hyphen
+    .replace(/^-+|-+$/g, "") // trim leading/trailing hyphens
+    .replace(/-{2,}/g, "-"); // collapse multiple hyphens
+}
+
 export function formatAuthors(authors: string[] | undefined): string {
   if (!authors || authors.length === 0) {
     return "";
