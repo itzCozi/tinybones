@@ -45,10 +45,6 @@ export const NAV_LINKS: NavigationLinks = {
     path: "/tags",
     label: "Tags",
   },
-  github: {
-    path: "https://github.com/itzcozi/tinybones",
-    label: "GitHub",
-  },
 };
 
 // Giscus Comments Configuration
