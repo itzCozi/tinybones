@@ -11,7 +11,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      exclude: ["/rss.xml", "/robots.txt", "/search-index.json"],
+      filter: (page) => !["/rss.xml", "/robots.txt", "/search-index.json"].includes(page)
     }),
     mdx(),
     compress({

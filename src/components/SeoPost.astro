@@ -8,9 +8,11 @@ const post = entry as any;
 const postTitle = post.data.title || SITE.title;
 const postDescription = post.data.description || SITE.description;
 const url = new URL(Astro.url.pathname, SITE.href).toString();
+// Prefer dynamic OG image endpoint; fall back to explicit image if provided
+const dynamicOg = new URL(`/og/${post.id}.png`, SITE.href).toString();
 const imageUrl = post?.data?.image?.src
   ? new URL(post.data.image.src, SITE.href).toString()
-  : undefined;
+  : dynamicOg;
 const authorsList = (post.data.authors?.length ? post.data.authors : [SITE.author]);
 const tagsList = post.data.tags ?? [];
 const datePublishedVal = post.data.publicationDate?.toISOString?.()
@@ -70,25 +72,14 @@ void breadcrumbsLd;
 
 <meta property="og:title" content={postTitle} />
 <meta property="og:description" content={postDescription} />
-{
-  post?.data?.image?.src && (
-    <meta property="og:image" content={`${SITE.href}${post.data.image.src}`} />
-  )
-}
+<meta property="og:image" content={imageUrl} />
 <meta property="og:image:alt" content={postTitle} />
 <meta property="og:type" content="article" />
 <meta property="og:locale" content={SITE.locale} />
 
 <meta name="twitter:title" content={postTitle} />
 <meta name="twitter:description" content={postDescription} />
-{
-  post?.data?.image?.src && (
-    <meta
-      property="twitter:image"
-      content={`${SITE.href}${post.data.image.src}`}
-    />
-  )
-}
+<meta property="twitter:image" content={imageUrl} />
 <meta name="twitter:image:alt" content={postTitle} />
 <meta name="twitter:card" content="summary_large_image" />
 
@@ -96,12 +87,10 @@ void breadcrumbsLd;
   <meta property="article:tag" content={tag} />
 ))}
 
-<!-- Structured Data: Article / BlogPosting -->
 <script is:inline type="application/ld+json">
   {JSON.stringify(articleLd, (_, value) => (value === undefined ? undefined : value))}
 </script>
 
-<!-- Structured Data: Breadcrumbs -->
 <script is:inline type="application/ld+json">
   {JSON.stringify(breadcrumbsLd, (_, value) => (value === undefined ? undefined : value))}
 </script>

@@ -42,5 +42,19 @@ import Favicons from "@/components/Favicons.astro";
   <ClientRouter />
   <Favicons />
 
+  <script is:inline type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE.title,
+      url: SITE.href,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE.href}search?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    })}
+  </script>
+
   <slot />
 </head>

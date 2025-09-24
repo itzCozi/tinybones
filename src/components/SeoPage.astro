@@ -27,7 +27,6 @@ const url = new URL(Astro.url.pathname, SITE.href).toString();
 <meta name="twitter:image:alt" content={formattedTitle} />
 <meta name="twitter:card" content="summary_large_image" />
 
-<!-- Structured Data: WebPage -->
 <script is:inline type="application/ld+json">
   {JSON.stringify(
     {
@@ -46,7 +45,6 @@ const url = new URL(Astro.url.pathname, SITE.href).toString();
   )}
 </script>
 
-<!-- Structured Data: Breadcrumbs -->
 <script is:inline type="application/ld+json">
   {JSON.stringify(
     {

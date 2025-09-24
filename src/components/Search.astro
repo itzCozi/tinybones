@@ -49,7 +49,7 @@ const {
   </form>
 </div>
 
-<script define:vars={{ INPUT_ID: inputId, RESULTS_ID: resultsId, FORM_ID: formId, RESULTS_LIMIT: (mode === "modal" ? 5 : 5) }}>
+<script is:inline define:vars={{ INPUT_ID: inputId, RESULTS_ID: resultsId, FORM_ID: formId, RESULTS_LIMIT: (mode === "modal" ? 5 : 5) }}>
   (function (INPUT_ID, RESULTS_ID, FORM_ID) {
   // @ts-nocheck
   /**
@@ -92,6 +92,7 @@ const {
   const newSearchInput = searchInput.cloneNode(true);
     searchInput.parentNode?.replaceChild(newSearchInput, searchInput);
 
+  /** @type {Post[]} */
   let posts = [];
 
     try {
