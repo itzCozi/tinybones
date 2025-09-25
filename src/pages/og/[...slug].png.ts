@@ -15,7 +15,6 @@ export async function GET({ params }: { params: { slug: string } }) {
   const title = (entry?.data.title ?? SITE.title).toString();
   const subtitle = (entry?.data.description ?? SITE.description).toString();
 
-  // Create a simple 1200x630 image with dark background and text
   const width = 1200;
   const height = 630;
 

@@ -194,7 +194,6 @@ const shareLinks = [
 
 <script>
   function initSocialShare() {
-    // Native Web Share
     const webShareButtons = document.querySelectorAll(".web-share-button");
 
     webShareButtons.forEach((button) => {
@@ -212,7 +211,6 @@ const shareLinks = [
 
           try {
             await navigator.share(data);
-            // Success feedback
             button.innerHTML = `
               <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="20,6 9,17 4,12"/>

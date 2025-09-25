@@ -1,14 +1,12 @@
 ---
 import { SITE } from "@/siteConfig";
 
-// Use a relaxed type for entries to avoid TS issues with generated content types in .astro files
 const { entry } = Astro.props as { entry: any };
 const post = entry as any;
 
 const postTitle = post.data.title || SITE.title;
 const postDescription = post.data.description || SITE.description;
 const url = new URL(Astro.url.pathname, SITE.href).toString();
-// Prefer dynamic OG image endpoint; fall back to explicit image if provided
 const dynamicOg = new URL(`/og/${post.id}.png`, SITE.href).toString();
 const imageUrl =
   post?.data?.image?.src ? new URL(post.data.image.src, SITE.href).toString() : dynamicOg;
@@ -17,7 +15,6 @@ const tagsList = post.data.tags ?? [];
 const datePublishedVal =
   post.data.publicationDate?.toISOString?.() ? post.data.publicationDate.toISOString() : undefined;
 
-// Precompute JSON-LD objects to ensure variables are used and typed
 const articleLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -57,7 +54,6 @@ const breadcrumbsLd = {
     },
   ],
 } as const;
-// Mark as used for TypeScript so they don't trigger no-unused-locals hints
 void articleLd;
 void breadcrumbsLd;
 ---

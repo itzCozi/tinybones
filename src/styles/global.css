@@ -35,6 +35,11 @@
   color-scheme: light;
 }
 
+.js .cloak { display: none !important; }
+.js [data-cloak="true"] { display: none !important; }
+
+noscript .nojs-show { display: block !important; }
+
 html {
   font-size: 108%;
   scroll-behavior: smooth;

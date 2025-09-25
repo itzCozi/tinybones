@@ -11,7 +11,6 @@ export async function getStaticPaths() {
   for (const p of posts) {
     (p.data.authors || []).forEach((a: string) => authorSet.add(a));
   }
-  // Emit slug as the param
   return Array.from(authorSet).map((author) => ({ params: { author: slugifyAuthor(author) } }));
 }
 
@@ -20,7 +19,6 @@ const allPosts = (await getCollection("blog"))
   .filter((p) => (p.data.authors || []).some((a: string) => slugifyAuthor(a) === authorSlug))
   .sort((a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf());
 
-// Derive the display name from the first matching post's authors
 const displayName =
   allPosts.length > 0 ?
     (allPosts[0].data.authors || []).find((a: string) => slugifyAuthor(a) === authorSlug) ||

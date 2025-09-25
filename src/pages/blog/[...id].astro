@@ -29,7 +29,7 @@ const { Content } = await render(entry);
 const readingTime = calculateReadingTime(entry.body || "");
 ---
 
-<BaseLayout>
+<BaseLayout showMobileToc>
   <SeoPost
     slot="head"
     {entry}
@@ -116,10 +116,6 @@ const readingTime = calculateReadingTime(entry.body || "");
       </aside>
 
       <article class="lg:col-span-3">
-        <div class="mb-8 lg:hidden">
-          <TableOfContents content={entry.body || ""} />
-        </div>
-
         <div
           class="prose mx-auto max-w-none lg:mx-0"
           id="blog-content">

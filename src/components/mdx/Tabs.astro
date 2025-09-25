@@ -20,6 +20,33 @@ const { defaultTab = 0, class: className } = Astro.props;
   </div>
 </div>
 
+<style is:global>
+  .tabs-container:not([data-initialized="true"]) .tab-content > :not([data-default="true"]) {
+    display: none;
+  }
+  .tabs-container:not([data-initialized="true"]) .tab-content > [data-default="true"] {
+    display: block;
+  }
+  .tabs-container:not([data-initialized="true"])
+    .tab-content:not(:has(> [data-default="true"]))
+    > :not(:first-child) {
+    display: none;
+  }
+  .tabs-container:not([data-initialized="true"])
+    .tab-content:not(:has(> [data-default="true"]))
+    > :first-child {
+    display: block;
+  }
+</style>
+
+<noscript>
+  <style>
+    .tabs-container .tab-panel {
+      display: block !important;
+    }
+  </style>
+</noscript>
+
 <script>
   function initializeTabs() {
     const tabContainers = document.querySelectorAll(".tabs-container");
@@ -27,7 +54,11 @@ const { defaultTab = 0, class: className } = Astro.props;
     tabContainers.forEach((container) => {
       const tabButtonsContainer = container.querySelector(".tab-buttons");
       const tabPanels = container.querySelectorAll(".tab-panel");
-      const defaultTab = parseInt(container.getAttribute("data-default-tab") || "0");
+      const markedDefaultIndex = Array.from(tabPanels).findIndex((p) =>
+        p.hasAttribute("data-default"),
+      );
+      const propDefaultIndex = parseInt(container.getAttribute("data-default-tab") || "0");
+      const defaultTab = markedDefaultIndex >= 0 ? markedDefaultIndex : propDefaultIndex;
 
       if (!tabButtonsContainer || tabPanels.length === 0) return;
       if (tabButtonsContainer.children.length > 0) return;
@@ -82,6 +113,8 @@ const { defaultTab = 0, class: className } = Astro.props;
           panel.setAttribute("aria-hidden", "false");
         }
       });
+
+      container.setAttribute("data-initialized", "true");
     });
   }
 

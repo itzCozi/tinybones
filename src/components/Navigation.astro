@@ -2,7 +2,13 @@
 import { NAV_LINKS, SITE } from "@/siteConfig";
 import Search from "./Search.astro";
 import BlogDropdown from "./BlogDropdown.astro";
-import { Menu, Search as SearchIcon, X } from "lucide-astro";
+import { Menu, Search as SearchIcon, X, BookOpenText } from "lucide-astro";
+
+interface Props {
+  showMobileToc?: boolean;
+}
+
+const { showMobileToc = false } = Astro.props as Props;
 ---
 
 <header class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10">
@@ -19,16 +25,27 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
           >{SITE.title}</a
         >
       </div>
-      <div class="flex items-center gap-5 md:hidden">
+      <div class="flex items-center gap-4 md:hidden">
         <button
           aria-label="Search"
           id="open-search-btn">
           <SearchIcon class="h-6 w-6" />
         </button>
+        {
+          showMobileToc && (
+            <button
+              id="mobile-toc-toggle"
+              class="md:hidden"
+              aria-label="Open table of contents"
+              aria-expanded="false"
+              aria-controls="mobile-toc">
+              <BookOpenText class="h-6 w-6" />
+            </button>
+          )
+        }
         <button
           aria-label="Menu"
-          id="mobile-menu-toggle"
-          onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); document.getElementById('mobile-menu').classList.toggle('show');">
+          id="mobile-menu-toggle">
           <Menu class="h-6 w-6" />
         </button>
       </div>
@@ -62,6 +79,21 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
         }
       </ul>
     </nav>
+
+    {
+      showMobileToc && (
+        <div
+          id="mobile-toc"
+          class="mt-2 hidden w-full overflow-y-auto overscroll-contain pr-1 md:hidden">
+          <nav aria-label="Table of contents">
+            <ul
+              id="mobile-toc-list"
+              class="space-y-2"
+            />
+          </nav>
+        </div>
+      )
+    }
   </div>
 </header>
 
@@ -97,7 +129,6 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
 </div>
 
 <script>
-  // Utils that always operate on the current DOM (works across client-side navigations)
   function getMobileMenu() {
     return document.getElementById("mobile-menu");
   }
@@ -107,11 +138,29 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
   function getSearchModal() {
     return document.getElementById("mobile-search-modal");
   }
+  function getMobileToc() {
+    return document.getElementById("mobile-toc");
+  }
+  function getMobileTocToggle() {
+    return document.getElementById("mobile-toc-toggle");
+  }
+  function getMobileTocList() {
+    return document.getElementById("mobile-toc-list");
+  }
+
   function closeMobileMenu() {
     const menu = getMobileMenu();
     if (!menu) return;
     menu.classList.add("hidden");
     menu.classList.remove("show");
+  }
+
+  function toggleMobileMenu() {
+    const menu = getMobileMenu();
+    if (!menu) return;
+    closeMobileToc();
+    menu.classList.toggle("hidden");
+    menu.classList.toggle("show");
   }
 
   function openSearchModal() {
@@ -128,9 +177,135 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
     const modal = getSearchModal();
     modal?.classList.add("hidden");
     document.body.classList.remove("overflow-hidden");
-    // Hide results panel if open
     const results = document.getElementById("search-results-modal");
     results?.classList.add("hidden");
+  }
+
+  function closeMobileToc() {
+    const toc = getMobileToc();
+    const toggle = getMobileTocToggle();
+    if (!toc || !toggle) return;
+    toc.classList.add("hidden");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleMobileToc() {
+    const toc = getMobileToc();
+    const toggle = getMobileTocToggle();
+    if (!toc || !toggle) return;
+    closeMobileMenu();
+    const isHidden = toc.classList.contains("hidden");
+    toc.classList.toggle("hidden");
+    toggle.setAttribute("aria-expanded", isHidden ? "true" : "false");
+  }
+
+  function ensureHeadingId(el: Element, idCounts: Map<string, number>) {
+    if ((el as HTMLElement).id) return (el as HTMLElement).id;
+    const text = el.textContent || "";
+    let baseId = text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .trim();
+    let id = baseId || "section";
+    const count = idCounts.get(baseId) || 0;
+    if (count > 0) id = `${baseId}-${count}`;
+    idCounts.set(baseId, count + 1);
+    (el as HTMLElement).id = id;
+    return id;
+  }
+
+  function buildMobileToc() {
+    const tocToggle = getMobileTocToggle();
+    const tocList = getMobileTocList();
+    const tocContainer = getMobileToc();
+    if (!tocToggle || !tocList || !tocContainer) return;
+
+    tocList.innerHTML = "";
+
+    const prose = document.querySelector(".prose");
+    if (!prose) {
+      tocToggle.style.display = "none";
+      return;
+    }
+
+    const headings = prose.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    if (!headings.length) {
+      tocToggle.style.display = "none";
+      return;
+    }
+
+    const idCounts = new Map<string, number>();
+    const items: { id: string; text: string; level: number }[] = [];
+    headings.forEach((h) => {
+      const level = Number(h.tagName.substring(1));
+      if (level === 1) return;
+      const id = ensureHeadingId(h, idCounts);
+      const text = (h.textContent || "")
+        .trim()
+        .replace(/^#\s*/, "")
+        .replace(/\s*#\s*$/, "");
+      items.push({ id, text, level });
+    });
+
+    if (!items.length) {
+      const h1 = prose.querySelector("h1");
+      if (h1) {
+        const id = ensureHeadingId(h1, idCounts);
+        const text = (h1.textContent || "")
+          .trim()
+          .replace(/^#\s*/, "")
+          .replace(/\s*#\s*$/, "");
+        items.push({ id, text, level: 1 });
+      }
+    }
+
+    if (!items.length) {
+      tocToggle.style.display = "none";
+      return;
+    }
+
+    items.forEach((it) => {
+      const li = document.createElement("li");
+      li.className = `toc-item toc-level-${it.level}`;
+      const a = document.createElement("a");
+      a.href = `#${it.id}`;
+      a.textContent = it.text;
+      a.className =
+        "toc-link block text-sm text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link transition-colors duration-200";
+      a.style.paddingLeft = `${(it.level - 1) * 0.75}rem`;
+      a.addEventListener("click", () => {
+        setTimeout(() => closeMobileToc(), 50);
+      });
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+
+    tocToggle.style.display = "inline-flex";
+
+    setupCurrentHeaderObserver(items.map((i) => i.id));
+  }
+
+  function setupCurrentHeaderObserver(ids: string[]) {
+    if (!ids.length) return;
+    const observerOptions = { rootMargin: "-20% 0% -70% 0%", threshold: 0 };
+    const list = getMobileTocList() || document.createElement("div");
+    const links = Array.from(list.querySelectorAll(".toc-link"));
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = (entry.target as HTMLElement).id;
+        links.forEach((l) => l.classList.remove("toc-active"));
+        const active = list.querySelector(`.toc-link[href="#${id}"]`);
+        (active as HTMLElement | null)?.classList.add("toc-active");
+      });
+    }, observerOptions);
+
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
   }
 
   document.addEventListener("astro:page-load", () => {
@@ -138,46 +313,62 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
     const closeBtn = document.getElementById("close-search-btn");
     const modal = getSearchModal();
     const mobileMenu = getMobileMenu();
-
-    // Ensure menu is closed on navigation
+    const mobileMenuToggle = getMobileMenuToggle();
+    const mobileTocToggle = getMobileTocToggle();
     closeMobileMenu();
+    closeMobileToc();
 
     openBtn?.addEventListener("click", openSearchModal);
     closeBtn?.addEventListener("click", closeSearchModal);
+    mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
+    mobileTocToggle?.addEventListener("click", toggleMobileToc);
 
-    // Close when clicking outside the search content panel for the current page's modal
     modal?.addEventListener("click", (e) => {
       if (e.target === modal) {
         closeSearchModal();
       }
     });
 
-    // Close mobile menu when any nav link is clicked (mobile UX nicety)
     mobileMenu
       ?.querySelectorAll("a")
       .forEach((a) => a.addEventListener("click", () => closeMobileMenu()));
+
+    setTimeout(buildMobileToc, 0);
+
+    document.addEventListener("search-highlighting-complete", () => setTimeout(buildMobileToc, 0));
   });
 
-  // Close on ESC
   if (!(window as any).__navGlobalBound) {
-    // Close on ESC (works across navigations)
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       const modal = getSearchModal();
       const menu = getMobileMenu();
+      const toc = getMobileToc();
       if (modal && !modal.classList.contains("hidden")) closeSearchModal();
       if (menu && !menu.classList.contains("hidden")) closeMobileMenu();
+      if (toc && !toc.classList.contains("hidden")) closeMobileToc();
     });
 
-    // Close mobile menu when clicking outside of it (works across navigations)
     document.addEventListener("click", (e) => {
       const menu = getMobileMenu();
+      const toc = getMobileToc();
       if (!menu || menu.classList.contains("hidden")) return;
       const target = e.target as Node;
       const clickedInsideMenu = menu.contains(target);
       const clickedToggle = getMobileMenuToggle()?.contains(target);
       if (!clickedInsideMenu && !clickedToggle) {
         closeMobileMenu();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      const toc = getMobileToc();
+      if (!toc || toc.classList.contains("hidden")) return;
+      const target = e.target as Node;
+      const clickedInside = toc.contains(target);
+      const clickedToggle = getMobileTocToggle()?.contains(target);
+      if (!clickedInside && !clickedToggle) {
+        closeMobileToc();
       }
     });
 
@@ -188,5 +379,33 @@ import { Menu, Search as SearchIcon, X } from "lucide-astro";
 <style>
   #mobile-menu.show {
     display: flex;
+  }
+  .toc-active {
+    color: var(--color-link) !important;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .dark .toc-active {
+    color: var(--color-dark-link) !important;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  html {
+    scroll-padding-top: 5rem;
+  }
+  @media (max-width: 767px) {
+    #mobile-menu {
+      max-height: 40vh;
+      max-height: 40svh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    #mobile-toc {
+      max-height: 30vh;
+      max-height: 30svh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
   }
 </style>

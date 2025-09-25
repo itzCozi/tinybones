@@ -2,13 +2,15 @@
 interface Props {
   title: string;
   class?: string;
+  default?: boolean;
 }
 
-const { title, class: className } = Astro.props;
+const { title, class: className, default: isDefault } = Astro.props;
 ---
 
 <div
   class={`tab-panel pt-4 px-2 ${className || ""}`}
-  data-title={title}>
+  data-title={title}
+  {...isDefault ? { "data-default": "true" } : {}}>
   <slot />
 </div>
