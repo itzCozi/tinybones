@@ -8,10 +8,11 @@ export interface Props {
 const { currentPage, totalPages, baseUrl } = Astro.props;
 
 function getPageUrl(page: number): string {
+  const normalized = baseUrl === "/" ? "" : baseUrl.replace(/\/$/, "");
   if (page === 1) {
-    return baseUrl;
+    return normalized || "/";
   }
-  return `${baseUrl}/page/${page}`;
+  return `${normalized}/page/${page}`;
 }
 ---
 

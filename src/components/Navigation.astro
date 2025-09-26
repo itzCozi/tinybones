@@ -265,12 +265,21 @@ const { showMobileToc = false } = Astro.props as Props;
       return;
     }
 
+    const textCounts = new Map<string, number>();
     items.forEach((it) => {
       const li = document.createElement("li");
       li.className = `toc-item toc-level-${it.level}`;
       const a = document.createElement("a");
       a.href = `#${it.id}`;
-      a.textContent = it.text;
+      // Normalize text the same way slugs/ids are generated for accurate duplicate counts
+      const norm = it.text
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+      const current = (textCounts.get(norm) || 0) + 1;
+      textCounts.set(norm, current);
+      a.textContent = current > 1 ? `${it.text} (${current})` : it.text;
       a.className =
         "toc-link block text-sm text-muted-text dark:text-dark-muted-text hover:text-link dark:hover:text-dark-link transition-colors duration-200";
       a.style.paddingLeft = `${(it.level - 1) * 0.75}rem`;
