@@ -98,6 +98,7 @@ const headings = extractHeadings(content);
   declare global {
     interface Window {
       tocObserver?: IntersectionObserver;
+      tocCleanup?: () => void;
     }
   }
 
@@ -150,35 +151,93 @@ const headings = extractHeadings(content);
       }
     });
 
+    // Clean up any previous listeners/observers
     if (window.tocObserver) {
       window.tocObserver.disconnect();
+      window.tocObserver = undefined;
+    }
+    if (window.tocCleanup) {
+      window.tocCleanup();
+      window.tocCleanup = undefined;
     }
 
-    const tocLinks = document.querySelectorAll(".toc-link");
-    const observerOptions = {
-      rootMargin: "-20% 0% -80% 0%",
-      threshold: 0,
-    };
+    const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-link"));
+    const headingEls = Array.from(
+      prose.querySelectorAll<HTMLHeadingElement>("h1, h2, h3, h4, h5, h6")
+    ).filter((h) => !!h.id);
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.id;
-        const tocLink = document.querySelector(`.toc-link[href="#${id}"]`);
-
-        if (entry.isIntersecting) {
-          tocLinks.forEach((link) => link.classList.remove("toc-active"));
-          tocLink?.classList.add("toc-active");
-        }
-      });
-    }, observerOptions);
-
-    headings.forEach((heading) => {
-      if (heading.id) {
-        observer.observe(heading);
-      }
+    const linksById = new Map<string, HTMLAnchorElement>();
+    tocLinks.forEach((a) => {
+      const id = decodeURIComponent((a.getAttribute("href") || "").replace(/^#/, ""));
+      if (id) linksById.set(id, a);
     });
 
-    window.tocObserver = observer;
+    function setActive(id?: string) {
+      if (!id) return;
+      const link = linksById.get(id);
+      if (!link) return;
+      tocLinks.forEach((l) => l.classList.remove("toc-active"));
+      link.classList.add("toc-active");
+    }
+
+    function getScrollOffset(): number {
+      // Match the top sticky spacing (see scroll-padding-top in styles)
+      // Add a small extra offset so the section activates a bit before it hits the very top
+      const paddingTop = 80; // ~5rem
+      return paddingTop;
+    }
+
+    let cachedPositions: number[] = [];
+    function recalcPositions() {
+      const offset = getScrollOffset();
+      cachedPositions = headingEls.map((h) => Math.max(0, h.offsetTop - offset));
+    }
+
+    function updateActiveFromScroll() {
+      if (headingEls.length === 0) return;
+      const y = window.scrollY;
+      // Find the last heading with position <= current scroll
+      let idx = 0;
+      for (let i = 0; i < cachedPositions.length; i++) {
+        if (cachedPositions[i] <= y) idx = i;
+        else break;
+      }
+      const currentId = headingEls[idx]?.id;
+      setActive(currentId);
+    }
+
+    // Support hash on load or when clicking internal links
+    function updateFromHash() {
+      const hash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+      if (!hash) return;
+      setActive(hash);
+    }
+
+    // Initial measurement and listeners
+    recalcPositions();
+    updateFromHash();
+    updateActiveFromScroll();
+
+    const onScroll = () => {
+      // Use rAF to coalesce scroll events
+      requestAnimationFrame(updateActiveFromScroll);
+    };
+    const onResize = () => {
+      recalcPositions();
+      updateActiveFromScroll();
+    };
+    const onHashChange = () => updateFromHash();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    window.addEventListener("hashchange", onHashChange);
+
+    // Expose a cleanup hook so re-initialization doesn't pile up listeners
+    window.tocCleanup = () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("hashchange", onHashChange);
+    };
   }
 
   document.addEventListener("astro:page-load", initTableOfContents);
