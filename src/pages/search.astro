@@ -67,7 +67,6 @@ import SeoPage from "@/components/SeoPage.astro";
     }
 
     const query = q.toLowerCase();
-    // Prefer content matches; if none, fall back to title/description matches
     const contentMatches = posts.filter((p) => p.content?.toLowerCase().includes(query));
     const fallbackMatches = posts.filter(
       (p) => p.title?.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query),
@@ -103,11 +102,10 @@ import SeoPage from "@/components/SeoPage.astro";
         const descriptionMatch = p.description?.toLowerCase().includes(query);
         const contentMatch = p.content?.toLowerCase().includes(query);
 
-        // Use snippet from the field that matched, preferring content
         let snippetSource = "";
         if (contentMatch) snippetSource = p.content || "";
         else if (descriptionMatch) snippetSource = p.description || "";
-        else snippetSource = p.description || p.content || ""; // fallback
+        else snippetSource = p.description || p.content || "";
 
         let snippet = snippetSource;
         const idx = snippetSource.toLowerCase().indexOf(query);

@@ -59,6 +59,27 @@ html {
   font-family: inherit;
 }
 
+:root {
+  --focus-ring-color: var(--color-link);
+}
+.dark {
+  --focus-ring-color: var(--color-dark-link);
+}
+
+:where(a, button, input, select, textarea, summary,
+  [role="button"], [role="menuitem"], [role="tab"], [role="link"],
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+:where(a):focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 1px;
+}
+
 code,
 pre,
 kbd,

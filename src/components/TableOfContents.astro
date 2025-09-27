@@ -38,7 +38,7 @@ function extractHeadings(content: string): Heading[] {
       }
       idCounts.set(baseId, count + 1);
 
-      const displayIndex = count + 1; // 1 for first, 2 for second, etc.
+      const displayIndex = count + 1;
       const displayText = displayIndex > 1 ? `${text} (${displayIndex})` : text;
 
       headings.push({ id, text, level, displayText });

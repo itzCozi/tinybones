@@ -126,7 +126,6 @@ const {
       freshSearchInput.addEventListener("input", () => {
         const query = freshSearchInput.value.toLowerCase().trim();
 
-        // Immediate hide when under threshold
         if (query.length < MIN_CHARS) {
           freshSearchResults.classList.add("hidden");
           if (debounceTimeout) clearTimeout(debounceTimeout);
@@ -136,7 +135,6 @@ const {
         if (debounceTimeout) clearTimeout(debounceTimeout);
 
         debounceTimeout = setTimeout(() => {
-          // Prefer content matches; if none, fall back to title/description matches
           const contentMatches = posts.filter((post) =>
             post.content?.toLowerCase().includes(query),
           );
@@ -188,15 +186,11 @@ const {
             console.error("Invalid URL for post:", post);
           }
 
-          const titleMatch = post.title.toLowerCase().includes(query);
-          const descriptionMatch = post.description?.toLowerCase().includes(query);
           const contentMatch = post.content?.toLowerCase().includes(query);
 
-          // When matched in content, include the search param so the post page can highlight it
           if (contentMatch) {
             resultItem.href = `${post.url || "#"}?search=${encodeURIComponent(query)}`;
           } else {
-            // Otherwise, keep a clean URL for title/description-only matches
             resultItem.href = post.url || "#";
           }
 

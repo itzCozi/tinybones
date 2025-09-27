@@ -78,7 +78,7 @@ export function getTotalPages(totalItems: number, pageSize: number): number {
 export function slugifyAuthor(name: string, maxLength = 100): string {
   if (!name) return "";
 
-  return name
+  const slug = name
     .trim()
     .toLowerCase()
     .normalize("NFKD")
@@ -87,6 +87,7 @@ export function slugifyAuthor(name: string, maxLength = 100): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .replace(/-{2,}/g, "-")
+  return slug.length > maxLength ? slug.slice(0, maxLength).replace(/-+$/g, "") : slug;
 }
 
 export function formatAuthors(authors: string[] | undefined): string {

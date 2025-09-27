@@ -45,6 +45,8 @@ const { showMobileToc = false } = Astro.props as Props;
         }
         <button
           aria-label="Menu"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
           id="mobile-menu-toggle">
           <Menu class="h-6 w-6" />
         </button>
@@ -157,10 +159,17 @@ const { showMobileToc = false } = Astro.props as Props;
 
   function toggleMobileMenu() {
     const menu = getMobileMenu();
+    const toggle = getMobileMenuToggle();
     if (!menu) return;
     closeMobileToc();
     menu.classList.toggle("hidden");
     menu.classList.toggle("show");
+    const isOpen = menu.classList.contains("show");
+    toggle?.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (isOpen) {
+      const firstLink = menu.querySelector("a");
+      (firstLink as HTMLElement | null)?.focus();
+    }
   }
 
   function openSearchModal() {
@@ -271,7 +280,6 @@ const { showMobileToc = false } = Astro.props as Props;
       li.className = `toc-item toc-level-${it.level}`;
       const a = document.createElement("a");
       a.href = `#${it.id}`;
-      // Normalize text the same way slugs/ids are generated for accurate duplicate counts
       const norm = it.text
         .toLowerCase()
         .replace(/[^\w\s-]/g, "")
@@ -330,6 +338,18 @@ const { showMobileToc = false } = Astro.props as Props;
     openBtn?.addEventListener("click", openSearchModal);
     closeBtn?.addEventListener("click", closeSearchModal);
     mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
+    mobileMenuToggle?.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        const menu = getMobileMenu();
+        if (menu?.classList.contains("show")) {
+          const firstLink = menu.querySelector("a");
+          (firstLink as HTMLElement | null)?.focus();
+        } else {
+          toggleMobileMenu();
+        }
+      }
+    });
     mobileTocToggle?.addEventListener("click", toggleMobileToc);
 
     modal?.addEventListener("click", (e) => {
@@ -352,15 +372,14 @@ const { showMobileToc = false } = Astro.props as Props;
       if (e.key !== "Escape") return;
       const modal = getSearchModal();
       const menu = getMobileMenu();
-      const toc = getMobileToc();
       if (modal && !modal.classList.contains("hidden")) closeSearchModal();
       if (menu && !menu.classList.contains("hidden")) closeMobileMenu();
-      if (toc && !toc.classList.contains("hidden")) closeMobileToc();
+      const maybeToc = getMobileToc();
+      if (maybeToc && !maybeToc.classList.contains("hidden")) closeMobileToc();
     });
 
     document.addEventListener("click", (e) => {
       const menu = getMobileMenu();
-      const toc = getMobileToc();
       if (!menu || menu.classList.contains("hidden")) return;
       const target = e.target as Node;
       const clickedInsideMenu = menu.contains(target);
