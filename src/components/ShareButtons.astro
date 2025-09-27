@@ -7,10 +7,11 @@ interface Props {
 
 const { title, url, description = "" } = Astro.props;
 
+const enc = encodeURIComponent;
 const shareData = {
-  title: encodeURIComponent(title),
-  url: encodeURIComponent(url),
-  description: encodeURIComponent(description),
+  title: enc(title),
+  url: enc(url),
+  description: enc(description),
 };
 
 const shareLinks = [
@@ -41,12 +42,12 @@ const shareLinks = [
   },
   {
     name: "Mastodon",
-    url: `https://mastodon.social/share?text=${shareData.title} ${shareData.url}`,
+    url: `https://mastodon.social/share?text=${enc(`${title} ${url}`)}`,
     icon: "mastodon",
   },
   {
     name: "Bluesky",
-    url: `https://bsky.app/intent/compose?text=${shareData.title} ${shareData.url}`,
+    url: `https://bsky.app/intent/compose?text=${enc(`${title} ${url}`)}`,
     icon: "bluesky",
   },
   {
@@ -197,21 +198,24 @@ const shareLinks = [
     const webShareButtons = document.querySelectorAll(".web-share-button");
 
     webShareButtons.forEach((button) => {
+      if (!(button instanceof HTMLElement)) return;
+      const btn = button as HTMLButtonElement;
       const isSupported = typeof navigator !== "undefined" && !!navigator.share;
       if (isSupported) {
-        (button as HTMLButtonElement).hidden = false;
-        button.addEventListener("click", async (e) => {
+        if (btn instanceof HTMLButtonElement) btn.hidden = false;
+        btn.addEventListener("click", async (e) => {
           e.preventDefault();
-          const el = button as HTMLElement;
+          const el = btn;
+          const ds = el && el.dataset ? el.dataset : {};
           const data = {
-            title: el.dataset.title || document.title,
-            text: el.dataset.text || el.dataset.title || document.title,
-            url: el.dataset.url || location.href,
-          } as ShareData;
+            title: ds.title || document.title,
+            text: ds.text || ds.title || document.title,
+            url: ds.url || location.href,
+          };
 
           try {
             await navigator.share(data);
-            button.innerHTML = `
+            btn.innerHTML = `
               <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="20,6 9,17 4,12"/>
               </svg>
@@ -222,9 +226,9 @@ const shareLinks = [
             if (!err || err.name === "AbortError") return;
 
             try {
-              const url = el.dataset.url || location.href;
+              const url = (ds && ds.url) || location.href;
               await navigator.clipboard.writeText(url);
-              button.innerHTML = `
+              btn.innerHTML = `
                 <svg class=\"size-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n                  <polyline points=\"20,6 9,17 4,12\"/>\n                </svg>
               `;
             } catch (copyErr) {
@@ -233,13 +237,11 @@ const shareLinks = [
           }
         });
       } else {
-        (button as HTMLButtonElement).hidden = true;
+        if (btn instanceof HTMLButtonElement) btn.hidden = true;
       }
     });
 
-    const backToTop = document.querySelector(
-      ".social-share-compact .back-to-top",
-    ) as HTMLElement | null;
+    const backToTop = document.querySelector(".social-share-compact .back-to-top");
     if (backToTop) {
       backToTop.addEventListener("click", (e) => {
         e.preventDefault();

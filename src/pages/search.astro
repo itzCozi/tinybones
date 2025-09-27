@@ -45,7 +45,7 @@ import SeoPage from "@/components/SeoPage.astro";
     const params = new URLSearchParams(window.location.search);
     const q = (params.get("q") || "").trim();
     const input = document.getElementById("q");
-    if (input) (input as HTMLInputElement).value = q;
+    if (input && "value" in input) (input as HTMLInputElement).value = q;
     const resultsEl = document.getElementById("results");
     if (!resultsEl) return;
 
@@ -57,6 +57,8 @@ import SeoPage from "@/components/SeoPage.astro";
       return;
     }
 
+    /** @typedef {{ url: string; title?: string; description?: string; content?: string; pubDate?: string | number | Date }} SearchPost */
+    /** @type {SearchPost[]} */
     let posts = [];
     try {
       const res = await fetch("/search-index.json");
@@ -67,19 +69,32 @@ import SeoPage from "@/components/SeoPage.astro";
     }
 
     const query = q.toLowerCase();
-    const contentMatches = posts.filter((p) => p.content?.toLowerCase().includes(query));
+    const contentMatches = posts.filter((p /**: SearchPost*/) =>
+      p.content?.toLowerCase().includes(query),
+    );
     const fallbackMatches = posts.filter(
-      (p) => p.title?.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query),
+      (p /**: SearchPost*/) =>
+        p.title?.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query),
     );
     const filtered = contentMatches.length ? contentMatches : fallbackMatches;
 
+    /**
+     * @param {string} str
+     * @returns {string}
+     */
     function esc(str) {
-      return (str || "").replace(
-        /[&<>"']/g,
-        (ch) =>
-          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch as any],
-      );
+      const map /**: Record<string,string> */ = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+      return (str || "").replace(/[&<>"']/g, (ch /**: string*/) => map[ch] || ch);
     }
+    /**
+     * @param {string} text
+     */
     function highlight(text) {
       if (!text) return "";
       const safe = esc(text);
@@ -87,7 +102,8 @@ import SeoPage from "@/components/SeoPage.astro";
       const re = new RegExp(queryEsc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
       return safe.replace(
         re,
-        (m) => `<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">${m}</mark>`,
+        (m /**: string*/) =>
+          `<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">${m}</mark>`,
       );
     }
 
@@ -97,7 +113,7 @@ import SeoPage from "@/components/SeoPage.astro";
     }
 
     resultsEl.innerHTML = filtered
-      .map((p) => {
+      .map((p /**: SearchPost*/) => {
         const titleMatch = p.title?.toLowerCase().includes(query);
         const descriptionMatch = p.description?.toLowerCase().includes(query);
         const contentMatch = p.content?.toLowerCase().includes(query);

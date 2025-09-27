@@ -1,8 +1,13 @@
 ---
 import { SITE } from "@/siteConfig";
+import type { CollectionEntry } from "astro:content";
 
-const { entry } = Astro.props as { entry: any };
-const post = entry as any;
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props as Props;
+const post = entry;
 
 const postTitle = post.data.title || SITE.title;
 const postDescription = post.data.description || SITE.description;
