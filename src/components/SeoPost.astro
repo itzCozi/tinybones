@@ -49,8 +49,8 @@ const breadcrumbsLd = {
     {
       "@type": "ListItem",
       position: 3,
-      name: postTitle,
-      item: url,
+      name: "Projects",
+      item: new URL("/projects", SITE.href).toString(),
     },
   ],
 } as const;

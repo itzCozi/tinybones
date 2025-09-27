@@ -286,6 +286,7 @@
   :where(img):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
     margin-top: 2em;
     margin-bottom: 2em;
+    border-radius: 6px;
   }
 
   :where(picture):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
@@ -647,6 +648,7 @@
   :where(img):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
     margin-top: 1.7777778em;
     margin-bottom: 1.7777778em;
+    border-radius: 6px;
   }
 
   :where(picture):not(:where([class~="not-prose"], [class~="not-prose"] *)) {

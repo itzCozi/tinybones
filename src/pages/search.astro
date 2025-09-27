@@ -67,12 +67,12 @@ import SeoPage from "@/components/SeoPage.astro";
     }
 
     const query = q.toLowerCase();
-    const filtered = posts.filter(
-      (p) =>
-        p.title?.toLowerCase().includes(query) ||
-        p.description?.toLowerCase().includes(query) ||
-        p.content?.toLowerCase().includes(query),
+    // Prefer content matches; if none, fall back to title/description matches
+    const contentMatches = posts.filter((p) => p.content?.toLowerCase().includes(query));
+    const fallbackMatches = posts.filter(
+      (p) => p.title?.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query),
     );
+    const filtered = contentMatches.length ? contentMatches : fallbackMatches;
 
     function esc(str) {
       return (str || "").replace(
@@ -99,7 +99,16 @@ import SeoPage from "@/components/SeoPage.astro";
 
     resultsEl.innerHTML = filtered
       .map((p) => {
-        const snippetSource = p.description || p.content || "";
+        const titleMatch = p.title?.toLowerCase().includes(query);
+        const descriptionMatch = p.description?.toLowerCase().includes(query);
+        const contentMatch = p.content?.toLowerCase().includes(query);
+
+        // Use snippet from the field that matched, preferring content
+        let snippetSource = "";
+        if (contentMatch) snippetSource = p.content || "";
+        else if (descriptionMatch) snippetSource = p.description || "";
+        else snippetSource = p.description || p.content || ""; // fallback
+
         let snippet = snippetSource;
         const idx = snippetSource.toLowerCase().indexOf(query);
         if (idx >= 0) {
@@ -112,8 +121,11 @@ import SeoPage from "@/components/SeoPage.astro";
         } else {
           snippet = snippetSource.slice(0, 140) + (snippetSource.length > 140 ? "…" : "");
         }
+
+        const href = contentMatch ? `${p.url}?search=${encodeURIComponent(q)}` : p.url;
+
         return `
-        <a class="block rounded-md border border-neutral-300 p-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href="${p.url}?search=${encodeURIComponent(q)}">
+        <a class="block rounded-md border border-neutral-300 p-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href="${href}">
           <div class="font-medium text-neutral-900 dark:text-white">${highlight(p.title)}</div>
           <div class="text-xs text-neutral-500 dark:text-neutral-400">${new Date(p.pubDate).toLocaleDateString?.() || ""}</div>
           <div class="mt-1 text-sm text-neutral-700 dark:text-neutral-300">${highlight(snippet)}</div>
