@@ -12,6 +12,8 @@ const blog = defineCollection({
       imageAlt: z.string().optional(),
       tags: z.array(z.string()).optional(),
       authors: z.array(z.string()).optional(),
+      // Enable/disable comments per post (defaults to true)
+      comments: z.boolean().default(true),
     }),
 });
 

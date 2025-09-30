@@ -13,7 +13,7 @@ const recentPosts = allPosts.slice(0, 5);
   <button
     id="blog-dropdown-button"
     type="button"
-    class="mt-1.5 text-sm font-medium hover:cursor-pointer"
+    class="mt-1.5 cursor-pointer text-sm font-medium"
     aria-expanded="false"
     aria-haspopup="true"
     aria-controls="blog-dropdown-menu"
@@ -40,7 +40,7 @@ const recentPosts = allPosts.slice(0, 5);
             {recentPosts.map((post) => (
               <a
                 href={`/blog/${post.id}`}
-                class="block border-b border-neutral-200 px-4 py-3 text-sm transition-colors duration-150 last:border-b-0 hover:bg-neutral-100/70 dark:border-neutral-700 dark:hover:bg-neutral-900/70"
+                class="block border-b border-neutral-200 px-4 py-3 text-sm transition-colors duration-150 last:border-b-0 hover:bg-neutral-100/70 dark:border-neutral-700 dark:hover:bg-neutral-900"
                 role="menuitem">
                 <div class="truncate font-medium">{post.data.title}</div>
                 <div class="mt-1 text-xs">{post.data.publicationDate.toLocaleDateString()}</div>

@@ -77,6 +77,16 @@ void breadcrumbsLd;
   href={url}
 />
 
+{
+  post?.data?.image?.src && (
+    <link
+      rel="preload"
+      as="image"
+      href={post.data.image.src}
+    />
+  )
+}
+
 <meta
   property="og:title"
   content={postTitle}

@@ -78,6 +78,7 @@ async function createNewPost() {
 title: ${title}
 description: ${description}
 publicationDate: ${getCurrentDateTimeISO()}
+comments: true
 ---
 
 ${

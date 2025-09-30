@@ -4,6 +4,13 @@ import SeoPage from "@/components/SeoPage.astro";
 ---
 
 <BaseLayout>
+  <link
+    slot="head"
+    rel="preload"
+    as="fetch"
+    href="/search-index.json"
+    type="application/json"
+  />
   <SeoPage
     slot="head"
     title="Search"
@@ -39,116 +46,6 @@ import SeoPage from "@/components/SeoPage.astro";
   </section>
 </BaseLayout>
 
-<script>
-  // @ts-nocheck
-  async function runSearch() {
-    const params = new URLSearchParams(window.location.search);
-    const q = (params.get("q") || "").trim();
-    const input = document.getElementById("q");
-    if (input && "value" in input) (input as HTMLInputElement).value = q;
-    const resultsEl = document.getElementById("results");
-    if (!resultsEl) return;
-
-    if (!q || q.length < 2) {
-      resultsEl.innerHTML =
-        q ?
-          `<div class="text-sm text-neutral-600 dark:text-neutral-300">Type at least 2 characters.</div>`
-        : "";
-      return;
-    }
-
-    /** @typedef {{ url: string; title?: string; description?: string; content?: string; pubDate?: string | number | Date }} SearchPost */
-    /** @type {SearchPost[]} */
-    let posts = [];
-    try {
-      const res = await fetch("/search-index.json");
-      posts = await res.json();
-    } catch (e) {
-      resultsEl.innerHTML = `<div class="text-sm text-red-600">Failed to load search index.</div>`;
-      return;
-    }
-
-    const query = q.toLowerCase();
-    const contentMatches = posts.filter((p /**: SearchPost*/) =>
-      p.content?.toLowerCase().includes(query),
-    );
-    const fallbackMatches = posts.filter(
-      (p /**: SearchPost*/) =>
-        p.title?.toLowerCase().includes(query) || p.description?.toLowerCase().includes(query),
-    );
-    const filtered = contentMatches.length ? contentMatches : fallbackMatches;
-
-    /**
-     * @param {string} str
-     * @returns {string}
-     */
-    function esc(str) {
-      const map /**: Record<string,string> */ = {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      };
-      return (str || "").replace(/[&<>"']/g, (ch /**: string*/) => map[ch] || ch);
-    }
-    /**
-     * @param {string} text
-     */
-    function highlight(text) {
-      if (!text) return "";
-      const safe = esc(text);
-      const queryEsc = esc(q);
-      const re = new RegExp(queryEsc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
-      return safe.replace(
-        re,
-        (m /**: string*/) =>
-          `<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">${m}</mark>`,
-      );
-    }
-
-    if (filtered.length === 0) {
-      resultsEl.innerHTML = `<div class="text-sm text-neutral-600 dark:text-neutral-300">No results for "${esc(q)}"</div>`;
-      return;
-    }
-
-    resultsEl.innerHTML = filtered
-      .map((p /**: SearchPost*/) => {
-        const titleMatch = p.title?.toLowerCase().includes(query);
-        const descriptionMatch = p.description?.toLowerCase().includes(query);
-        const contentMatch = p.content?.toLowerCase().includes(query);
-
-        let snippetSource = "";
-        if (contentMatch) snippetSource = p.content || "";
-        else if (descriptionMatch) snippetSource = p.description || "";
-        else snippetSource = p.description || p.content || "";
-
-        let snippet = snippetSource;
-        const idx = snippetSource.toLowerCase().indexOf(query);
-        if (idx >= 0) {
-          const start = Math.max(0, idx - 60);
-          const end = Math.min(snippetSource.length, idx + q.length + 60);
-          snippet =
-            (start > 0 ? "…" : "") +
-            snippetSource.slice(start, end) +
-            (end < snippetSource.length ? "…" : "");
-        } else {
-          snippet = snippetSource.slice(0, 140) + (snippetSource.length > 140 ? "…" : "");
-        }
-
-        const href = contentMatch ? `${p.url}?search=${encodeURIComponent(q)}` : p.url;
-
-        return `
-        <a class="block rounded-md border border-neutral-300 p-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href="${href}">
-          <div class="font-medium text-neutral-900 dark:text-white">${highlight(p.title)}</div>
-          <div class="text-xs text-neutral-500 dark:text-neutral-400">${new Date(p.pubDate).toLocaleDateString?.() || ""}</div>
-          <div class="mt-1 text-sm text-neutral-700 dark:text-neutral-300">${highlight(snippet)}</div>
-        </a>
-      `;
-      })
-      .join("");
-  }
-
-  document.addEventListener("astro:page-load", runSearch);
-  if (document.readyState !== "loading") runSearch();
+<script type="module" is:inline>
+  import "../scripts/fuzzy-search.ts";
 </script>

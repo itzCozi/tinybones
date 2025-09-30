@@ -11,7 +11,9 @@ interface Props {
 const { showMobileToc = false } = Astro.props as Props;
 ---
 
-<header id="site-header" class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10 border-b-[0.5px] border-transparent">
+<header
+  id="site-header"
+  class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10 border-b-[0.5px] border-transparent">
   <div
     class="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3">
     <div class="flex w-full items-center justify-between md:w-auto">
@@ -230,8 +232,8 @@ const { showMobileToc = false } = Astro.props as Props;
     const header = getHeader();
     if (!header) return;
     const anyOpen = isMobileMenuOpen() || isMobileTocOpen();
-    const colorOn = ["border-neutral-300", "dark:border-neutral-700"]; 
-    const colorOff = ["border-transparent"]; 
+    const colorOn = ["border-neutral-300", "dark:border-neutral-700"];
+    const colorOff = ["border-transparent"];
     const baseShadow = [
       "shadow-[0_6px_12px_-8px_rgba(0,0,0,0.18)]",
       "dark:shadow-[0_6px_12px_-8px_rgba(0,0,0,0.5)]",
@@ -371,7 +373,7 @@ const { showMobileToc = false } = Astro.props as Props;
     const mobileTocToggle = getMobileTocToggle();
     closeMobileMenu();
     closeMobileToc();
-  updateHeaderDivider();
+    updateHeaderDivider();
 
     openBtn?.addEventListener("click", openSearchModal);
     closeBtn?.addEventListener("click", closeSearchModal);
@@ -414,6 +416,31 @@ const { showMobileToc = false } = Astro.props as Props;
       if (menu && !menu.classList.contains("hidden")) closeMobileMenu();
       const maybeToc = getMobileToc();
       if (maybeToc && !maybeToc.classList.contains("hidden")) closeMobileToc();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.defaultPrevented) return;
+      if (e.key !== "/" || e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target as HTMLElement | null;
+      const tag = target?.tagName?.toLowerCase();
+      const isEditable = !!target && (target as any).isContentEditable;
+      if (tag === "input" || tag === "textarea" || isEditable) return;
+
+      e.preventDefault();
+
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      if (isDesktop) {
+        const desktopInput = document.getElementById(
+          "search-input-desktop",
+        ) as HTMLInputElement | null;
+        if (desktopInput) {
+          desktopInput.focus();
+          desktopInput.select();
+          return;
+        }
+      }
+
+      openSearchModal();
     });
 
     document.addEventListener("click", (e) => {
