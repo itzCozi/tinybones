@@ -11,15 +11,13 @@ authors:
 comments: true
 ---
 
+# Show HN: TinyBones
+
 TinyBones is a minimalist, batteries‑included blog template built with [Astro](https://astro.build). It focuses on:
 
 - Speed: ships almost zero JS by default on content pages
 - Accessibility: includes a dyslexia‑friendly font toggle and high‑contrast theming
 - Writing ergonomics: clean typography, MD/MDX support, TOC, code copy, and sensible defaults
-
-Live demo: https://tinybones.pages.dev/
-
-Source: https://github.com/itzcozi/tinybones
 
 ## Why I built it
 
@@ -27,22 +25,19 @@ Most blog starters are either too heavy or too bare. I wanted a tiny, readable b
 
 ## Highlights
 
-- MD + MDX content out of the box
-- First‑class SEO: `<SeoPost />` and `<SeoPage />`, RSS, sitemap, robots
-- In‑page Table of Contents and automatic reading‑time
-- Tag pages and author pages
-- Built‑in search (client‑side fuzzy search + index generator)
-- Share buttons and copy‑code buttons
-- Giscus comments integration (toggle per post)
-- Dark mode and dyslexia‑friendly font toggle
-- Lightweight, accessible components with Tailwind v4
+- **Minimal and fast:** Built with Astro for optimal performance and minimal JavaScript
+- **SEO-friendly:** Sitemap, RSS feed, and Open Graph protocol support out of the box
+- **Accessible:** System, dark, and light mode support with keyboard navigation
+- **Developer-friendly:** TypeScript, Tailwind CSS, and modern tooling
+- **MDX support:** Write interactive blog posts with custom components including built-in InfoBox admonitions
+- **Comments system:** Built-in support for Giscus comments
+- **CLI tool:** Create and manage blog posts and projects from the command line
 
 ## Quick start
 
 1) Clone the repo
 
-```powershell
-# Windows PowerShell
+```bash
 git clone https://github.com/itzcozi/tinybones.git
 cd tinybones
 pnpm install
@@ -67,6 +62,65 @@ authors: ["BadDeveloper"]
 Write your content here.
 ```
 
+
+## TinyBones CLI
+
+Ship content faster with the built-in TinyBones CLI. It helps you:
+
+- Scaffold new blog posts (MD or MDX) and projects
+- List existing posts/projects
+- Safely update your blog to the latest TinyBones template (with backups)
+
+### Install
+
+From your project root:
+
+```bash
+# Prefer this in this repo (runs a helper script)
+pnpm run setup-cli
+
+# After linking, the `tinybones` command is available globally
+```
+
+Alternatively, you can navigate into the CLI folder and link it manually:
+
+```bash
+cd scripts/tinybones-cli
+npm install
+npm link
+```
+
+### Use
+
+You can run the CLI either via the npm script or directly if globally linked:
+
+```bash
+tinybones --help
+```
+
+Common commands:
+
+```bash
+# Create a new blog post (interactive: title, description, MD/MDX)
+tinybones -- create new-post
+
+# Create a new project page (interactive)
+tinybones -- create new-project
+
+# List content
+tinybones -- list posts
+tinybones -- list projects
+
+# Update to the latest TinyBones template (backs up content, creates a branch)
+tinybones -- update
+```
+
+#### Notes:
+
+- New posts/projects are created under `src/content/blog/` and `src/content/projects/` with an `index.md(x)` file and sensible frontmatter.
+- The update command backs up your `src/content`, `public`, and `src/siteConfig.ts` by default, fetches the latest template, restores your content, installs deps, and checks out a new branch for review.
+- If you prefer global usage, replace `tinybones --` with `tinybones` (for example, `tinybones create new-post`).
+
 ## What’s inside
 
 - `src/content/` — your posts (MD/MDX), validated with a Zod schema
@@ -77,19 +131,3 @@ Write your content here.
 ## Performance
 
 Astro renders static HTML by default, so content pages ship minimal JS. Interactive bits like search and theme/dyslexia toggles hydrate only where needed.
-
-## Configuring comments
-
-If you use Giscus, flip `enabled: true` in `src/siteConfig.ts` and drop in your repo details. You can disable comments per‑post via frontmatter: `comments: false`.
-
-## Roadmap
-
-- Draft/preview mode
-- Image CDN helpers and captions
-- More MDX shortcodes
-
-## License
-
-MIT. Free to use for personal and commercial projects.
-
-If you try it, I’d love feedback—especially around accessibility and the writing flow. Thanks for reading!

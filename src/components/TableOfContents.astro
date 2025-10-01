@@ -23,6 +23,8 @@ function extractHeadings(content: string): Heading[] {
 
     while ((match = headingRegex.exec(segment)) !== null) {
       const level = match[1].length;
+      // Skip headings deeper than h3
+      if (level > 3) continue;
       const text = match[2].trim();
 
       let baseId = text
@@ -106,10 +108,11 @@ const headings = extractHeadings(content);
     const prose = document.querySelector(".prose");
     if (!prose) return;
 
-    const headings = prose.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    // Generate IDs/anchors for all headings
+    const allHeadings = prose.querySelectorAll("h1, h2, h3, h4, h5, h6");
     const idCounts = new Map<string, number>();
 
-    headings.forEach((heading) => {
+    allHeadings.forEach((heading) => {
       if (!heading.id) {
         const text = heading.textContent || "";
         let baseId = text
@@ -161,8 +164,9 @@ const headings = extractHeadings(content);
     }
 
     const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-link"));
+    // Only track up to h3 for TOC active state and scrolling
     const headingEls = Array.from(
-      prose.querySelectorAll<HTMLHeadingElement>("h1, h2, h3, h4, h5, h6"),
+      prose.querySelectorAll<HTMLHeadingElement>("h1, h2, h3"),
     ).filter((h) => !!h.id);
 
     const linksById = new Map<string, HTMLAnchorElement>();

@@ -37,11 +37,11 @@ TinyBones comes with a built-in CLI tool to help you manage your blog content:
 
 1. Set up the CLI tool: `pnpm setup-cli`
 2. Use it to manage your blog:
-   - Create a new blog post: `pnpm tb create new-post`
-   - Create a new project: `pnpm tb create new-project`
-   - List all posts: `pnpm tb list posts`
-   - List all projects: `pnpm tb list projects`
-   - Update template: `pnpm tb update`
+   - Create a new blog post: `tinybones create new-post`
+   - Create a new project: `tinybones create new-project`
+   - List all posts: `tinybones list posts`
+   - List all projects: `tinybones list projects`
+   - Update template: `tinybones update`
 
 For more details, see the [CLI documentation](./scripts/tinybones-cli/README.md).
 
@@ -51,7 +51,7 @@ TinyBones includes a built-in update mechanism that allows you to get the latest
 To update your TinyBones-based blog:
 
 1. Make sure you have committed all your changes (or create a backup)
-2. Run: `pnpm tb update` (or the legacy command: `pnpm update-template`)
+2. Run: `tinybones update` (or the legacy command: `pnpm update-template`)
 3. Review the changes and resolve any conflicts if needed
 4. Commit the updated code to your repository
 
