@@ -12,6 +12,9 @@ import Favicons from "@/components/Favicons.astro";
       var root = document.documentElement;
       root.classList.add("js");
       try {
+        var dys = localStorage.getItem("dyslexicFont") === "on";
+        if (dys) root.classList.add("dyslexic");
+
         var theme = localStorage.getItem("currentTheme") || "system";
         var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         var isDark = theme === "dark" || (theme === "system" && prefersDark);
@@ -77,6 +80,10 @@ import Favicons from "@/components/Favicons.astro";
     rel="preconnect"
     href="https://fonts.gstatic.com"
     crossorigin
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
   />
   <link
     rel="dns-prefetch"

@@ -1,0 +1,77 @@
+<div
+  class="inline-flex items-center gap-2"
+  id="dyslexic-toggle">
+  <button
+    type="button"
+    aria-pressed="false"
+    aria-label="Toggle dyslexic-friendly font"
+    class="rounded-full border border-neutral-300 px-5 py-3 text-sm hover:bg-neutral-100 md:px-3 md:py-2 lg:px-3 lg:py-1.5 dark:border-neutral-700 dark:hover:bg-neutral-900">
+    Focus
+  </button>
+</div>
+
+<script>
+  function isOn() {
+    return localStorage.getItem("dyslexicFont") === "on";
+  }
+
+  function apply(on) {
+    const root = document.documentElement;
+    if (on) root.classList.add("dyslexic");
+    else root.classList.remove("dyslexic");
+  }
+
+  function updateButtonState(btn) {
+    const on = isOn();
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.classList.toggle("bg-neutral-100", on);
+    btn.classList.toggle("dark:bg-neutral-900", on);
+  }
+
+  function refreshAllButtons() {
+    document
+      .querySelectorAll('#dyslexic-toggle button[aria-label="Toggle dyslexic-friendly font"]')
+      .forEach((b) => updateButtonState(b as HTMLButtonElement));
+  }
+
+  function bindOnce() {
+    if ((window as any).__dyslexicToggleBound) return;
+    (window as any).__dyslexicToggleBound = true;
+
+    apply(isOn());
+    refreshAllButtons();
+
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+      const button = target.closest(
+        '#dyslexic-toggle button[aria-label="Toggle dyslexic-friendly font"]',
+      ) as HTMLButtonElement | null;
+      if (!button) return;
+      const next = !isOn();
+      localStorage.setItem("dyslexicFont", next ? "on" : "off");
+      apply(next);
+      refreshAllButtons();
+    });
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    apply(isOn());
+    refreshAllButtons();
+    bindOnce();
+  });
+  if (document.readyState !== "loading") {
+    apply(isOn());
+    refreshAllButtons();
+    bindOnce();
+  }
+</script>
+
+<style>
+  #dyslexic-toggle button {
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+</style>

@@ -27,12 +27,12 @@
     "astro": "^5.14.1",
     "astro-compress": "^2.3.8",
     "fs-extra": "^11.3.2",
+    "fuse.js": "^6.6.2",
     "lucide": "^0.540.0",
     "lucide-astro": "^0.540.0",
-    "fuse.js": "^6.6.2",
     "sharp": "^0.34.4",
     "tailwindcss": "^4.1.13",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

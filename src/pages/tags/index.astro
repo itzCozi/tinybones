@@ -27,7 +27,7 @@ const tags = Array.from(tagMap.entries()).sort((a, b) => a[0].localeCompare(b[0]
           {tags.map(([tag, count]) => (
             <li>
               <a
-                class="rounded-full border border-neutral-300 px-3 py-1 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+                class="rounded-full border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
                 href={`/tags/${encodeURIComponent(tag)}`}>
                 {tag} <span class="opacity-60">({count})</span>
               </a>

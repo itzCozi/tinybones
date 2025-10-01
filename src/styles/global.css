@@ -59,6 +59,29 @@ html {
   font-family: inherit;
 }
 
+.dyslexic,
+.dyslexic body,
+.dyslexic *:not(code):not(pre):not(kbd):not(samp) {
+  font-family: "Lexend", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+.dyslexic .prose h1,
+.dyslexic .prose h2,
+.dyslexic .prose h3,
+.dyslexic .prose h4,
+.dyslexic .prose h5,
+.dyslexic .prose h6 {
+  letter-spacing: 0.005em;
+}
+
+.dyslexic .prose :where(p, li) {
+  line-height: 1.7;
+  word-spacing: 0.02em;
+}
+
 :root {
   --focus-ring-color: var(--color-link);
 }
