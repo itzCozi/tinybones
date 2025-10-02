@@ -68,6 +68,32 @@ html {
   letter-spacing: 0.01em;
 }
 
+.dyslexic pre,
+.dyslexic pre *,
+.dyslexic code,
+.dyslexic code *,
+.dyslexic kbd,
+.dyslexic kbd *,
+.dyslexic samp,
+.dyslexic samp * {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace !important;
+  letter-spacing: 0 !important;
+}
+
+.dyslexic .prose pre,
+.dyslexic .prose pre *,
+.dyslexic .prose code,
+.dyslexic .prose code *,
+.dyslexic .shiki,
+.dyslexic .shiki * {
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace !important;
+  letter-spacing: 0 !important;
+}
+
 .dyslexic .prose h1,
 .dyslexic .prose h2,
 .dyslexic .prose h3,

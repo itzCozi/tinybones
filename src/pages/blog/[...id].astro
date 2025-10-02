@@ -215,4 +215,85 @@ const readingTime = calculateReadingTime(entry.body || "");
   if (document.readyState !== "loading") {
     highlightSearchTerm();
   }
+
+  function showCopyToast(message = "Copied link to clipboard") {
+    const toast = document.createElement("div");
+    toast.textContent = message;
+    toast.className =
+      "fixed bottom-4 right-4 z-50 rounded-lg text-md normal-case border border-neutral-400 px-3 py-1 dark:border-neutral-600 bg-white/90 dark:bg-neutral-900/90 backdrop-blur pointer-events-none";
+
+    toast.style.textTransform = "none";
+
+    toast.style.opacity = "0";
+    toast.style.transition = "opacity 150ms ease, transform 150ms ease";
+    toast.style.transform = "translateY(4px)";
+
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => {
+      toast.style.opacity = "1";
+      toast.style.transform = "translateY(0)";
+    });
+
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(4px)";
+      setTimeout(() => toast.remove(), 180);
+    }, 1600);
+  }
+
+  function initHashtagCopyToast() {
+    const container = document.getElementById("blog-content");
+    if (!container) return;
+
+    const FLAG = "__hashtag-copy-bound__";
+    if ((container as any)[FLAG]) return;
+    (container as any)[FLAG] = true;
+
+    container.addEventListener("click", (evt) => {
+      const target = evt.target as HTMLElement | null;
+      if (!target) return;
+      const link = target.closest("a") as HTMLAnchorElement | null;
+      if (!link) return;
+
+      const rawHref = link.getAttribute("href") || "";
+      const looksLikePermalinkAnchor =
+        (link.textContent || "").trim() === "#" ||
+        link.getAttribute("aria-hidden") === "true" ||
+        link.classList.contains("anchor") ||
+        link.hasAttribute("data-anchor");
+
+      if (!rawHref.startsWith("#") || !looksLikePermalinkAnchor) return;
+
+      try {
+        const url = new URL(window.location.href);
+        url.hash = rawHref.slice(1);
+        const text = url.toString();
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard
+            .writeText(text)
+            .then(() => showCopyToast())
+            .catch(() => {});
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "absolute";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand("copy");
+            showCopyToast();
+          } catch {}
+          document.body.removeChild(ta);
+        }
+      } catch {}
+    });
+  }
+
+  document.addEventListener("astro:page-load", initHashtagCopyToast);
+  if (document.readyState !== "loading") {
+    initHashtagCopyToast();
+  }
 </script>

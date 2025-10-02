@@ -165,9 +165,9 @@ const headings = extractHeadings(content);
 
     const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc-link"));
     // Only track up to h3 for TOC active state and scrolling
-    const headingEls = Array.from(
-      prose.querySelectorAll<HTMLHeadingElement>("h1, h2, h3"),
-    ).filter((h) => !!h.id);
+    const headingEls = Array.from(prose.querySelectorAll<HTMLHeadingElement>("h1, h2, h3")).filter(
+      (h) => !!h.id,
+    );
 
     const linksById = new Map<string, HTMLAnchorElement>();
     tocLinks.forEach((a) => {
