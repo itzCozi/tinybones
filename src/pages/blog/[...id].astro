@@ -58,7 +58,6 @@ if (entry.data.series) {
   seriesPrev = idx > 0 ? seriesPosts[idx - 1] : null;
   seriesNext = idx < seriesPosts.length - 1 ? seriesPosts[idx + 1] : null;
 }
-
 ---
 
 <BaseLayout showMobileToc>
@@ -190,46 +189,67 @@ if (entry.data.series) {
           )
         }
 
-        {entry.data.series && (
-          <div class="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <h2 class="mb-3 text-lg font-semibold">Series: {entry.data.series}</h2>
-            {seriesPosts.length > 1 && (
-              <nav class="mb-4 flex flex-col gap-3 text-sm sm:flex-row sm:justify-between sm:gap-8" aria-label="Series navigation">
-                <div class="sm:w-1/2">
-                  {seriesPrev && (
-                    <a href={`/blog/${seriesPrev.id}`} class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
-                      <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">Previous in series</span>
-                      <p class="mt-1 line-clamp-2 font-medium">{seriesPrev.data.title}</p>
-                    </a>
-                  )}
-                </div>
-                <div class="sm:w-1/2 sm:text-right">
-                  {seriesNext && (
-                    <a href={`/blog/${seriesNext.id}`} class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
-                      <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">Next in series</span>
-                      <p class="mt-1 line-clamp-2 font-medium">{seriesNext.data.title}</p>
-                    </a>
-                  )}
-                </div>
-              </nav>
-            )}
-            <ol class="list-none m-0 p-0 flex flex-col gap-2">
-              {seriesPosts.map((p) => (
-                <li class={`text-sm ${p.id === entry.id ? 'font-semibold' : ''}`}>
-                  {p.data.seriesIndex && <span class="opacity-60 mr-1">Part {p.data.seriesIndex}:</span>}
-                  {p.id === entry.id ? (
-                    <span>{p.data.title}</span>
-                  ) : (
-                    <a href={`/blog/${p.id}`} class="underlined">{p.data.title}</a>
-                  )}
-                </li>
-              ))}
-            </ol>
-            <div class="mt-3 text-xs">
-              <a href={`/series/${entry.data.series}`} class="underlined">View full series page</a>
+        {
+          entry.data.series && (
+            <div class="mt-8 border-t border-neutral-200 pt-6 dark:border-neutral-700">
+              <h2 class="mb-3 text-lg font-semibold">Series: {entry.data.series}</h2>
+              {seriesPosts.length > 1 && (
+                <nav
+                  class="mb-4 flex flex-col gap-3 text-sm sm:flex-row sm:justify-between sm:gap-8"
+                  aria-label="Series navigation">
+                  <div class="sm:w-1/2">
+                    {seriesPrev && (
+                      <a
+                        href={`/blog/${seriesPrev.id}`}
+                        class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
+                        <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                          Previous in series
+                        </span>
+                        <p class="mt-1 line-clamp-2 font-medium">{seriesPrev.data.title}</p>
+                      </a>
+                    )}
+                  </div>
+                  <div class="sm:w-1/2 sm:text-right">
+                    {seriesNext && (
+                      <a
+                        href={`/blog/${seriesNext.id}`}
+                        class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
+                        <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                          Next in series
+                        </span>
+                        <p class="mt-1 line-clamp-2 font-medium">{seriesNext.data.title}</p>
+                      </a>
+                    )}
+                  </div>
+                </nav>
+              )}
+              <ol class="m-0 flex list-none flex-col gap-2 p-0">
+                {seriesPosts.map((p) => (
+                  <li class={`text-sm ${p.id === entry.id ? "font-semibold" : ""}`}>
+                    {p.data.seriesIndex && (
+                      <span class="mr-1 opacity-60">Part {p.data.seriesIndex}:</span>
+                    )}
+                    {p.id === entry.id ?
+                      <span>{p.data.title}</span>
+                    : <a
+                        href={`/blog/${p.id}`}
+                        class="underlined">
+                        {p.data.title}
+                      </a>
+                    }
+                  </li>
+                ))}
+              </ol>
+              <div class="mt-3 text-xs">
+                <a
+                  href={`/series/${entry.data.series}`}
+                  class="underlined">
+                  View full series page
+                </a>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
 
         <ShareButtons
           title={entry.data.title}

@@ -16,10 +16,17 @@ const readingTime = calculateReadingTime(post.body || "");
       <span>{readingTime}</span>
     </div>
   </a>
-  {post.data.series && (
-    <div class="mt-0.5 text-xs">
-      Series: <a href={`/series/${post.data.series}`} class="underlined">{post.data.series}</a>
-      {post.data.seriesIndex && <span class="ml-1">(Part {post.data.seriesIndex})</span>}
-    </div>
-  )}
+  {
+    post.data.series && (
+      <div class="mt-0.5 text-xs">
+        Series:{" "}
+        <a
+          href={`/series/${post.data.series}`}
+          class="underlined">
+          {post.data.series}
+        </a>
+        {post.data.seriesIndex && <span class="ml-1">(Part {post.data.seriesIndex})</span>}
+      </div>
+    )
+  }
 </li>

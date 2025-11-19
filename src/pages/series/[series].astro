@@ -25,21 +25,28 @@ const allSeriesPosts = (await getCollection("blog"))
 ---
 
 <BaseLayout>
-  <SeoPage slot="head" title={`${series}`} description={`Posts in the '${series}' series`} />
+  <SeoPage
+    slot="head"
+    title={`${series}`}
+    description={`Posts in the '${series}' series`}
+  />
   <section class="py-3">
     <h1 class="mb-4 text-2xl font-bold">
-      <a href="/series" class="hover:underline" title="Series">Series</a>/{series}
+      <a
+        href="/series"
+        class="hover:underline"
+        title="Series"
+        >Series</a
+      >/{series}
     </h1>
     {
-      allSeriesPosts.length === 0 ? (
+      allSeriesPosts.length === 0 ?
         <p class="text-neutral-600 dark:text-neutral-300">No posts in this series yet.</p>
-      ) : (
-        <ol class="list-none m-0 p-0 flex flex-col gap-2">
+      : <ol class="m-0 flex list-none flex-col gap-2 p-0">
           {allSeriesPosts.map((post) => (
             <Post post={post} />
           ))}
         </ol>
-      )
     }
   </section>
 </BaseLayout>
