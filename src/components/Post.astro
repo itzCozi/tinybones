@@ -18,7 +18,7 @@ const readingTime = calculateReadingTime(post.body || "");
   </a>
   {
     post.data.series && (
-      <div class="mt-0.5 text-xs">
+      <div class="text-muted-text dark:text-dark-muted-text mt-0.5 text-xs">
         Series:{" "}
         <a
           href={`/series/${post.data.series}`}

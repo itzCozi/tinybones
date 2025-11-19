@@ -21,5 +21,3 @@ In this first part we cover motivation and schema changes:
 3. Enhanced individual posts with intra–series navigation and a list of all parts.
 
 In Part 2 we will look at best practices for structuring longer series and retrofitting older content.
-
-Continue with Part 2 once it's published!

@@ -30,8 +30,3 @@ When grouping existing posts:
 - Assign `seriesIndex` in logical reading order (not necessarily publication date).
 - Optionally update descriptions to clarify how each part fits.
 
-## What’s Next
-
-You now have a working series system. Extend it by adding an optional `seriesTitle` or summary page if needed.
-
-Happy writing!
