@@ -14,6 +14,11 @@ const blog = defineCollection({
       authors: z.array(z.string()).optional(),
       // Enable/disable comments per post (defaults to true)
       comments: z.boolean().default(true),
+      // Optional series support
+      // `series`: slug identifier for grouping related posts
+      // `seriesIndex`: order of the post within the series (1-based recommended)
+      series: z.string().optional(),
+      seriesIndex: z.number().int().positive().optional(),
     }),
 });
 

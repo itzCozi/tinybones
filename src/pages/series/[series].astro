@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SeoPage from "@/components/SeoPage.astro";
+import Post from "@/components/Post.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const set = new Set<string>();
+  for (const p of posts) {
+    if (p.data.series) set.add(p.data.series);
+  }
+  return Array.from(set).map((slug) => ({ params: { series: slug } }));
+}
+
+const { series } = Astro.params;
+const allSeriesPosts = (await getCollection("blog"))
+  .filter((p) => p.data.series === series)
+  .sort((a, b) => {
+    const ai = a.data.seriesIndex || 0;
+    const bi = b.data.seriesIndex || 0;
+    if (ai !== bi) return ai - bi;
+    return a.data.publicationDate.valueOf() - b.data.publicationDate.valueOf();
+  });
+---
+
+<BaseLayout>
+  <SeoPage slot="head" title={`${series}`} description={`Posts in the '${series}' series`} />
+  <section class="py-3">
+    <h1 class="mb-4 text-2xl font-bold">
+      <a href="/series" class="hover:underline" title="Series">Series</a>/{series}
+    </h1>
+    {
+      allSeriesPosts.length === 0 ? (
+        <p class="text-neutral-600 dark:text-neutral-300">No posts in this series yet.</p>
+      ) : (
+        <ol class="list-none m-0 p-0 flex flex-col gap-2">
+          {allSeriesPosts.map((post) => (
+            <Post post={post} />
+          ))}
+        </ol>
+      )
+    }
+  </section>
+</BaseLayout>

@@ -1,4 +1,5 @@
 import { SITE } from "@/siteConfig.ts";
+import type { CollectionEntry } from "astro:content";
 
 function getOrdinalSuffix(day: number): string {
   if (day > 3 && day < 21) return "th";
@@ -106,4 +107,25 @@ export function formatAuthors(authors: string[] | undefined): string {
   const lastAuthor = authors[authors.length - 1];
   const otherAuthors = authors.slice(0, -1);
   return `By ${otherAuthors.join(", ")} and ${lastAuthor}`;
+}
+
+export function groupPostsBySeries(posts: CollectionEntry<"blog">[]): Map<string, CollectionEntry<"blog">[]> {
+  const map = new Map<string, CollectionEntry<"blog">[]>();
+  for (const p of posts) {
+    const slug = p.data.series;
+    if (!slug) continue;
+    const arr = map.get(slug) || [];
+    arr.push(p);
+    map.set(slug, arr);
+  }
+  for (const [slug, arr] of map) {
+    arr.sort((a, b) => {
+      const ai = a.data.seriesIndex || 0;
+      const bi = b.data.seriesIndex || 0;
+      if (ai !== bi) return ai - bi;
+      return a.data.publicationDate.valueOf() - b.data.publicationDate.valueOf();
+    });
+    map.set(slug, arr);
+  }
+  return map;
 }

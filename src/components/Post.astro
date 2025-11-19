@@ -8,7 +8,7 @@ const readingTime = calculateReadingTime(post.body || "");
 <li>
   <a
     href={`/blog/${post.id}`}
-    class="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between">
+    class="flex w-full flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between">
     <span class="link">{post.data.title}</span>
     <div
       class="text-muted-text dark:text-dark-muted-text flex flex-col text-sm font-normal sm:flex-row sm:items-center sm:gap-3">
@@ -16,4 +16,10 @@ const readingTime = calculateReadingTime(post.body || "");
       <span>{readingTime}</span>
     </div>
   </a>
+  {post.data.series && (
+    <div class="mt-0.5 text-xs">
+      Series: <a href={`/series/${post.data.series}`} class="underlined">{post.data.series}</a>
+      {post.data.seriesIndex && <span class="ml-1">(Part {post.data.seriesIndex})</span>}
+    </div>
+  )}
 </li>

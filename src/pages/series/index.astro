@@ -1,0 +1,53 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SeoPage from "@/components/SeoPage.astro";
+import Post from "@/components/Post.astro";
+
+const posts = await getCollection("blog");
+const seriesMap = new Map<string, typeof posts>();
+for (const p of posts) {
+  const slug = p.data.series;
+  if (!slug) continue;
+  const arr = seriesMap.get(slug) || [];
+  arr.push(p);
+  seriesMap.set(slug, arr);
+}
+const seriesList = Array.from(seriesMap.entries()).map(([slug, items]) => {
+  const sorted = [...items].sort((a, b) => {
+    const ai = a.data.seriesIndex || 0;
+    const bi = b.data.seriesIndex || 0;
+    if (ai !== bi) return ai - bi;
+    return a.data.publicationDate.valueOf() - b.data.publicationDate.valueOf();
+  });
+  return { slug, items: sorted };
+}).sort((a, b) => a.slug.localeCompare(b.slug));
+---
+
+<BaseLayout>
+  <SeoPage slot="head" title="Series" description="Browse post series" />
+  <section>
+    <h1 class="mb-4 text-2xl font-bold">Series</h1>
+    {
+      seriesList.length === 0 ? (
+        <p class="text-neutral-600 dark:text-neutral-300">No series yet.</p>
+      ) : (
+        <div class="flex flex-col gap-10">
+          {seriesList.map((s) => (
+            <div>
+              <h2 class="mb-2 text-lg font-semibold">
+                <a href={`/series/${encodeURIComponent(s.slug)}`}>{s.slug}</a>
+                <span class="ml-2 text-sm font-normal opacity-60">({s.items.length})</span>
+              </h2>
+              <ol class="list-none m-0 p-0 flex flex-col gap-2">
+                {s.items.map((p) => (
+                  <Post post={p} />
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
