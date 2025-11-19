@@ -15,13 +15,13 @@
     return localStorage.getItem("dyslexicFont") === "on";
   }
 
-  function apply(on) {
+  function apply(on: boolean) {
     const root = document.documentElement;
     if (on) root.classList.add("dyslexic");
     else root.classList.remove("dyslexic");
   }
 
-  function updateButtonState(btn) {
+  function updateButtonState(btn: HTMLButtonElement) {
     const on = isOn();
     btn.setAttribute("aria-pressed", on ? "true" : "false");
     btn.classList.toggle("bg-neutral-100", on);

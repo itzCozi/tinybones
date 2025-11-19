@@ -14,17 +14,31 @@ import { SITE } from "@/siteConfig";
 
 interface Props {
   entry: CollectionEntry<"blog">;
+  prevEntry: CollectionEntry<"blog"> | null;
+  nextEntry: CollectionEntry<"blog"> | null;
 }
 
 export async function getStaticPaths() {
   const blog = await getCollection("blog");
-  return blog.map((entry) => ({
-    params: { id: entry.id },
-    props: { entry },
-  }));
+
+  const sorted = [...blog].sort((a, b) => {
+    const aDate = a.data.publicationDate ? new Date(a.data.publicationDate) : new Date(0);
+    const bDate = b.data.publicationDate ? new Date(b.data.publicationDate) : new Date(0);
+    return bDate.getTime() - aDate.getTime();
+  });
+
+  return sorted.map((entry, index) => {
+    const prevEntry = index > 0 ? sorted[index - 1] : null;
+    const nextEntry = index < sorted.length - 1 ? sorted[index + 1] : null;
+
+    return {
+      params: { id: entry.id },
+      props: { entry, prevEntry, nextEntry },
+    };
+  });
 }
 
-const { entry } = Astro.props;
+const { entry, prevEntry, nextEntry } = Astro.props as Props;
 const { Content } = await render(entry);
 const readingTime = calculateReadingTime(entry.body || "");
 ---
@@ -123,6 +137,40 @@ const readingTime = calculateReadingTime(entry.body || "");
           id="blog-content">
           <Content />
         </div>
+
+        {
+          (prevEntry || nextEntry) && (
+            <nav
+              class="mt-4 flex flex-col gap-3 pt-6 text-sm sm:flex-row sm:justify-between sm:gap-8"
+              aria-label="Post navigation">
+              <div class="sm:w-1/2">
+                {prevEntry && (
+                  <a
+                    href={`/blog/${prevEntry.id}`}
+                    class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
+                    <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                      Previous
+                    </span>
+                    <p class="mt-1 line-clamp-2 font-medium">{prevEntry.data.title}</p>
+                  </a>
+                )}
+              </div>
+
+              <div class="sm:w-1/2 sm:text-right">
+                {nextEntry && (
+                  <a
+                    href={`/blog/${nextEntry.id}`}
+                    class="block rounded-lg border border-neutral-300 px-4 py-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900/50">
+                    <span class="text-xs tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                      Next
+                    </span>
+                    <p class="mt-1 line-clamp-2 font-medium">{nextEntry.data.title}</p>
+                  </a>
+                )}
+              </div>
+            </nav>
+          )
+        }
 
         <ShareButtons
           title={entry.data.title}
@@ -275,18 +323,8 @@ const readingTime = calculateReadingTime(entry.body || "");
             .then(() => showCopyToast())
             .catch(() => {});
         } else {
-          const ta = document.createElement("textarea");
-          ta.value = text;
-          ta.setAttribute("readonly", "");
-          ta.style.position = "absolute";
-          ta.style.left = "-9999px";
-          document.body.appendChild(ta);
-          ta.select();
-          try {
-            document.execCommand("copy");
-            showCopyToast();
-          } catch {}
-          document.body.removeChild(ta);
+          // Fallback without deprecated execCommand: prompt user to copy
+          window.prompt("Copy link to clipboard:", text);
         }
       } catch {}
     });

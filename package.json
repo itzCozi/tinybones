@@ -19,19 +19,19 @@
     "tb": "tinybones"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^4.3.6",
-    "@astrojs/rss": "^4.0.12",
+    "@astrojs/check": "^0.9.5",
+    "@astrojs/mdx": "^4.3.11",
+    "@astrojs/rss": "^4.0.13",
     "@astrojs/sitemap": "^3.6.0",
-    "@tailwindcss/vite": "^4.1.14",
-    "astro": "^5.14.1",
+    "@tailwindcss/vite": "^4.1.17",
+    "astro": "^5.15.9",
     "astro-compress": "^2.3.8",
     "fs-extra": "^11.3.2",
     "fuse.js": "^6.6.2",
     "lucide": "^0.540.0",
     "lucide-astro": "^0.540.0",
-    "sharp": "^0.34.4",
-    "tailwindcss": "^4.1.14",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
