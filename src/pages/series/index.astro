@@ -37,21 +37,17 @@ const seriesList = Array.from(seriesMap.entries())
     {
       seriesList.length === 0 ?
         <p class="text-neutral-600 dark:text-neutral-300">No series yet.</p>
-      : <div class="flex flex-col gap-10">
+      : <ul class="flex list-none flex-wrap gap-2 p-0">
           {seriesList.map((s) => (
-            <div>
-              <h2 class="mb-2 text-lg font-semibold">
-                <a href={`/series/${encodeURIComponent(s.slug)}`}>{s.slug}</a>
-                <span class="ml-2 text-sm font-normal opacity-60">({s.items.length})</span>
-              </h2>
-              <ol class="m-0 flex list-none flex-col gap-2 p-0">
-                {s.items.map((p) => (
-                  <Post post={p} />
-                ))}
-              </ol>
-            </div>
+            <li>
+              <a
+                class="rounded-full border border-neutral-300 px-3 py-1.5 text-sm hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900"
+                href={`/series/${encodeURIComponent(s.slug)}`}>
+                {s.slug} <span class="opacity-60">({s.items.length})</span>
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
     }
   </section>
 </BaseLayout>
