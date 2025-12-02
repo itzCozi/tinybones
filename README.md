@@ -67,14 +67,6 @@ Content...
 
 Create additional parts by incrementing `seriesIndex`. The reading order uses `seriesIndex` first, then publication date as a tiebreaker.
 
-### Tips
-
-- Keep the `series` slug stable (avoid renaming once published)
-- Never reuse the same `seriesIndex` within a series
-- Optionally recap previous parts at the top of each new entry
-
-### Extending
-
 Want a nicer display name or description per series? You can add optional fields later (e.g. `seriesTitle`) and update the `/series` pages to use them.
 
 ## CLI Tool
