@@ -308,10 +308,6 @@ if (entry.data.series) {
 
   document.addEventListener("astro:page-load", highlightSearchTerm);
 
-  if (document.readyState !== "loading") {
-    highlightSearchTerm();
-  }
-
   function showCopyToast(message = "Copied link to clipboard") {
     const toast = document.createElement("div");
     toast.textContent = message;
@@ -379,7 +375,4 @@ if (entry.data.series) {
   }
 
   document.addEventListener("astro:page-load", initHashtagCopyToast);
-  if (document.readyState !== "loading") {
-    initHashtagCopyToast();
-  }
 </script>

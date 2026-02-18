@@ -75,10 +75,6 @@ const {
 
     document.addEventListener("astro:page-load", initSearch);
 
-    if (document.readyState !== "loading") {
-      initSearch();
-    }
-
     document.addEventListener("astro:before-preparation", () => {
       isSearchInitialized = false;
     });

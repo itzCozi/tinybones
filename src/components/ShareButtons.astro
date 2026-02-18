@@ -243,12 +243,6 @@ const shareLinks = [
     }
   }
 
-  if (document.readyState !== "loading") {
-    initSocialShare();
-  } else {
-    document.addEventListener("DOMContentLoaded", initSocialShare);
-  }
-
   document.addEventListener("astro:page-load", initSocialShare);
 </script>
 
