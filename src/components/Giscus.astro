@@ -111,12 +111,6 @@ const shouldRender =
       }, 100);
     });
 
-    if (document.readyState !== "loading") {
-      setTimeout(() => {
-        initializeGiscus();
-      }, 100);
-    }
-
     document.addEventListener("astro:after-swap", () => {
       setTimeout(() => {
         updateGiscusTheme();

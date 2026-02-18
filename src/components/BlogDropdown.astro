@@ -168,8 +168,4 @@ const recentPosts = allPosts.slice(0, 3);
   }
 
   document.addEventListener("astro:page-load", initBlogDropdown);
-
-  if (document.readyState !== "loading") {
-    initBlogDropdown();
-  }
 </script>

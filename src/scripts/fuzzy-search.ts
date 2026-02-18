@@ -171,8 +171,4 @@ async function initFuzzySearch() {
   if (form) form.addEventListener('submit', (ev) => { ev.preventDefault(); doSearch(input.value); });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initFuzzySearch);
-} else {
-  initFuzzySearch();
-}
+document.addEventListener('astro:page-load', initFuzzySearch);
