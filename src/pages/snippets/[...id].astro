@@ -1,0 +1,86 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SeoPage from "@/components/SeoPage.astro";
+import ShareButtons from "@/components/ShareButtons.astro";
+import Giscus from "@/components/Giscus.astro";
+import { formatDate, slugifyAuthor } from "@/lib/util";
+import { SITE } from "@/siteConfig";
+
+interface Props {
+  entry: CollectionEntry<"snippets">;
+}
+
+export async function getStaticPaths() {
+  const snippets = (await getCollection("snippets")).filter((s) => !s.data.draft);
+  return snippets.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<BaseLayout>
+  <SeoPage
+    slot="head"
+    title={entry.data.title}
+    description={entry.data.description || entry.data.title}
+  />
+  <article class="snippet-post mx-auto max-w-3xl">
+    <header class="mb-6">
+      <h1 class="text-2xl font-bold">{entry.data.title}</h1>
+      <div
+        class="text-muted-text dark:text-dark-muted-text mt-2 flex flex-col text-sm sm:flex-row sm:items-center sm:gap-1.5">
+        <span>{formatDate(entry.data.publicationDate)}</span>
+        {
+          entry.data.authors && entry.data.authors.length > 0 && (
+            <>
+              <span class="hidden sm:inline">•</span>
+              <span>
+                By{" "}
+                {entry.data.authors.map((a, idx) => (
+                  <>
+                    {idx > 0 && (idx === entry.data.authors!.length - 1 ? " and " : ", ")}
+                    <a
+                      href={`/authors/${slugifyAuthor(a)}`}
+                      class="underlined"
+                      title={a}>
+                      {a}
+                    </a>
+                  </>
+                ))}
+              </span>
+            </>
+          )
+        }
+      </div>
+      {
+        entry.data.tags && entry.data.tags.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-2">
+            {entry.data.tags.map((tag) => (
+              <a
+                href={`/tags/${encodeURIComponent(tag)}`}
+                class="rounded-full border border-neutral-300 px-2 py-0.5 text-xs hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900">
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+    <div class="prose dark:prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <ShareButtons
+      title={entry.data.title}
+      url={`${SITE.href.replace(/\/$/, "")}/snippets/${entry.id}`}
+      description={entry.data.description || entry.data.title}
+    />
+
+    <Giscus class="mt-12" />
+  </article>
+</BaseLayout>

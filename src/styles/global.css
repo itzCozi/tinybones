@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "./typography.css" layer(components);
-@variant dark (&:where(.dark, .dark *));
 
 :root ::-webkit-scrollbar {
   width: 8px;
@@ -33,6 +32,28 @@
 }
 .light {
   color-scheme: light;
+}
+
+/* Page transition background fix - prevents white flash in dark mode */
+html {
+  background-color: #fafafa;
+  background-color: var(--color-bg, #fafafa);
+}
+html.dark {
+  background-color: #0a0a0a;
+  background-color: var(--color-dark-bg, #0a0a0a);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.15s;
+}
+::view-transition-group(root) {
+  background-color: #fafafa;
+  background-color: var(--color-bg, #fafafa);
+}
+.dark::view-transition-group(root) {
+  background-color: #0a0a0a;
+  background-color: var(--color-dark-bg, #0a0a0a);
 }
 
 .js .cloak { display: none !important; }
@@ -87,7 +108,9 @@ html {
 .dyslexic .prose code,
 .dyslexic .prose code *,
 .dyslexic .shiki,
-.dyslexic .shiki * {
+.dyslexic .shiki *,
+.dyslexic .astro-code,
+.dyslexic .astro-code * {
   font-family:
     ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace !important;
@@ -276,22 +299,38 @@ samp {
   text-decoration-thickness: 1px !important;
 }
 
+/* Light mode: Don't override colors - Shiki sets them directly via inline styles.
+   Only ensure background is transparent. */
 .shiki,
-.shiki span {
-  color: var(--shiki-light) !important;
-  background-color: var(--shiki-light-bg) !important;
-  font-style: var(--shiki-light-font-style) !important;
-  font-weight: var(--shiki-light-font-weight) !important;
-  text-decoration: var(--shiki-light-text-decoration) !important;
+.shiki span,
+.astro-code,
+.astro-code span {
+  background-color: transparent !important;
 }
 
+/* Dark mode: Override with --shiki-dark CSS variables */
 .dark .shiki,
-.dark .shiki span {
+.dark .shiki span,
+.dark .astro-code,
+.dark .astro-code span {
   color: var(--shiki-dark) !important;
   background-color: var(--shiki-dark-bg) !important;
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
   text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .system .shiki,
+  .system .shiki span,
+  .system .astro-code,
+  .system .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
 }
 
 .code-block-wrapper {

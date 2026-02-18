@@ -4,7 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SeoPage from "@/components/SeoPage.astro";
 import { slugifyAuthor } from "@/lib/util";
 
-const posts = await getCollection("blog");
+const posts = (await getCollection("blog")).filter((post) => !post.data.draft);
 const counts = new Map<string, number>();
 for (const p of posts) {
   for (const a of p.data.authors || []) {

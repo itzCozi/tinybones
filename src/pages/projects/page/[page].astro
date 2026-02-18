@@ -1,13 +1,13 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Posts from "@/components/Posts.astro";
+import Projects from "@/components/Projects.astro";
 import SeoPage from "@/components/SeoPage.astro";
 
 export async function getStaticPaths() {
-  const allPosts = (await getCollection("blog")).filter((post) => !post.data.draft);
+  const allProjects = await getCollection("projects");
   const pageSize = 5;
-  const totalPages = Math.ceil(allPosts.length / pageSize);
+  const totalPages = Math.ceil(allProjects.length / pageSize);
 
   const paths = [];
   for (let i = 2; i <= totalPages; i++) {
@@ -26,11 +26,11 @@ const { currentPage } = Astro.props;
 <BaseLayout>
   <SeoPage
     slot="head"
-    title={`Blog - pg${currentPage}`}
+    title={`Projects - pg${currentPage}`}
   />
-  <Posts
+  <Projects
     {currentPage}
     showPagination={true}
-    baseUrl="/"
+    baseUrl="/projects"
   />
 </BaseLayout>

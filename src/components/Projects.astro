@@ -1,8 +1,27 @@
 ---
 import { getCollection } from "astro:content";
 import ExternalLink from "@/components/ExternalLink.astro";
+import Pagination from "@/components/Pagination.astro";
 
-const projects = await getCollection("projects");
+export interface Props {
+  currentPage?: number;
+  pageSize?: number;
+  showPagination?: boolean;
+  baseUrl?: string;
+}
+
+const { currentPage = 1, pageSize = 5, showPagination = true, baseUrl = "/projects" } = Astro.props;
+
+const allProjects = (await getCollection("projects")).sort((a, b) => {
+  const dateA = a.data.publicationDate?.valueOf() ?? 0;
+  const dateB = b.data.publicationDate?.valueOf() ?? 0;
+  return dateB - dateA;
+});
+
+const totalPages = Math.ceil(allProjects.length / pageSize);
+const startIndex = (currentPage - 1) * pageSize;
+const endIndex = startIndex + pageSize;
+const projects = allProjects.slice(startIndex, endIndex);
 ---
 
 <section class="py-3">
@@ -14,4 +33,13 @@ const projects = await getCollection("projects");
       ))
     }
   </div>
+  {
+    showPagination && (
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl={baseUrl}
+      />
+    )
+  }
 </section>

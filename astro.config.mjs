@@ -6,12 +6,12 @@ import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  experimental: {
-    clientPrerender: true,
-  },
   integrations: [
     sitemap({
-      filter: (page) => !["/rss.xml", "/robots.txt", "/search-index.json"].includes(page)
+      filter: (page) =>
+        !["/rss.xml", "/robots.txt", "/search-index.json"].some((path) =>
+          page.endsWith(path)
+        ),
     }),
     mdx(),
     compress({
@@ -28,7 +28,10 @@ export default defineConfig({
   ],
   markdown: {
     shikiConfig: {
-      theme: "dark-plus",
+      themes: {
+        light: "github-light",
+        dark: "dark-plus",
+      },
     },
   },
   site: "https://tinybones.pages.dev",
@@ -39,23 +42,5 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    build: {
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ["astro"],
-          },
-          format: "es",
-          entryFileNames: "assets/[name].[hash].js",
-          chunkFileNames: "assets/[name].[hash].js",
-        },
-      },
-      minify: "terser",
-      terserOptions: {
-        keep_fnames: true,
-        keep_classnames: true,
-      },
-    },
   },
 });

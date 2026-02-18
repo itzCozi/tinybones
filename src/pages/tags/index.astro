@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SeoPage from "@/components/SeoPage.astro";
 
-const posts = await getCollection("blog");
+const posts = (await getCollection("blog")).filter((post) => !post.data.draft);
 const tagMap = new Map<string, number>();
 for (const p of posts) {
   const tags: string[] = p.data.tags || [];

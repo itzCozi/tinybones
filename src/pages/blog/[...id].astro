@@ -19,7 +19,7 @@ interface Props {
 }
 
 export async function getStaticPaths() {
-  const blog = await getCollection("blog");
+  const blog = (await getCollection("blog")).filter((post) => !post.data.draft);
 
   const sorted = [...blog].sort((a, b) => {
     const aDate = a.data.publicationDate ? new Date(a.data.publicationDate) : new Date(0);
@@ -47,7 +47,7 @@ let seriesNext: CollectionEntry<"blog"> | null = null;
 
 if (entry.data.series) {
   seriesPosts = (await getCollection("blog"))
-    .filter((p) => p.data.series === entry.data.series)
+    .filter((p) => !p.data.draft && p.data.series === entry.data.series)
     .sort((a, b) => {
       const ai = a.data.seriesIndex || 0;
       const bi = b.data.seriesIndex || 0;
@@ -84,7 +84,7 @@ if (entry.data.series) {
       </h1>
       {
         entry.data.tags && entry.data.tags.length > 0 && (
-          <div
+          <nav
             class="mt-2 flex flex-wrap gap-2 sm:hidden"
             aria-label="Post tags">
             {entry.data.tags.map((tag) => (
@@ -95,7 +95,7 @@ if (entry.data.series) {
                 {tag}
               </a>
             ))}
-          </div>
+          </nav>
         )
       }
       <div class="text-muted-text dark:text-dark-muted-text mt-2 flex items-center justify-between">
@@ -127,7 +127,7 @@ if (entry.data.series) {
       </div>
       {
         entry.data.tags && entry.data.tags.length > 0 && (
-          <div
+          <nav
             class="mt-3 hidden flex-wrap gap-3 sm:flex"
             aria-label="Post tags">
             {entry.data.tags.map((tag) => (
@@ -138,7 +138,7 @@ if (entry.data.series) {
                 {tag}
               </a>
             ))}
-          </div>
+          </nav>
         )
       }
     </div>

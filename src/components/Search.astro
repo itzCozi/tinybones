@@ -166,6 +166,15 @@ const {
         e.preventDefault();
       });
 
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
       function displayResults(results, resultsElement, inputElement) {
         resultsElement.innerHTML = "";
         resultsElement.classList.remove("hidden");
@@ -199,7 +208,7 @@ const {
           const title = document.createElement("div");
           title.className = "font-medium text-neutral-900 dark:text-white";
 
-          const highlightedTitle = post.title.replace(
+          const highlightedTitle = escapeHtml(post.title).replace(
             new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
             '<mark class="bg-yellow-200 dark:bg-yellow-600 px-1 rounded">$1</mark>',
           );
@@ -226,7 +235,7 @@ const {
             if (startIndex > 0) snippet = "..." + snippet;
             if (endIndex < post.content.length) snippet = snippet + "...";
 
-            const highlightedSnippet = snippet.replace(
+            const highlightedSnippet = escapeHtml(snippet).replace(
               new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
               '<mark class="bg-yellow-200 dark:bg-yellow-600 px-0.5 rounded-xs">$1</mark>',
             );

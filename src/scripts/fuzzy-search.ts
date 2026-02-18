@@ -147,7 +147,7 @@ async function initFuzzySearch() {
       }
       const dateStr = item.pubDate ? new Date(item.pubDate).toLocaleDateString?.() || '' : '';
 
-      const href = `${item.url}?search=${encodeURIComponent(query)}`;
+      const href = `${esc(item.url)}?search=${encodeURIComponent(query)}`;
 
       return `
         <a class="block rounded-md border border-neutral-300 p-3 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-900" href="${href}">

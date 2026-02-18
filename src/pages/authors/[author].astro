@@ -6,7 +6,7 @@ import Post from "@/components/Post.astro";
 import { slugifyAuthor } from "@/lib/util";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = (await getCollection("blog")).filter((post) => !post.data.draft);
   const authorSet = new Set<string>();
   for (const p of posts) {
     (p.data.authors || []).forEach((a: string) => authorSet.add(a));
@@ -16,7 +16,10 @@ export async function getStaticPaths() {
 
 const { author: authorSlug } = Astro.params;
 const allPosts = (await getCollection("blog"))
-  .filter((p) => (p.data.authors || []).some((a: string) => slugifyAuthor(a) === authorSlug))
+  .filter(
+    (p) =>
+      !p.data.draft && (p.data.authors || []).some((a: string) => slugifyAuthor(a) === authorSlug),
+  )
   .sort((a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf());
 
 const displayName =

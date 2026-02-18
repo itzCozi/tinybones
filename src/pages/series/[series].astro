@@ -5,7 +5,7 @@ import SeoPage from "@/components/SeoPage.astro";
 import Post from "@/components/Post.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = (await getCollection("blog")).filter((post) => !post.data.draft);
   const set = new Set<string>();
   for (const p of posts) {
     if (p.data.series) set.add(p.data.series);
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { series } = Astro.params;
 const allSeriesPosts = (await getCollection("blog"))
-  .filter((p) => p.data.series === series)
+  .filter((p) => !p.data.draft && p.data.series === series)
   .sort((a, b) => {
     const ai = a.data.seriesIndex || 0;
     const bi = b.data.seriesIndex || 0;

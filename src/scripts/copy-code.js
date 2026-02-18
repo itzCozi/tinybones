@@ -20,12 +20,12 @@ function initializeCopyButtons() {
     wrapper.appendChild(copyButton);
 
     copyButton.addEventListener("click", async () => {
-      try {
-        const codeElement = codeBlock.querySelector("code");
-        const codeText = codeElement
-          ? codeElement.textContent
-          : codeBlock.textContent;
+      const codeElement = codeBlock.querySelector("code");
+      const codeText = codeElement
+        ? codeElement.textContent
+        : codeBlock.textContent;
 
+      try {
         await navigator.clipboard.writeText(codeText);
 
         copyButton.textContent = "Copied";
@@ -38,8 +38,9 @@ function initializeCopyButtons() {
       } catch (err) {
         console.error("Failed to copy code: ", err);
 
+        let textArea;
         try {
-          const textArea = document.createElement("textarea");
+          textArea = document.createElement("textarea");
           textArea.value = codeText;
           textArea.style.position = "fixed";
           textArea.style.left = "-999999px";
@@ -47,32 +48,25 @@ function initializeCopyButtons() {
           document.body.appendChild(textArea);
           textArea.focus();
           textArea.select();
-          
-          if (document.getSelection) {
-            const selection = document.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(textArea);
-            selection.removeAllRanges();
-            selection.addRange(range);
-          }
-          
+          document.execCommand("copy");
+
           copyButton.textContent = "Copied";
           copyButton.classList.add("copied");
-          
+
           setTimeout(() => {
             copyButton.textContent = "Copy";
             copyButton.classList.remove("copied");
           }, 2000);
-          
+
         } catch (fallbackErr) {
           console.error("Fallback copy failed: ", fallbackErr);
           copyButton.textContent = "Copy failed";
-          
+
           setTimeout(() => {
             copyButton.textContent = "Copy";
           }, 2000);
         } finally {
-          if (document.body.contains(textArea)) {
+          if (textArea && document.body.contains(textArea)) {
             document.body.removeChild(textArea);
           }
         }

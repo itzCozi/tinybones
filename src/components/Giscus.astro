@@ -17,9 +17,20 @@ const shouldRender =
 
 {
   shouldRender && (
-    <div class={`giscus-container ${className}`}>
-      <div id="giscus-comments" />
-    </div>
+    <Fragment>
+      <link
+        rel="dns-prefetch"
+        href="//giscus.app"
+      />
+      <link
+        rel="preconnect"
+        href="https://giscus.app"
+        crossorigin
+      />
+      <div class={`giscus-container ${className}`}>
+        <div id="giscus-comments" />
+      </div>
+    </Fragment>
   )
 }
 

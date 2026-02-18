@@ -1,0 +1,16 @@
+---
+import { formatDate } from "@/lib/util";
+
+const { snippet } = Astro.props;
+---
+
+<li>
+  <a
+    href={`/snippets/${snippet.id}`}
+    class="flex w-full flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between">
+    <span class="link">{snippet.data.title}</span>
+    <span class="text-muted-text dark:text-dark-muted-text text-sm">
+      {formatDate(snippet.data.publicationDate)}
+    </span>
+  </a>
+</li>

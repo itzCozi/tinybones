@@ -8,6 +8,8 @@ const blog = defineCollection({
       title: z.string(),
       description: z.string(),
       publicationDate: z.date(),
+      updatedDate: z.date().optional(),
+      draft: z.boolean().default(false),
       image: image().optional(),
       imageAlt: z.string().optional(),
       tags: z.array(z.string()).optional(),
@@ -19,7 +21,11 @@ const blog = defineCollection({
       // `seriesIndex`: order of the post within the series (1-based recommended)
       series: z.string().optional(),
       seriesIndex: z.number().int().positive().optional(),
-    }),
+    })
+    .refine(
+      (data) => !data.image || !!data.imageAlt,
+      { message: "imageAlt is required when image is provided", path: ["imageAlt"] }
+    ),
 });
 
 const projects = defineCollection({
@@ -36,4 +42,17 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { blog, projects };
+const snippets = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: "./src/content/snippets" }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      publicationDate: z.date(),
+      draft: z.boolean().default(false),
+      tags: z.array(z.string()).optional(),
+      authors: z.array(z.string()).optional(),
+    }),
+});
+
+export const collections = { blog, projects, snippets };

@@ -37,6 +37,10 @@ export const NAV_LINKS: NavigationLinks = {
     path: "/blog",
     label: "Blog",
   },
+  snippets: {
+    path: "/snippets",
+    label: "Snippets",
+  },
   projects: {
     path: "/projects",
     label: "Projects",

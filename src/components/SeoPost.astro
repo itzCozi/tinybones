@@ -19,6 +19,8 @@ const authorsList = post.data.authors?.length ? post.data.authors : [SITE.author
 const tagsList = post.data.tags ?? [];
 const datePublishedVal =
   post.data.publicationDate?.toISOString?.() ? post.data.publicationDate.toISOString() : undefined;
+const dateModifiedVal =
+  post.data.updatedDate?.toISOString?.() ? post.data.updatedDate.toISOString() : datePublishedVal;
 
 const articleLd = {
   "@context": "https://schema.org",
@@ -30,7 +32,7 @@ const articleLd = {
   inLanguage: SITE.locale,
   image: imageUrl ? [imageUrl] : undefined,
   datePublished: datePublishedVal,
-  dateModified: datePublishedVal,
+  dateModified: dateModifiedVal,
   author: authorsList.map((name: string) => ({ "@type": "Person", name })),
   keywords: tagsList.length ? tagsList.join(", ") : undefined,
 } as const;
@@ -54,8 +56,8 @@ const breadcrumbsLd = {
     {
       "@type": "ListItem",
       position: 3,
-      name: "Projects",
-      item: new URL("/projects", SITE.href).toString(),
+      name: postTitle,
+      item: url,
     },
   ],
 } as const;
@@ -107,6 +109,14 @@ void breadcrumbsLd;
   property="og:type"
   content="article"
 />
+{
+  datePublishedVal && (
+    <meta
+      property="article:published_time"
+      content={datePublishedVal}
+    />
+  )
+}
 <meta
   property="og:locale"
   content={SITE.locale}

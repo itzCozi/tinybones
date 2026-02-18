@@ -42,7 +42,7 @@
       --prose-color: var(--color-neutral-200);
       --prose-heading-color: var(--color-white);
       --prose-strong-color: var(--color-white);
-      --prose-link-color: var(--color-white);
+      --prose-link-color: var(--color-dark-link);
       --prose-code-color: var(--color-white);
       --prose-marker-color: color-mix(
         in oklab,

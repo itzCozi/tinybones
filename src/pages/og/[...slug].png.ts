@@ -3,8 +3,10 @@ import sharp from "sharp";
 import { SITE } from "@/siteConfig";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((p) => ({ params: { slug: p.id } }));
+  const posts = (await getCollection("blog")).filter((post) => !post.data.draft);
+  const postPaths = posts.map((p) => ({ params: { slug: p.id } }));
+  // Include a default OG image for non-blog pages
+  return [...postPaths, { params: { slug: "default" } }];
 }
 
 export async function GET({ params }: { params: { slug: string } }) {
@@ -12,8 +14,8 @@ export async function GET({ params }: { params: { slug: string } }) {
   const posts = await getCollection("blog");
   const entry = posts.find((p) => p.id === id);
 
-  const title = (entry?.data.title ?? SITE.title).toString();
-  const subtitle = (entry?.data.description ?? SITE.description).toString();
+  const title = truncateWithEllipsis((entry?.data.title ?? SITE.title).toString(), 60);
+  const subtitle = truncateWithEllipsis((entry?.data.description ?? SITE.description).toString(), 120);
 
   const width = 1200;
   const height = 630;
@@ -29,10 +31,10 @@ export async function GET({ params }: { params: { slug: string } }) {
       <rect width="100%" height="100%" fill="url(#g)"/>
       <g fill="#e5e5e5">
         <text x="60" y="300" font-size="64" font-weight="800" font-family="Cambria, Georgia, 'Times New Roman', Times, serif">
-          ${escapeXml(title).slice(0, 120)}
+          ${escapeXml(title)}
         </text>
         <text x="60" y="360" font-size="32" font-weight="500" opacity="0.92" font-family="Cambria, Georgia, 'Times New Roman', Times, serif">
-          ${escapeXml(subtitle).slice(0, 160)}
+          ${escapeXml(subtitle)}
         </text>
         <text x="60" y="560" font-size="28" font-weight="600" opacity="0.9" font-family="Cambria, Georgia, 'Times New Roman', Times, serif">
           ${escapeXml(SITE.title)} • ${escapeXml(new URL(SITE.href).host)}
@@ -60,4 +62,9 @@ function escapeXml(str: string) {
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&apos;");
+}
+
+function truncateWithEllipsis(str: string, maxLength: number): string {
+  if (str.length <= maxLength) return str;
+  return str.slice(0, maxLength - 1).trimEnd() + "…";
 }

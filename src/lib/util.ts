@@ -87,7 +87,7 @@ export function slugifyAuthor(name: string, maxLength = 100): string {
     .replace(/['’`]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .replace(/-{2,}/g, "-")
+    .replace(/-{2,}/g, "-");
   return slug.length > maxLength ? slug.slice(0, maxLength).replace(/-+$/g, "") : slug;
 }
 
@@ -107,6 +107,16 @@ export function formatAuthors(authors: string[] | undefined): string {
   const lastAuthor = authors[authors.length - 1];
   const otherAuthors = authors.slice(0, -1);
   return `By ${otherAuthors.join(", ")} and ${lastAuthor}`;
+}
+
+export function filterDrafts(posts: CollectionEntry<"blog">[]): CollectionEntry<"blog">[] {
+  return posts.filter((post) => !post.data.draft);
+}
+
+export function sortPostsByDate(posts: CollectionEntry<"blog">[]): CollectionEntry<"blog">[] {
+  return [...posts].sort(
+    (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf()
+  );
 }
 
 export function groupPostsBySeries(posts: CollectionEntry<"blog">[]): Map<string, CollectionEntry<"blog">[]> {

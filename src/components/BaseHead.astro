@@ -9,23 +9,28 @@ import Favicons from "@/components/Favicons.astro";
 <head>
   <script is:inline>
     (function () {
-      var root = document.documentElement;
-      root.classList.add("js");
-      try {
-        var dys = localStorage.getItem("dyslexicFont") === "on";
-        if (dys) root.classList.add("dyslexic");
+      function applyTheme() {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          var dys = localStorage.getItem("dyslexicFont") === "on";
+          if (dys) root.classList.add("dyslexic");
 
-        var theme = localStorage.getItem("currentTheme") || "system";
-        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        var isDark = theme === "dark" || (theme === "system" && prefersDark);
-        if (isDark) {
-          root.classList.add("dark");
-          root.classList.remove("light");
-        } else {
-          root.classList.add("light");
-          root.classList.remove("dark");
-        }
-      } catch (e) {}
+          var theme = localStorage.getItem("currentTheme") || "system";
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark = theme === "dark" || (theme === "system" && prefersDark);
+          if (isDark) {
+            root.classList.add("dark");
+            root.classList.remove("light");
+          } else {
+            root.classList.add("light");
+            root.classList.remove("dark");
+          }
+        } catch (e) {}
+      }
+      applyTheme();
+      // Re-apply theme during View Transitions to prevent flash
+      document.addEventListener("astro:after-swap", applyTheme);
     })();
   </script>
   <meta charset="UTF-8" />
@@ -81,20 +86,19 @@ import Favicons from "@/components/Favicons.astro";
     href="https://fonts.gstatic.com"
     crossorigin
   />
+  <!-- Load Lexend font lazily — only needed for dyslexia-friendly mode -->
   <link
     href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
   />
-  <link
-    rel="dns-prefetch"
-    href="//giscus.app"
-  />
-  <link
-    rel="preconnect"
-    href="https://giscus.app"
-    crossorigin
-  />
-
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
   <link
     rel="sitemap"
     href="/sitemap-index.xml"

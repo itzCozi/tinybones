@@ -2,11 +2,11 @@
 import { getCollection } from "astro:content";
 import { Menu } from "lucide-astro";
 
-const allPosts = (await getCollection("blog")).sort(
-  (a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf(),
-);
+const allPosts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.publicationDate.valueOf() - a.data.publicationDate.valueOf());
 
-const recentPosts = allPosts.slice(0, 5);
+const recentPosts = allPosts.slice(0, 3);
 ---
 
 <div class="relative inline-block text-left">
