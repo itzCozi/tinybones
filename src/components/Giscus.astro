@@ -105,30 +105,34 @@ const shouldRender =
       }, 100);
     };
 
-    document.addEventListener("astro:page-load", () => {
-      setTimeout(() => {
-        initializeGiscus();
-      }, 100);
-    });
+    if (!window.__giscusListenersBound) {
+      window.__giscusListenersBound = true;
 
-    document.addEventListener("astro:after-swap", () => {
-      setTimeout(() => {
-        updateGiscusTheme();
-      }, 100);
-    });
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === "attributes" && mutation.attributeName === "class") {
-          updateGiscusTheme();
-        }
+      document.addEventListener("astro:page-load", () => {
+        setTimeout(() => {
+          initializeGiscus();
+        }, 100);
       });
-    });
 
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+      document.addEventListener("astro:after-swap", () => {
+        setTimeout(() => {
+          updateGiscusTheme();
+        }, 100);
+      });
+
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === "attributes" && mutation.attributeName === "class") {
+            updateGiscusTheme();
+          }
+        });
+      });
+
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
   }
 </script>
 

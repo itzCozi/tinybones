@@ -32,43 +32,6 @@ A minimal blog template built with [Astro](https://astro.build/). Perfect for de
 - Modify colors and styling in `src/styles/`
 - Add your content in `src/content/blog/`
 
-## Post Series
-
-You can group related posts into a sequential **series** that gets:
-
-- A dedicated listing page: `/series/<slug>`
-- A global index page: `/series`
-- Previous/next navigation within the series on each post
-- A parts list with direct links
-
-### How to create a series
-
-Add two new optional frontmatter fields to your blog posts:
-
-```yaml
-series: my-cool-series      # slug identifier (lowercase recommended)
-seriesIndex: 1              # numeric order (start at 1)
-```
-
-Example:
-
-```md
----
-title: "Building a Series: Part 1"
-description: "Introducing the new post series feature."
-publicationDate: 2025-11-15
-tags: [Series]
-authors: ["BadDeveloper"]
-series: building-a-series
-seriesIndex: 1
----
-Content...
-```
-
-Create additional parts by incrementing `seriesIndex`. The reading order uses `seriesIndex` first, then publication date as a tiebreaker.
-
-Want a nicer display name or description per series? You can add optional fields later (e.g. `seriesTitle`) and update the `/series` pages to use them.
-
 ## CLI Tool
 
 TinyBones comes with a built-in CLI tool to help you manage your blog content:

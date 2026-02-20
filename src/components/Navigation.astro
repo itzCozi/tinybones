@@ -13,6 +13,8 @@ const { showMobileToc = false } = Astro.props as Props;
 
 <header
   id="site-header"
+  transition:persist
+  style="view-transition-name: site-header;"
   class="bg-bg dark:bg-dark-bg fixed top-0 right-0 left-0 z-10 border-b-[0.5px] border-transparent">
   <div
     class="mx-auto flex max-w-5xl flex-wrap items-center justify-between p-2 pb-2 font-sans sm:px-5 sm:py-3">

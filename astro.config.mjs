@@ -38,7 +38,7 @@ export default defineConfig({
   output: "static",
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: "viewport",
+    defaultStrategy: "hover",
   },
   vite: {
     plugins: [tailwindcss()],

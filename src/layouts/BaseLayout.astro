@@ -20,7 +20,10 @@ const { showMobileToc = false } = Astro.props as Props;
   <body class="bg-bg dark:bg-dark-bg">
     <Navigation showMobileToc={showMobileToc} />
     <div class="mx-auto max-w-5xl p-3 pt-16 font-sans sm:p-6 sm:pt-20">
-      <main class="min-h-[75vh]">
+      <main
+        class="min-h-[75vh]"
+        transition:name="main-content"
+        transition:animate="initial">
         <slot />
       </main>
       <Footer />

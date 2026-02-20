@@ -45,7 +45,8 @@ html.dark {
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.15s;
+  animation-duration: 0.25s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 ::view-transition-group(root) {
   background-color: #fafafa;
@@ -54,6 +55,50 @@ html.dark {
 .dark::view-transition-group(root) {
   background-color: #0a0a0a;
   background-color: var(--color-dark-bg, #0a0a0a);
+}
+
+/* Main content slide-fade transition */
+@keyframes content-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes content-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+::view-transition-old(main-content) {
+  animation: content-fade-out 0.2s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+::view-transition-new(main-content) {
+  animation: content-fade-in 0.3s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+/* Keep header stable during transitions */
+::view-transition-old(site-header),
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(main-content),
+  ::view-transition-new(main-content) {
+    animation-duration: 0.01s !important;
+  }
 }
 
 .js .cloak { display: none !important; }
